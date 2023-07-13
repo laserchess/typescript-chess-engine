@@ -1,6 +1,6 @@
 import { Int } from "./int.js";
 
-enum Symmetry{
+export enum Symmetry{
     ORIGIN = 0,
     X_AXIS = 1,
     Y_AXIS = 2
