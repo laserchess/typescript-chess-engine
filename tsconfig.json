@@ -3,8 +3,14 @@
     "strict": true,
     "outDir": "build",
     "module": "ESNext",
-    "moduleResolution": "nodenext",
-    "removeComments": false
+    "moduleResolution": "Node",
+    "removeComments": false,
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": false,
+    "baseUrl": ".",
+    "paths":{
+      "utils/*":["src/utils/*"]
+    }
   },
   "include": [ "src/**/*", "tests/**/*" ],
   "exclude": [ "node_modules/**/*" ]

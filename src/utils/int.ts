@@ -1,21 +1,24 @@
-export type Int = number & { __int__: void };
+export type int = number & { __int__: void };
 
-export const roundToInt = (num: number): Int => Math.round(num) as Int;
+export function roundToInt(num: number): int {
+  return Math.round(num) as int;
+}
 
-export const toInt = (value: string): Int => {
-  return Number.parseInt(value) as Int;
+export function toInt(value: string): int {
+  return Number.parseInt(value) as int;
 };
 
-export const checkIsInt = (num: number): num is Int =>  num % 1 === 0;
-
-export const assertAsInt = (num: number): Int => {
+export function checkIsInt(num: number): num is int {
+  return num % 1 === 0;
+}
+export function assertAsInt(num: number): int {
   try {
     if (checkIsInt(num)) {
       return num;
     }
   } catch (err) {
-    throw new Error(`Invalid Int value (error): ${num}`);
+    throw new Error(`Invalid int value (error): ${num}`);
   }
 
-  throw new Error(`Invalid Int value: ${num}`);
+  throw new Error(`Invalid int value: ${num}`);
 };
