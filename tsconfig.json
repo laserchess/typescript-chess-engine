@@ -3,15 +3,25 @@
     "strict": true,
     "outDir": "build",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "NodeNext",
     "removeComments": false,
     "resolveJsonModule": true,
     "allowImportingTsExtensions": false,
-    "baseUrl": ".",
-    "paths":{
-      "utils/*":["src/utils/*"]
+    "baseUrl": "src",
+    "paths": {
+      "geometry": [
+        "geometry/index.ts"
+      ],
+      "utils": [
+        "utils/index.ts"
+      ]
     }
   },
-  "include": [ "src/**/*", "tests/**/*" ],
-  "exclude": [ "node_modules/**/*" ]
+  "include": [
+    "src/**/*",
+    "tests/**/*"
+  ],
+  "exclude": [
+    "node_modules/**/*"
+  ]
 }
