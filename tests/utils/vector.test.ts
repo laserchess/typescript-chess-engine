@@ -42,9 +42,8 @@ describe("Vector2d", () => {
     expect(new Vector2d(1, 1).copy()).toStrictEqual(new Vector2d(1, 1));
     expect(new Vector2d(1.5, 2).copy()).not.toStrictEqual(new Vector2d(1, 2));
   });
-
-
-})
+  
+});
 
 describe("IntVector2d", () => {
   test("Creating vector", () => {
@@ -73,8 +72,7 @@ describe("IntVector2d", () => {
     expect(new IntVector2d(1 as int, 1 as int).copy()).toStrictEqual(new IntVector2d(1 as int, 1 as int));
     expect(new IntVector2d(1.5 as int, 2 as int).copy()).toStrictEqual(new IntVector2d(1 as int, 2 as int));
   });
-
-})
+});
 
 describe("BoardVector2d", () => {
   test("Creating BoardVector2d from other type vectors", () => {
@@ -100,5 +98,4 @@ describe("BoardVector2d", () => {
     expect(new BoardVector2d(1 as int, 1 as int).copy()).toStrictEqual(new BoardVector2d(1 as int, 1 as int));
     expect(new BoardVector2d(1 as int, 2 as int).copy()).toStrictEqual(new BoardVector2d(1 as int, 2 as int));
   });
-
-})
+});
