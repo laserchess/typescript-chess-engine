@@ -5,6 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --watch",
     "test": "jest"
   },
   "keywords": [],
