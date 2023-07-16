@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
+    "target": "es6",
     "strict": true,
     "outDir": "build",
-    "module": "ESNext",
-    "moduleResolution": "NodeNext",
+    "module": "es6",
+    "moduleResolution": "nodenext",
     "removeComments": false,
     "resolveJsonModule": true,
-    "allowImportingTsExtensions": false,
+    "esModuleInterop": true,
     "baseUrl": "src",
     "paths": {
       "geometry": [
