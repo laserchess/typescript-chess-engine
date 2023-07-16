@@ -1,3 +1,9 @@
-import { Integer, int } from "./int.js";
+import {
+  int,
+  Integer
+} from "./int.js";
 
-export { int, Integer };
+export {
+  int,
+  Integer
+};
