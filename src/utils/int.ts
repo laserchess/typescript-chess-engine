@@ -1,7 +1,7 @@
 export type int = number & { __int__: void };
 
 export namespace Integer {
-  export function roundToInt(num: number): int {
+  export function create(num: number): int {
     return Math.floor(num) as int;
   }
 

@@ -22,11 +22,17 @@ describe("Vector2d", () => {
   test("Multiplying/dividing 2 vectors", () => {
     expect(new Vector2d(1, 2).mul(new Vector2d(2, 1.5))).toStrictEqual(new Vector2d(2, 3));
     expect(new Vector2d(1, 2).div(new Vector2d(2, 2))).toStrictEqual(new Vector2d(0.5, 1));
+    expect(()=>{
+      new Vector2d(1, 2).div(new Vector2d(2, 0))
+    }).toThrow("At least one coordinate of divider vector is equal to 0.");
   });
 
   test("Multiplying/dividing vector and scalar", () => {
     expect(new Vector2d(1, 1).mul(3.5)).toStrictEqual(new Vector2d(3.5, 3.5));
     expect(new Vector2d(5, 2).div(2)).toStrictEqual(new Vector2d(2.5, 1));
+    expect(()=>{
+      new Vector2d(1, 2).div(0)
+    }).toThrow("Divider is equal to 0");
   });
 
   test("Opposite, reverseAxis, pivotSymmettry", () => {

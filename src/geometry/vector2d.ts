@@ -8,8 +8,8 @@ export enum Symmetry {
 
 
 export class Vector2d {
-  protected x: number;
-  protected y: number;
+  protected readonly x: number;
+  protected readonly y: number;
 
   protected createVector(x: number, y: number): Vector2d {
     return new Vector2d(x, y);
@@ -56,7 +56,13 @@ export class Vector2d {
 
   public div(other: Vector2d | number): Vector2d {
     if (other instanceof Vector2d) {
+      if(other.x == 0 || other.y == 0){
+        throw new Error("At least one coordinate of divider vector is equal to 0.");
+      }
       return this.createVector(this.x / other.x, this.y / other.y);
+    }
+    if(other == 0){
+      throw new Error("Divider is equal to 0");
     }
     return this.createVector(this.x / other, this.y / other);
   }
@@ -88,7 +94,7 @@ export class Vector2d {
 
 export class IntVector2d extends Vector2d {
   public constructor(x: int, y: int) {
-    super(Integer.roundToInt(x), Integer.roundToInt(y))
+    super(Integer.create(x), Integer.create(y))
   }
 
   protected createVector(x: int, y: int): Vector2d {
@@ -110,8 +116,13 @@ export class IntVector2d extends Vector2d {
 
 export class BoardVector2d extends IntVector2d {
 
+  protected createVector(x: int, y: int): Vector2d {
+    return new BoardVector2d(x, y);
+  }
+
   public static fromVector2d(vector: Vector2d | IntVector2d): BoardVector2d {
-    return new BoardVector2d(vector.getX() as int, vector.getY() as int);
+    let board: BoardVector2d = vector as BoardVector2d
+    return new BoardVector2d(board.x as int, board.y as int);
   }
 
   public static fromString(vectorString: string): BoardVector2d {
