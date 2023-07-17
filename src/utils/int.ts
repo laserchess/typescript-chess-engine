@@ -15,9 +15,9 @@ export namespace Integer {
   /**
    * Function that creates `int` from any number.
    * 
-   * @param {number} num  Number to be converted to {@linkcode int}.
+   * @param {number} num - Number to be converted to {@linkcode int}.
    * If it has any decimal part it will be truncated.
-   * @returns {int} Number converted to {@linkcode int}.
+   * @returns {int}  Number converted to {@linkcode int}.
    */
   export function create(num: number): int {
     return Math.trunc(num) as int;
@@ -26,8 +26,8 @@ export namespace Integer {
   /**
    * Function that parses string and creates {@linkcode int} from it.
    * 
-   * @param {string} value  String to be parsed.
-   * @returns {int} {@linkcode int} created from string.
+   * @param {string} value - `string` to be parsed.
+   * @returns {int} {@linkcode int} ` created from `string`.
    */
   export function toint(value: string): int {
     return Number.parseInt(value) as int;
@@ -38,7 +38,7 @@ export namespace Integer {
    * It is type guard function.
    * 
    * @param {number} num  Number to be checked if it is an integer.
-   * @returns True if number is integer, false otherwise.
+   * @returns {boolean} True if number is integer, false otherwise.
    */
   export function checkIsInt(num: number): num is int {
     return num % 1 === 0;
