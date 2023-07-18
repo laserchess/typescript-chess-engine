@@ -1,4 +1,4 @@
-import { Integer, int } from "utils";
+import { Integer } from "utils";
 
 /**
  * Enum that represents possible symmetry transformation
@@ -206,10 +206,10 @@ export class IntVector2d extends Vector2d {
    * then theirs decimal part will be truncated. This constructor
    * makes sure that every new `IntVector2d` object and its subclasses' objects
    * have integer coordinates.
-   * @param {int} x - Integer to be first coordinate.
-   * @param {int} y - Integer to be second coordinate.
+   * @param {number} x - Integer to be first coordinate.
+   * @param {number} y - Integer to be second coordinate.
    */
-  public constructor(x: int, y: int) {
+  public constructor(x: number, y: number) {
     super(Integer.create(x), Integer.create(y))
   }
 
@@ -224,7 +224,7 @@ export class IntVector2d extends Vector2d {
    * @param {number} y - `number` that is ment to be second coordinate.
    * @returns {IntVector2d}  New `IntVector2d` object created with given coordinates.
    */
-  protected createVector(x: int, y: int): IntVector2d {
+  protected createVector(x: number, y: number): IntVector2d {
     return new IntVector2d(x, y);
   }
 
@@ -234,7 +234,7 @@ export class IntVector2d extends Vector2d {
    * @returns  New `IntVector2d` object that is copy of calling object.
    */
   public copy(): IntVector2d {
-    return new IntVector2d(this.x as int, this.y as int)
+    return new IntVector2d(this.x, this.y)
   }
 
   /**
@@ -271,7 +271,7 @@ export class BoardVector2d extends IntVector2d {
    * @param {number} y - `number` that is ment to be second coordinate.
    * @returns {IntVector2d}  New `BoardVector2d` object created with given coordinates.
    */
-  protected createVector(x: int, y: int): BoardVector2d {
+  protected createVector(x: number, y: number): BoardVector2d {
     return new BoardVector2d(x, y);
   }
 
@@ -284,18 +284,18 @@ export class BoardVector2d extends IntVector2d {
    */
   public static fromVector2d(vector: Vector2d): BoardVector2d {
     let castedVector: BoardVector2d = vector as BoardVector2d
-    return new BoardVector2d(castedVector.x as int, castedVector.y as int);
+    return new BoardVector2d(castedVector.x, castedVector.y);
   }
 
   /**
    * Method creates new `BoardVector2d` object from two-character `string`.
    * First characted should be a letter of ASCII table, with code greater or
-   * equal to 97 ("a"). Second character should be any digit excluding 0.
+   * equal to 97 ("a"). Second character should be any digit, excluding 0.
    * If we consider only classic chess range of first character should be in
    * interval ["a","h"] and second should be integer in [1,8].
    * First character is translated to first coordinate in such way 
    * that "a"->0, "b"->1 ... and so on. Second character is translated to second
-   * coordinate by substracting -1 from it after parsing it to {@linkcode int}.
+   * coordinate by substracting -1 from it after parsing it to `number`.
    * Reverse process is performed by {@linkcode BoardVector2d.toString}.
    * This method returns `Error` if `vectorString` length is not equal to 2.
    * 
@@ -306,14 +306,14 @@ export class BoardVector2d extends IntVector2d {
     if (vectorString.length != 2) {
       throw new Error("Vector string is invalid [fromString()]");
     }
-    return new BoardVector2d((vectorString.charCodeAt(0) - 97) as int, (vectorString.charCodeAt(1) - 1) as int);
+    return new BoardVector2d(vectorString.charCodeAt(0) - 97, vectorString.charCodeAt(1) - 1);
   }
 
   /**
    * Method creates one-character `string` from first coordinate in such way that
    * 0->"a", 1->"b"... and so on. 
    * 
-   * @returns {string}  One-character 'string' that represents first coordinate of `BoardVector2d`.
+   * @returns {string}  One-character `string` that represents first coordinate of `BoardVector2d`.
    */
   public xToString(): string {
     return String.fromCharCode(this.x + 97);
@@ -323,7 +323,7 @@ export class BoardVector2d extends IntVector2d {
    * Method creates one-character `string` from second coordinate by adding
    * 1 to it. 
    * 
-   * @returns {string}  One-character 'string' that represents second coordinate of `BoardVector2d`.
+   * @returns {string}  One-character `string` that represents second coordinate of `BoardVector2d`.
    */
   public yToString(): string {
     return (this.y + 1).toString();
@@ -360,6 +360,6 @@ export class BoardVector2d extends IntVector2d {
    * @returns  New `BoardVector2d` object that is copy of calling object.
    */
   public copy(): BoardVector2d {
-    return new BoardVector2d(this.x as int, this.y as int)
+    return new BoardVector2d(this.x, this.y)
   }
 }
