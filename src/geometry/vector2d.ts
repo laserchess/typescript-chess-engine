@@ -70,6 +70,27 @@ export class Vector2d {
   }
 
   /**
+   * Method returns tuple that represents `Vector2d` object
+   * , first element of tuple if first coordinate, second element
+   * is second coordinate.
+   * @returns {[number, number]} Tuple representation of `Vector2d`
+   */
+  public toTuple(): [number, number] {
+    return [this.x, this.y];
+  }
+
+  /**
+   * Method creates new `Vector2d` object from tuple.
+   * first element of tuple if first coordinate, second element
+   * is second coordinate.
+   * @param {[number, number]} coordinates Tuple of numbers to be used for coordinates.
+   * @returns New `Vector2d` object created from `coordinates`.
+   */
+  public fromTuple(coordinates: [number, number]){
+    return this.createVector(coordinates[0], coordinates[1]);
+  }
+
+  /**
    * Method checks if two objects are equal.
    * 
    * @param {unknown} other - any object to be compared with calling object.
