@@ -22,7 +22,7 @@ describe("Vector2d", () => {
   test("Multiplying/dividing 2 vectors", () => {
     expect(new Vector2d(1, 2).mul(new Vector2d(2, 1.5))).toStrictEqual(new Vector2d(2, 3));
     expect(new Vector2d(1, 2).div(new Vector2d(2, 2))).toStrictEqual(new Vector2d(0.5, 1));
-    expect(()=>{
+    expect(() => {
       new Vector2d(1, 2).div(new Vector2d(2, 0))
     }).toThrow(Error);
   });
@@ -30,7 +30,7 @@ describe("Vector2d", () => {
   test("Multiplying/dividing vector and scalar", () => {
     expect(new Vector2d(1, 1).mul(3.5)).toStrictEqual(new Vector2d(3.5, 3.5));
     expect(new Vector2d(5, 2).div(2)).toStrictEqual(new Vector2d(2.5, 1));
-    expect(()=>{
+    expect(() => {
       new Vector2d(1, 2).div(0)
     }).toThrow(Error);
   });
@@ -47,7 +47,7 @@ describe("Vector2d", () => {
     expect(new Vector2d(1, 1).copy()).toStrictEqual(new Vector2d(1, 1));
     expect(new Vector2d(1.5, 2).copy()).not.toStrictEqual(new Vector2d(1, 2));
   });
-  
+
 });
 
 describe("IntVector2d", () => {
@@ -92,7 +92,7 @@ describe("BoardVector2d", () => {
   });
 
 
-  test("ToString functions", () => {
+  test("toString functions", () => {
     expect(new BoardVector2d(1, 3).xToString()).toStrictEqual("b");
     expect(new BoardVector2d(1, 3).yToString()).toStrictEqual("4");
     expect(new BoardVector2d(1, 3).toString()).toStrictEqual("b4");

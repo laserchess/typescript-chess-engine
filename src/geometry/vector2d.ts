@@ -48,6 +48,8 @@ export class Vector2d {
    * It has to be done in order to ensure that subclass
    * will return its instance and not superclass instance.
    * 
+   * @summary Method creates new `Vector2d` object. Shoudl be overriden by
+   * subclass to return its instance.
    * @param {number} x - `number` that is ment to be first coordinate.
    * @param {number} y - `number` that is ment to be second coordinate.
    * @returns {Vector2d}  New `Vector2d` object created with given coordinates.
@@ -107,6 +109,8 @@ export class Vector2d {
    * `Vector2d` object. Second coordinate is equal to multiplication of second coordinates
    * of calling object and passed `Vector2d` object. Muliplying vectors
    * by scalars is discussed {@link https://en.wikipedia.org/wiki/Scalar_multiplication here}.
+   * 
+   * @summary Method multiplies two `Vector2d` objects or one `Vector2d` object and one number. 
    * @param {Vector2d | number} other - `Vector2d` object to be multiplied by calling object,
    * or `number` to be multiplied by calling object.
    * @returns {Vector2d} - New `Vector2d` object created by substraction of two `Vector2d` objects, or `Vector2d`
@@ -129,6 +133,7 @@ export class Vector2d {
    * This method throws Error if at least one coordinate of `other` is 0, or
    * `other` is equal to 0. 
    * 
+   * @summary Method divides two `Vector2d` objects or one `Vector2d` object and one number. 
    * @param {Vector2d | number} other - `Vector2d` object to be divider of calling object,
    * or `number` to be divider of calling object.
    * @returns {Vector2d} - New `Vector2d` object created by division of two `Vector2d` objects, or `Vector2d`
@@ -144,7 +149,7 @@ export class Vector2d {
       }
       return this.createVector(this.x / other.x, this.y / other.y);
     }
-    if (other == 0) {
+    if (other === 0) {
       throw new Error("Divider is equal to 0");
     }
     return this.createVector(this.x / other, this.y / other);
@@ -176,6 +181,8 @@ export class Vector2d {
    * - {@linkcode Symmetry.X_AXIS} - negate second coordinate.
    * - {@linkcode Symmetry.Y_AXIS} - negate first coordinate.
    * - {@linkcode Symmetry.Y_EQ_X} - swap coordinates.
+   * 
+   * @summary Method returns new trasformed, acorrding to `symmetry`, `Vector2d`.
    * @param {Symmetry} symmetry - {@linkcode Symmetry} enum to be used to create new object.
    * @returns 
    */
@@ -199,7 +206,6 @@ export class Vector2d {
  * `IntVector2d` class and its subclasses are meant to be immutable.
  */
 export class IntVector2d extends Vector2d {
-
   /**
    * Basic constructor that allows to create new `IntVector2d` object.
    * If floats are passed as parameters in this constructor,
@@ -259,13 +265,12 @@ export class IntVector2d extends Vector2d {
  * Objects created with`BoardVector2d` class and its subclasses are meant to be immutable.
  */
 export class BoardVector2d extends IntVector2d {
-
   /**
    * Method creates and returns new `BoardVector2d` object. It is used by every
-   * method that creates new vector and is meant to be
+   * method that creates new vector is meant to be
    * overriden in subclass to return subclass's object. 
    * It has to be done in order to ensure that subclass
-   * will return its instance and not superclass instance.
+   * will return its instance not superclass instance.
    * 
    * @param {number} x - `number` that is ment to be first coordinate.
    * @param {number} y - `number` that is ment to be second coordinate.
@@ -283,8 +288,7 @@ export class BoardVector2d extends IntVector2d {
    * @returns {BoardVector2d}  New `BoardVector2d` created from `vector`.
    */
   public static fromVector2d(vector: Vector2d): BoardVector2d {
-    let castedVector: BoardVector2d = vector as BoardVector2d
-    return new BoardVector2d(castedVector.x, castedVector.y);
+    return new BoardVector2d(vector.x, vector.y);
   }
 
   /**
@@ -292,13 +296,14 @@ export class BoardVector2d extends IntVector2d {
    * First characted should be a letter of ASCII table, with code greater or
    * equal to 97 ("a"). Second character should be any digit, excluding 0.
    * If we consider only classic chess range of first character should be in
-   * interval ["a","h"] and second should be integer in [1,8].
+   * interval ["a", "h"] and second should be integer in [1, 8].
    * First character is translated to first coordinate in such way 
-   * that "a"->0, "b"->1 ... and so on. Second character is translated to second
+   * that "a" -> 0, "b" -> 1 ... and so on. Second character is translated to second
    * coordinate by substracting -1 from it after parsing it to `number`.
    * Reverse process is performed by {@linkcode BoardVector2d.toString}.
    * This method returns `Error` if `vectorString` length is not equal to 2.
    * 
+   * @summary Method creates new `BoardVector2d` from two-character string.
    * @param {string} vectorString - Any {@linkcode Vector2d} or its subclass object to create new `BoardVector2d` object on its basis. 
    * @returns {BoardVector2d}  New `BoardVector2d` created from `vector`.
    */
@@ -311,7 +316,7 @@ export class BoardVector2d extends IntVector2d {
 
   /**
    * Method creates one-character `string` from first coordinate in such way that
-   * 0->"a", 1->"b"... and so on. 
+   * 0 -> "a", 1 -> "b"... and so on. 
    * 
    * @returns {string}  One-character `string` that represents first coordinate of `BoardVector2d`.
    */
