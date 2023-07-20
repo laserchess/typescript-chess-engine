@@ -10,7 +10,6 @@ export enum Symmetry {
   ORIGIN = 0,
   X_AXIS = 1,
   Y_AXIS = 2,
-  Y_EQ_X = 3
 }
 
 /**
@@ -201,7 +200,6 @@ export class Vector2d {
    * - {@linkcode Symmetry.ORIGIN} - effect is the same as {@linkcode Vector2d.opposite}.
    * - {@linkcode Symmetry.X_AXIS} - negate second coordinate.
    * - {@linkcode Symmetry.Y_AXIS} - negate first coordinate.
-   * - {@linkcode Symmetry.Y_EQ_X} - swap coordinates.
    * 
    * @summary Method returns new trasformed, acorrding to `symmetry`, `Vector2d`.
    * @param {Symmetry} symmetry - {@linkcode Symmetry} enum to be used to create new object.
@@ -215,9 +213,16 @@ export class Vector2d {
         return this.createVector(this.x, -this.y);
       case Symmetry.Y_AXIS:
         return this.createVector(-this.x, this.y);
-      case Symmetry.Y_EQ_X:
-        return this.createVector(this.y, this.x);
     }
+  }
+
+  /**
+   * Method creates new `Vector2d` object with swapped coordinates.
+   * 
+   * @returns New `Vector2d` object with swapped coordinates.
+   */
+  public reverseAxis(): Vector2d {
+    return this.createVector(this.y, this.x);
   }
 }
 
