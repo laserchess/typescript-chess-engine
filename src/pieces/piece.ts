@@ -6,13 +6,11 @@ export class Piece {
   private position: BoardVector2d;
   private readonly playerId: number;
   private moveCounter: number;
-  private direction: BoardVector2d | undefined;
 
-  public constructor( position: BoardVector2d, playerId: number, direction: number){
+  public constructor(position: BoardVector2d, playerId: number, direction: number){
     this.initialPosition = position;
     this.position = position;
-    this.moveCounter = 0;
-    this.direction = this.direction; 
+    this.moveCounter = 0; 
     this.playerId = playerId;
   }
 }

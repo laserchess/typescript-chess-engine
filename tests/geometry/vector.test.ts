@@ -37,7 +37,7 @@ describe("Vector2d", () => {
 
   test("Opposite, reverseAxis, pivotSymmettry", () => {
     expect(new Vector2d(1, 1).opposite()).toStrictEqual(new Vector2d(-1, -1));
-    expect(new Vector2d(1.5, 2).applySymmetry(Symmetry.Y_EQ_X)).toStrictEqual(new Vector2d(2, 1.5));
+    expect(new Vector2d(1.5, 2).reverseAxis()).toStrictEqual(new Vector2d(2, 1.5));
     expect(new Vector2d(1, 1).applySymmetry(Symmetry.ORIGIN)).toStrictEqual(new Vector2d(-1, -1));
     expect(new Vector2d(1, 1).applySymmetry(Symmetry.X_AXIS)).toStrictEqual(new Vector2d(1, -1));
     expect(new Vector2d(1, 1).applySymmetry(Symmetry.Y_AXIS)).toStrictEqual(new Vector2d(-1, 1));
