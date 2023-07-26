@@ -11,7 +11,13 @@ export enum Direction {
   BOTTOM_LEFT_DIAGONAL = 7
 }
 
+export enum Rotation {
+  CLOCKWISE = 0,
+  ANTICLOCKWISE = 1
+}
+
 export namespace Direction {
+
   export function left(direction: Direction): Direction {
     return (direction.valueOf() + 7) % 8 as Direction;
   }
@@ -32,22 +38,22 @@ export namespace Direction {
     if (coordinates instanceof BoardVector2d) {
       coordinates = coordinates.toTuple();
     }
-    switch (coordinates.join()) {
-      case "-10":
+    switch (coordinates.join(", ")) {
+      case "-1, 0":
         return Direction.LEFT_RANK;
-      case "10":
+      case "1, 0":
         return Direction.RIGHT_RANK;
-      case "01":
+      case "0, 1":
         return Direction.UPPER_FILE;
-      case "0-1":
+      case "0, -1":
         return Direction.BOTTOM_FILE;
-      case "-11":
+      case "-1, 1":
         return Direction.UPPER_LEFT_DIAGONAL;
-      case "11":
+      case "1, 1":
         return Direction.UPPER_RIGHT_DIAGONAL;
-      case "1-1":
+      case "1, -1":
         return Direction.BOTTOM_RIGHT_DIAGONAL;
-      case "-1-1":
+      case "-1, -1":
         return Direction.BOTTOM_LEFT_DIAGONAL;
       default:
         throw new Error("Wrong value of vector")
