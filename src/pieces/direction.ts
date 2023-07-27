@@ -82,6 +82,27 @@ export namespace Direction {
     }
   }
 
+  export function toBoardVector2d(direction: Direction): BoardVector2d {
+    switch (direction) {
+      case Direction.LEFT_RANK:
+        return new BoardVector2d(-1, 0);
+      case Direction.RIGHT_RANK:
+        return new BoardVector2d(1, 0)
+      case Direction.UPPER_FILE:
+        return new BoardVector2d(0, 1)
+      case Direction.BOTTOM_FILE:
+        return new BoardVector2d(0, -1)
+      case Direction.UPPER_LEFT_DIAGONAL:
+        return new BoardVector2d(-1, 1)
+      case Direction.UPPER_RIGHT_DIAGONAL:
+        return new BoardVector2d(1, 1)
+      case Direction.BOTTOM_RIGHT_DIAGONAL:
+        return new BoardVector2d(1, -1)
+      case Direction.BOTTOM_LEFT_DIAGONAL:
+        return new BoardVector2d(-1, -1)
+    }
+  }
+
   export function getSquaresFromTuple(increment: [number, number], board: Board, origin: BoardVector2d): BoardVector2d[] {
     let xi: number = increment[0];
     let yi: number = increment[1];
@@ -111,9 +132,9 @@ export namespace Direction {
       }
     }
     let moves: BoardVector2d[] = [];
-    for (let sinX of xs) {
-      for (let sinY of ys) {
-        moves.push(new BoardVector2d(sinX, sinY));
+    for (let sInX of xs) {
+      for (let sInY of ys) {
+        moves.push(new BoardVector2d(sInX, sInY));
       }
     }
     //TODO laser fields 

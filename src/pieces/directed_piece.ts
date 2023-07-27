@@ -8,9 +8,13 @@ export class DirectedPiece extends Piece {
     super(position, playerId, board, options);
   }
 
-  set direction(direction: Direction) {
+  public set direction(direction: Direction) {
     if(this.direction === undefined){
       this._direction = direction;
     }
+  }
+
+  public get direction(): Direction | undefined {
+    return this._direction;
   }
 }
