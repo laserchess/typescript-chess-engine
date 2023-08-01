@@ -5,12 +5,12 @@ export class PawnPiece extends DirectedPiece {
   private _enPassantPosition?: BoardVector2d;
   private _promotionPosition?: BoardVector2d;
 
-  public constructor(position: BoardVector2d, playerId: number, board: Board){
+  public constructor(position: BoardVector2d, playerId: number, board: Board) {
     let options: PieceOpitons =
     {
       pieceType: PieceType.PAWN,
       movement: new PawnMovement(board)
-    } 
+    }
     super(position, playerId, board, options);
     this.movement.piece = this
   }
@@ -32,29 +32,83 @@ export class PawnPiece extends DirectedPiece {
   }
 
   public isOnPromotionPosition(): boolean {
-    if (this._promotionPosition === undefined){
-      throw new Error("promotionPosition of pawn is undefined");
-    }
-    return this._promotionPosition.y === this._position.y;
+    return this._promotionPosition!.y === this._position.y;
   }
 }
 
 export class PawnMovement extends PieceMovement {
 
-  public is_en_passant_legal(destination: BoardVector2d): boolean {
-    let piece: PawnPiece  = this._piece as PawnPiece;
+  public isEnPassantLegal(destination: BoardVector2d): boolean {
+    let piece: PawnPiece = this._piece as PawnPiece;
     let board: Board = this.board;
-    if (typeof piece.direction === "undefined") {
-      throw new Error("direction of PawnPiece cannot be undefined");
-    }
-    let otherPiece: Piece = board.getPiece(destination.sub(Direction.toBoardVector2d(piece.direction)));
-    return otherPiece !== undefined 
-    && otherPiece.isSameColor(piece)
-    && otherPiece.pieceType === PieceType.PAWN
-    && board.canMoveTo(destination)
-    && board.getLastMove().piece === otherPiece
-    && piece.isOnEnPassantPosition();
+    let otherPiece: Piece = board.getPiece(destination.sub(Direction.toBoardVector2d(piece.direction!)));
+    return otherPiece !== undefined
+      && otherPiece.isSameColor(piece)
+      && otherPiece.pieceType === PieceType.PAWN
+      && board.canMoveTo(destination)
+      && board.getLastMove().piece === otherPiece
+      && piece.isOnEnPassantPosition();
   }
 
+  public updateMoves(): void {
+    let piece: PawnPiece = this._piece as PawnPiece;
+    let board: Board = this.board;
+    let direction: BoardVector2d = Direction.toBoardVector2d(piece.direction as Direction);
+    let captureDeltas: BoardVector2d[] = [
+      Direction.toBoardVector2d(piece.direction!).reverseAxis().add(Direction.toBoardVector2d(piece.direction!)),
+      Direction.toBoardVector2d(piece.direction!).reverseAxis().opposite().add(Direction.toBoardVector2d(piece.direction!))
+    ]
 
+    this.clearMoves();
+
+    // Advance 1 square
+
+    if (!board.isOutOfBounds(piece.position.add(direction))) {
+      this._allMoves.push(piece.position.add(direction));
+    }
+
+    if (!board.canMoveTo(piece.position.add(direction), piece)) {
+      this._legalMoves.push(piece.position.add(direction));
+    }
+
+    // Advance 2 squares
+
+    if (!board.isOutOfBounds(piece.position.add(direction.mul(2)))) {
+      this._allMoves.push(piece.position.add(direction.mul(2)));
+    }
+
+    if (
+      !piece.wasMoved()
+      && board.canMoveTo(piece.position.add(direction.mul(2)), piece)
+      && this.legalMoves.length > 0
+    ) {
+      this._legalMoves.push(piece.position.add(direction.mul(2)));
+    }
+
+    // Capture
+
+    for (let increment of captureDeltas) {
+      let position: BoardVector2d = piece.position.add(increment);
+      if (!board.isOutOfBounds(position)) {
+        this._allMoves.push(position);
+      }
+      if (!board.canMoveTo(position, piece)) {
+        this._legalMoves.push(position);
+      }
+      this._capturableMoves.push(position);
+    }
+
+    // En Passant
+
+    if (piece.isOnEnPassantPosition()) {
+      for (let position of captureDeltas) {
+        let tmpPosition: BoardVector2d = piece.position.add(position);
+        if (this.isEnPassantLegal(tmpPosition)) {
+          this._allMoves.push(tmpPosition);
+          this._legalMoves.push(tmpPosition);
+        }
+      }
+    }
+
+  }
 }

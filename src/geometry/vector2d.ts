@@ -108,8 +108,8 @@ export class Vector2d {
    * @param {Vector2d} other - `Vector2d` object to be added to calling object of `Vector2d`.
    * @returns {Vector2d}  New `Vector2d` object created by addition of two `Vector2d` objects.
    */
-  public add(other: Vector2d): Vector2d {
-    return this.createVector(this.x + other.x, this.y + other.y);
+  public add<T extends Vector2d>(other: Vector2d): T {
+    return this.createVector(this.x + other.x, this.y + other.y) as T;
   }
 
   /**
@@ -117,8 +117,8 @@ export class Vector2d {
    * @param {Vector2d} other - `Vector2d` object to be substracted from calling object of `Vector2d`.
    * @returns {Vector2d}  New `Vector2d` object created by substraction of two `Vector2d` objects.
    */
-  public sub(other: Vector2d): Vector2d {
-    return this.createVector(this.x - other.x, this.y - other.y);
+  public sub<T extends Vector2d>(other: Vector2d): T {
+    return this.createVector(this.x - other.x, this.y - other.y) as T
   }
 
   /**
@@ -136,11 +136,11 @@ export class Vector2d {
    * @returns {Vector2d} - New `Vector2d` object created by substraction of two `Vector2d` objects, or `Vector2d`
    * object and `number`. 
    */
-  public mul(other: Vector2d | number): Vector2d {
+  public mul<T extends Vector2d>(other: Vector2d | number): T {
     if (other instanceof Vector2d) {
-      return this.createVector(this.x * other.x, this.y * other.y);
+      return this.createVector(this.x * other.x, this.y * other.y) as T;
     }
-    return this.createVector(this.x * other, this.y * other);
+    return this.createVector(this.x * other, this.y * other) as T;
   }
   /**
    * Method performs dividing operation of two `Vector2d` objects,
@@ -159,7 +159,7 @@ export class Vector2d {
    * @returns {Vector2d} - New `Vector2d` object created by division of two `Vector2d` objects, or `Vector2d`
    * object and `number`.
    */
-  public div(other: Vector2d | number): Vector2d {
+  public div<T extends Vector2d>(other: Vector2d | number): T {
     if (other instanceof Vector2d) {
       if (other.x == 0) {
         throw new Error("First (x) coordinate of divider vector is equal to 0.");
@@ -167,12 +167,12 @@ export class Vector2d {
       if (other.y == 0) {
         throw new Error("Second (y) coordinate of divider vector is equal to 0.");
       }
-      return this.createVector(this.x / other.x, this.y / other.y);
+      return this.createVector(this.x / other.x, this.y / other.y) as T;
     }
     if (other === 0) {
       throw new Error("Divider is equal to 0");
     }
-    return this.createVector(this.x / other, this.y / other);
+    return this.createVector(this.x / other, this.y / other) as T;
   }
   /**
    * Method returns `Vector2d` object opposite to calling object.
@@ -180,8 +180,8 @@ export class Vector2d {
    * 
    * @returns  New `Vector2d` object created by negating calling object coordinates.
    */
-  public opposite(): Vector2d {
-    return this.createVector(-this.x, -this.y);
+  public opposite<T extends Vector2d>(): T {
+    return this.createVector(-this.x, -this.y) as T;
   }
 
   /**
@@ -189,8 +189,8 @@ export class Vector2d {
    * 
    * @returns  New `Vector2d` object that is copy of calling object.
    */
-  public copy(): Vector2d {
-    return this.createVector(this.x, this.y);
+  public copy<T extends Vector2d>(): T {
+    return this.createVector(this.x, this.y) as T;
   }
 
   /**
@@ -205,14 +205,14 @@ export class Vector2d {
    * @param {Symmetry} symmetry - {@linkcode Symmetry} enum to be used to create new object.
    * @returns 
    */
-  public applySymmetry(symmetry: Symmetry): Vector2d {
+  public applySymmetry<T extends Vector2d>(symmetry: Symmetry): T {
     switch (symmetry) {
       case Symmetry.ORIGIN:
-        return this.opposite();
+        return this.opposite() as T;
       case Symmetry.X_AXIS:
-        return this.createVector(this.x, -this.y);
+        return this.createVector(this.x, -this.y) as T;
       case Symmetry.Y_AXIS:
-        return this.createVector(-this.x, this.y);
+        return this.createVector(-this.x, this.y) as T;
     }
   }
 
@@ -221,8 +221,8 @@ export class Vector2d {
    * 
    * @returns New `Vector2d` object with swapped coordinates.
    */
-  public reverseAxis(): Vector2d {
-    return this.createVector(this.y, this.x);
+  public reverseAxis<T extends Vector2d>(): T {
+    return this.createVector(this.y, this.x) as T;
   }
 }
 
@@ -256,8 +256,8 @@ export class IntVector2d extends Vector2d {
    * @param {number} y - `number` that is ment to be second coordinate.
    * @returns {IntVector2d}  New `IntVector2d` object created with given coordinates.
    */
-  protected createVector(x: number, y: number): IntVector2d {
-    return new IntVector2d(x, y);
+  protected createVector<T extends Vector2d>(x: number, y: number): T {
+    return new IntVector2d(x, y) as unknown as T;
   }
 
   /**
@@ -265,8 +265,8 @@ export class IntVector2d extends Vector2d {
    * 
    * @returns  New `IntVector2d` object that is copy of calling object.
    */
-  public copy(): IntVector2d {
-    return new IntVector2d(this.x, this.y)
+  public copy<T extends Vector2d>(): T {
+    return new IntVector2d(this.x, this.y) as unknown as T
   }
 
   /**
@@ -302,8 +302,8 @@ export class BoardVector2d extends IntVector2d {
    * @param {number} y - `number` that is ment to be second coordinate.
    * @returns {IntVector2d}  New `BoardVector2d` object created with given coordinates.
    */
-  protected createVector(x: number, y: number): BoardVector2d {
-    return new BoardVector2d(x, y);
+  protected createVector<T extends Vector2d>(x: number, y: number): T {
+    return new BoardVector2d(x, y) as unknown as T;
   }
 
   /**
@@ -390,7 +390,7 @@ export class BoardVector2d extends IntVector2d {
    * 
    * @returns  New `BoardVector2d` object that is copy of calling object.
    */
-  public copy(): BoardVector2d {
-    return new BoardVector2d(this.x, this.y)
+  public copy<T extends Vector2d>(): T {
+    return new BoardVector2d(this.x, this.y) as unknown as T;
   }
 }

@@ -21,8 +21,8 @@ export abstract class Piece {
   public readonly initialPosition: BoardVector2d;
   public readonly playerId: number;
   public readonly pieceType: PieceType;
-  public defendsKingsFrom: Piece[];
-  protected readonly movement: PieceMovement;
+  public readonly movement: PieceMovement;
+  public defendsKingsFrom: Piece[][];
   protected readonly board: Board;
   protected _position: BoardVector2d;
   protected moveCounter: number;
@@ -56,7 +56,7 @@ export abstract class Piece {
   }
 
   public toString(): string {
-    switch (this.pieceType) {
+    switch (this!.pieceType) {
       case PieceType.KING:
         return "K";
       case PieceType.QUEEN:
@@ -73,8 +73,6 @@ export abstract class Piece {
         return "M";
       case PieceType.LASGUN:
         return "L";
-      default:
-        throw new Error("Field pieceType is undefined.");
     }
   }
 
@@ -95,26 +93,20 @@ export abstract class Piece {
     this.moveCounter += 1;
     this.board.notifyPositionChange(origin, destination);
   }
-
-  public getAllMoves(): BoardVector2d[][] {
-    return this.movement.getAllMoves();
-  }
-
-  public getLegalMoves(): BoardVector2d[][] {
-    return this.movement.getLegalMoves();
-  }
-
-  public getCapturableMoves(): BoardVector2d[][] {
-    return this.movement.getCapturableMoves();
-  }
 }
 
 export abstract class PieceMovement {
   protected board: Board;
   protected _piece?: Piece;
+  protected readonly _allMoves: BoardVector2d[];
+  protected readonly _legalMoves: BoardVector2d[];
+  protected readonly _capturableMoves: BoardVector2d[];
 
   public constructor(board: Board) {
     this.board = board;
+    this._allMoves = [];
+    this._legalMoves = [];
+    this._capturableMoves = [];
   }
 
   public set piece(piece: Piece) {
@@ -123,9 +115,24 @@ export abstract class PieceMovement {
     }
   }
 
-  public abstract getAllMoves(): BoardVector2d[][];
+  protected clearMoves(): void {
+    this._allMoves.length = 0;
+    this._legalMoves.length = 0;
+    this._capturableMoves.length = 0;
+  }
 
-  public abstract getLegalMoves(): BoardVector2d[][];
+  public abstract updateMoves(): void;
 
-  public abstract getCapturableMoves(): BoardVector2d[][];
+
+  public get allMoves(): BoardVector2d[] {
+    return this._allMoves;
+  }
+
+  public get legalMoves(): BoardVector2d[] {
+    return this._legalMoves;
+  }
+
+  public get capturableMoves(): BoardVector2d[] {
+    return this._capturableMoves;
+  }
 }

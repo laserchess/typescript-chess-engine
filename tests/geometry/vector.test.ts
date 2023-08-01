@@ -103,4 +103,15 @@ describe("BoardVector2d", () => {
     expect(new BoardVector2d(1, 1).copy()).toStrictEqual(new BoardVector2d(1, 1));
     expect(new BoardVector2d(1, 2).copy()).toStrictEqual(new BoardVector2d(1, 2));
   });
+
+
+});
+
+
+describe("Different types vectors", () => {
+  test("Creating BoardVector2d from other type vectors", () => {
+    expect(new BoardVector2d(2,2).add(new Vector2d(2,2)).toString()).toStrictEqual(new BoardVector2d(4, 4).toString());
+    expect(new Vector2d(2,2).add(new BoardVector2d(2,2)).toString()).toStrictEqual(new Vector2d(4, 4).toString());
+  });
+  
 });
