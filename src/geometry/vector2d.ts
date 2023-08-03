@@ -85,8 +85,8 @@ export class Vector2d {
    * @param {[number, number]} coordinates Tuple of numbers to be used for coordinates.
    * @returns New `Vector2d` object created from `coordinates`.
    */
-  public fromTuple(coordinates: [number, number]){
-    return this.createVector(coordinates[0], coordinates[1]);
+  public static fromTuple(coordinates: [number, number]): Vector2d {
+    return new Vector2d(coordinates[0], coordinates[1]);
   }
 
   /**
@@ -266,7 +266,7 @@ export class IntVector2d extends Vector2d {
    * @returns  New `IntVector2d` object that is copy of calling object.
    */
   public copy<T extends Vector2d>(): T {
-    return new IntVector2d(this.x, this.y) as unknown as T
+    return this.createVector(this.x, this.y)
   }
 
   /**
@@ -391,6 +391,6 @@ export class BoardVector2d extends IntVector2d {
    * @returns  New `BoardVector2d` object that is copy of calling object.
    */
   public copy<T extends Vector2d>(): T {
-    return new BoardVector2d(this.x, this.y) as unknown as T;
+    return this.createVector(this.x, this.y)  as T;
   }
 }
