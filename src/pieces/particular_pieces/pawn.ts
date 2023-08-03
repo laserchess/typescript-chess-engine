@@ -39,9 +39,9 @@ export class PawnPiece extends DirectedPiece {
 export class PawnMovement extends PieceMovement {
 
   public isEnPassantLegal(destination: BoardVector2d): boolean {
-    let piece: PawnPiece = this._piece as PawnPiece;
-    let board: Board = this.board;
-    let otherPiece: Piece = board.getPiece(destination.sub(Direction.toBoardVector2d(piece.direction!)));
+    const piece: PawnPiece = this._piece as PawnPiece;
+    const board: Board = this.board;
+    const otherPiece: Piece = board.getPiece(destination.sub(Direction.toBoardVector2d(piece.direction!)));
     return otherPiece !== undefined
       && otherPiece.isSameColor(piece)
       && otherPiece.pieceType === PieceType.PAWN
@@ -51,10 +51,10 @@ export class PawnMovement extends PieceMovement {
   }
 
   public updateMoves(): void {
-    let piece: PawnPiece = this._piece as PawnPiece;
-    let board: Board = this.board;
-    let direction: BoardVector2d = Direction.toBoardVector2d(piece.direction as Direction);
-    let captureDeltas: BoardVector2d[] = [
+    const piece: PawnPiece = this._piece as PawnPiece;
+    const board: Board = this.board;
+    const direction: BoardVector2d = Direction.toBoardVector2d(piece.direction as Direction);
+    const captureDeltas: BoardVector2d[] = [
       Direction.toBoardVector2d(piece.direction!).reverseAxis().add(Direction.toBoardVector2d(piece.direction!)),
       Direction.toBoardVector2d(piece.direction!).reverseAxis().opposite().add(Direction.toBoardVector2d(piece.direction!))
     ]
@@ -62,7 +62,6 @@ export class PawnMovement extends PieceMovement {
     this.clearMoves();
 
     // Advance 1 square
-
     if (!board.isOutOfBounds(piece.position.add(direction))) {
       this._allMoves.push(piece.position.add(direction));
     }
@@ -109,6 +108,5 @@ export class PawnMovement extends PieceMovement {
         }
       }
     }
-
   }
 }
