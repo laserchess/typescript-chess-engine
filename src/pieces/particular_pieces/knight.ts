@@ -13,7 +13,6 @@ export class KnightPiece extends Piece {
   }
 
   public rangedCapture(destination: BoardVector2d) {
-    const origin: BoardVector2d = this._position.copy();
     this._position = destination;
     this.moveCounter += 1;
     this.board.notifyRangedCapture(this, destination);
@@ -39,10 +38,12 @@ export class KnightMovement extends PieceMovement {
     for (let position of positions) {
       if (!board.isOutOfBounds(position)) {
         this._allMoves.push(position);
-      }
-      if (!board.canMoveTo(position, piece)) {
-        this._legalMoves.push(position);
-        this._capturableMoves.push(position);
+        if (board.canMoveTo(position, piece)) {
+          this._legalMoves.push(position);
+        }
+        if (board.canMoveTo(position, piece)) { //Additional data 
+          this._capturableMoves.push(position);
+        }
       }
     }
   }

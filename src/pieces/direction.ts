@@ -18,20 +18,33 @@ export enum Rotation {
 
 export namespace Direction {
 
-  export function left(direction: Direction): Direction {
+  export function turnLeft(direction: Direction): Direction {
     return (direction.valueOf() + 7) % 8 as Direction;
   }
 
-  export function right(direction: Direction): Direction {
+  export function turnRight(direction: Direction): Direction {
     return (direction.valueOf() + 1) % 8 as Direction;
   }
 
-  export function doubleLeft(direction: Direction): Direction {
-    return left(left(direction)) as Direction;
+  export function turnDoubleLeft(direction: Direction): Direction {
+    return turnLeft(turnLeft(direction)) as Direction;
   }
 
-  export function doubleRight(direction: Direction): Direction {
-    return right(right(direction)) as Direction;
+  export function turnDoubleRight(direction: Direction): Direction {
+    return turnRight(turnRight(direction)) as Direction;
+  }
+
+  export function turnByStep(direction: Direction, turnNumber: number): Direction {
+    if (turnNumber > 0) {
+      return (direction.valueOf() + turnNumber) % 8 as Direction;
+    }
+    else if (turnNumber < 0) {
+      let turnsLeft = Math.abs(turnNumber) - direction.valueOf();
+      if (turnsLeft < 0) {
+        return Math.abs(turnsLeft);
+      }
+      return 7 - (turnsLeft % 8) as Direction;
+    }
   }
 
   export function createFrom(coordinates: BoardVector2d | [number, number]): Direction {

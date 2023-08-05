@@ -227,6 +227,26 @@ export class Vector2d {
   public reverseAxis<T extends Vector2d>(): T {
     return this.createVector(this.y, this.x) as T;
   }
+
+  /**
+   * Method returns length of `Vector2d` object.
+   * 
+   * @returns Number that represents object length.
+   */
+  public getLength(): number {
+    return Math.sqrt(this.x*this.x+this.y*this.y);
+  }
+
+  /**
+   * Method creates new `Vector2d` object that is 
+   * {@link https://en.wikipedia.org/wiki/Unit_vector unit vector} 
+   * of calling object.
+   * 
+   * @returns `Vector2d` object that is {@link https://en.wikipedia.org/wiki/Unit_vector unit vector}.
+   */
+  public createUnitVector<T extends Vector2d>(): T {
+    return this.div(this.getLength());
+  }
 }
 
 /**
@@ -284,6 +304,37 @@ export class IntVector2d extends Vector2d {
       return false;
     }
     return this.x == other.x && this.y == other.y;
+  }
+
+    /**
+   * Method creates new `IntVector2d` object that is 
+   * {@link https://en.wikipedia.org/wiki/Unit_vector unit vector} 
+   * of calling object. This method differs from {@link Vector2d.createUnitVector},
+   * as it creates new `IntVector2d` with one coordinate equal to 0, and one equal
+   * to -1 or 1. In most cases, new object have coordinate equal to 1 or -1, if this
+   * coordinate had greater absolute value than other coordinate in calling object.
+   * If absolute values of both coordinates of calling object are equal, then
+   * `prioritizeAxisY` decides which coordinate is more important(, by default
+   * more important is x axis).
+   * 
+   * @summary Method creates new `IntVector2d` object that is 
+   * {@link https://en.wikipedia.org/wiki/Unit_vector unit vector} 
+   * of calling object.
+   * @param {boolean} prioritizeAxisY - bool value that decides which axis should be considered
+   * as more important, when absolute value of coordinates is equal.
+   * @returns `IntVector2d` object that is {@link https://en.wikipedia.org/wiki/Unit_vector unit vector}.
+   */
+  public createUnitVector<T extends Vector2d>(prioritizeAxisY?: boolean): T {
+    if (Math.abs(this.x) === Math.abs(this.y)) {
+      if (typeof prioritizeAxisY === "undefined" || prioritizeAxisY === true) {
+        return this.createVector(0, Math.sign(this.y));
+      }
+      return this.createVector(Math.sign(this.x), 0);
+    }
+    if (Math.abs(this.x) > Math.abs(this.y)) {
+      return this.createVector(Math.sign(this.x), 0);
+    }
+    return this.createVector(0, Math.sign(this.y));
   }
 }
 

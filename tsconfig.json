@@ -18,6 +18,9 @@
       ],
       "pieces":[
         "pieces/index.ts"
+      ],
+      "core":[
+        "cores/index.ts"
       ]
 
     }

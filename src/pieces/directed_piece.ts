@@ -9,12 +9,10 @@ export class DirectedPiece extends Piece {
   }
 
   public set direction(direction: Direction) {
-    if(this.direction === undefined){
-      this._direction = direction;
-    }
+    this._direction = direction;
   }
 
-  public get direction(): Direction | undefined {
-    return this._direction;
+  public get direction(): Direction {
+    return this._direction!;
   }
 }

@@ -13,7 +13,6 @@ import {
   DirectedPiece
 } from "./directed_piece.js"
 
-type Rotation = Direction;
 
 export {
   Direction,
@@ -22,5 +21,4 @@ export {
   PieceType,
   PieceOpitons,
   PieceMovement,
-  Rotation
 }

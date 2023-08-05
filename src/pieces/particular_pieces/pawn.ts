@@ -15,6 +15,13 @@ export class PawnPiece extends DirectedPiece {
     this.movement.piece = this
   }
 
+  public set direction(direction: Direction) {
+    if (direction % 2 === 1) {
+      throw new Error("Direction for PawnPiece mustn't be diagonal.");
+    }
+    super.direction = direction;
+  }
+
   public set enPassantPosition(position: BoardVector2d) {
     if (this._enPassantPosition === undefined) {
       this._enPassantPosition = position;
@@ -28,7 +35,7 @@ export class PawnPiece extends DirectedPiece {
   }
 
   public isOnEnPassantPosition(): boolean {
-    return this._enPassantPosition === this.position;
+    return this._enPassantPosition === this._position;
   }
 
   public isOnPromotionPosition(): boolean {
@@ -62,26 +69,25 @@ export class PawnMovement extends PieceMovement {
     this.clearMoves();
 
     // Advance 1 square
+
     if (!board.isOutOfBounds(piece.position.add(direction))) {
       this._allMoves.push(piece.position.add(direction));
-    }
-
-    if (!board.canMoveTo(piece.position.add(direction), piece)) {
-      this._legalMoves.push(piece.position.add(direction));
+      if (board.canMoveTo(piece.position.add(direction), piece)) {
+        this._legalMoves.push(piece.position.add(direction));
+      }
     }
 
     // Advance 2 squares
 
     if (!board.isOutOfBounds(piece.position.add(direction.mul(2)))) {
       this._allMoves.push(piece.position.add(direction.mul(2)));
-    }
-
-    if (
-      !piece.wasMoved()
-      && board.canMoveTo(piece.position.add(direction.mul(2)), piece)
-      && this.legalMoves.length > 0
-    ) {
-      this._legalMoves.push(piece.position.add(direction.mul(2)));
+      if (
+        !piece.wasMoved()
+        && board.canMoveTo(piece.position.add(direction.mul(2)), piece)
+        && this.legalMoves.length > 0
+      ) {
+        this._legalMoves.push(piece.position.add(direction.mul(2)));
+      }
     }
 
     // Capture
@@ -90,11 +96,12 @@ export class PawnMovement extends PieceMovement {
       let position: BoardVector2d = piece.position.add(increment);
       if (!board.isOutOfBounds(position)) {
         this._allMoves.push(position);
+        if (!board.canMoveTo(position, piece)) { // Additional data
+          this._legalMoves.push(position.copy());
+          this._capturableMoves.push(position.copy());
+        }
       }
-      if (!board.canMoveTo(position, piece)) {
-        this._legalMoves.push(position);
-      }
-      this._capturableMoves.push(position);
+
     }
 
     // En Passant
@@ -104,7 +111,8 @@ export class PawnMovement extends PieceMovement {
         let tmpPosition: BoardVector2d = piece.position.add(position);
         if (this.isEnPassantLegal(tmpPosition)) {
           this._allMoves.push(tmpPosition);
-          this._legalMoves.push(tmpPosition);
+          this._legalMoves.push(tmpPosition.copy());
+          this._capturableMoves.push(tmpPosition.copy());
         }
       }
     }
