@@ -15,7 +15,11 @@
       ],
       "utils": [
         "utils/index.ts"
+      ],
+      "pieces":[
+        "pieces/index.ts"
       ]
+
     }
   },
   "include": [

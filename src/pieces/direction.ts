@@ -11,7 +11,13 @@ export enum Direction {
   BOTTOM_LEFT_DIAGONAL = 7
 }
 
+export enum Rotation {
+  CLOCKWISE = 0,
+  ANTICLOCKWISE = 1
+}
+
 export namespace Direction {
+
   export function left(direction: Direction): Direction {
     return (direction.valueOf() + 7) % 8 as Direction;
   }
@@ -32,22 +38,22 @@ export namespace Direction {
     if (coordinates instanceof BoardVector2d) {
       coordinates = coordinates.toTuple();
     }
-    switch (coordinates.join()) {
-      case "-10":
+    switch (coordinates.join(", ")) {
+      case "-1, 0":
         return Direction.LEFT_RANK;
-      case "10":
+      case "1, 0":
         return Direction.RIGHT_RANK;
-      case "01":
+      case "0, 1":
         return Direction.UPPER_FILE;
-      case "0-1":
+      case "0, -1":
         return Direction.BOTTOM_FILE;
-      case "-11":
+      case "-1, 1":
         return Direction.UPPER_LEFT_DIAGONAL;
-      case "11":
+      case "1, 1":
         return Direction.UPPER_RIGHT_DIAGONAL;
-      case "1-1":
+      case "1, -1":
         return Direction.BOTTOM_RIGHT_DIAGONAL;
-      case "-1-1":
+      case "-1, -1":
         return Direction.BOTTOM_LEFT_DIAGONAL;
       default:
         throw new Error("Wrong value of vector")
@@ -73,6 +79,27 @@ export namespace Direction {
         return [1, -1]
       case Direction.BOTTOM_LEFT_DIAGONAL:
         return [-1, -1]
+    }
+  }
+
+  export function toBoardVector2d(direction: Direction): BoardVector2d {
+    switch (direction) {
+      case Direction.LEFT_RANK:
+        return new BoardVector2d(-1, 0);
+      case Direction.RIGHT_RANK:
+        return new BoardVector2d(1, 0)
+      case Direction.UPPER_FILE:
+        return new BoardVector2d(0, 1)
+      case Direction.BOTTOM_FILE:
+        return new BoardVector2d(0, -1)
+      case Direction.UPPER_LEFT_DIAGONAL:
+        return new BoardVector2d(-1, 1)
+      case Direction.UPPER_RIGHT_DIAGONAL:
+        return new BoardVector2d(1, 1)
+      case Direction.BOTTOM_RIGHT_DIAGONAL:
+        return new BoardVector2d(1, -1)
+      case Direction.BOTTOM_LEFT_DIAGONAL:
+        return new BoardVector2d(-1, -1)
     }
   }
 
@@ -105,9 +132,9 @@ export namespace Direction {
       }
     }
     let moves: BoardVector2d[] = [];
-    for (let sinX of xs) {
-      for (let sinY of ys) {
-        moves.push(new BoardVector2d(sinX, sinY));
+    for (let sInX of xs) {
+      for (let sInY of ys) {
+        moves.push(new BoardVector2d(sInX, sInY));
       }
     }
     //TODO laser fields 
