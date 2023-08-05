@@ -7,7 +7,7 @@ import { AroundMovement } from "pieces/around_piece.js";
 export class KingPiece extends Piece {
 
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    const options: PieceOpitons = 
+    const options: PieceOpitons =
     {
       pieceType: PieceType.KING,
       movement: new KingMovement(board)
@@ -18,11 +18,11 @@ export class KingPiece extends Piece {
 }
 
 export class KingMovement extends AroundMovement {
-  
+
   public isCastlingLegal(castling: PieceMoveType): boolean {
     let potentialRook: Piece | undefined;
     if (castling === PieceMoveType.KING_SIDE_CASTLING) {
-      potentialRook = this.board.getPiece(new BoardVector2d(this.board.width-1, this.piece.position.y))
+      potentialRook = this.board.getPiece(new BoardVector2d(this.board.width - 1, this.piece.position.y))
     }
     else if (castling === PieceMoveType.QUEEN_SIDE_CASTLING) {
       potentialRook = this.board.getPiece(new BoardVector2d(0, this.piece.position.y))
@@ -36,7 +36,7 @@ export class KingMovement extends AroundMovement {
       const fromKingUnitVector: BoardVector2d = this.piece.position.sub(potentialRook.position).createUnitVector();
       let currentPosition: BoardVector2d = this.piece.position;
 
-      for (let i=0;i<2;i++){
+      for (let i = 0; i < 2; i++) {
         if (this.board.isCheckAt(currentPosition, this.piece.playerId)) {
           return false;
         }

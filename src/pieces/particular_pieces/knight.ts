@@ -30,11 +30,11 @@ export class KnightMovement extends PieceMovement {
     this.clearMoves();
 
     for (let symmetry of symmetries) {
-      for (let vector of baseVectors) { 
+      for (let vector of baseVectors) {
         positions.push(piece.position.add(vector.applySymmetry(symmetry)));
       }
     }
-    
+
     for (let position of positions) {
       if (!board.isOutOfBounds(position)) {
         this._allMoves.push(position);

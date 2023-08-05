@@ -1,7 +1,3 @@
-import {
-  Direction
-} from "./direction.js";
-
 import { 
   Piece,
   PieceType,
@@ -13,12 +9,10 @@ import {
   DirectedPiece
 } from "./directed_piece.js"
 
-
 export {
-  Direction,
   Piece,
   DirectedPiece,
   PieceType,
   PieceOpitons,
-  PieceMovement,
+  PieceMovement
 }

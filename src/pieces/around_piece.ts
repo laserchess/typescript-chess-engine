@@ -12,7 +12,7 @@ export class AroundMovement extends PieceMovement {
 
     for (let scalar1 of [-1, 1, 0]) {
       for (let scalar2 of [-1, 1, 0]) {
-        if (scalar1 === 0 && scalar2 === 0 ){
+        if (scalar1 === 0 && scalar2 === 0) {
           continue;
         }
         let newVector: BoardVector2d = new BoardVector2d(scalar1, scalar2).add(piece.position);

@@ -1,19 +1,19 @@
 import { BoardVector2d } from "geometry";
 
 export enum Direction {
-  LEFT_RANK = 0,
-  UPPER_LEFT_DIAGONAL = 1,
-  UPPER_FILE = 2,
-  UPPER_RIGHT_DIAGONAL = 3,
-  RIGHT_RANK = 4,
+  LEFT_RANK             = 0,
+  UPPER_LEFT_DIAGONAL   = 1,
+  UPPER_FILE            = 2,
+  UPPER_RIGHT_DIAGONAL  = 3,
+  RIGHT_RANK            = 4,
   BOTTOM_RIGHT_DIAGONAL = 5,
-  BOTTOM_FILE = 6,
-  BOTTOM_LEFT_DIAGONAL = 7
+  BOTTOM_FILE           = 6,
+  BOTTOM_LEFT_DIAGONAL  = 7
 }
 
 export enum Rotation {
-  CLOCKWISE = 0,
-  ANTICLOCKWISE = 1
+  CLOCKWISE             = 0,
+  ANTICLOCKWISE         = 1
 }
 
 export namespace Direction {
