@@ -1,3 +1,3 @@
-import { Direction } from "./direction.js";
+import { Direction } from "./Direction.js";
 
 type Rotation = Direction;
