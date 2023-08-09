@@ -231,7 +231,7 @@ export class Vector2d {
   /**
    * Method returns length of `Vector2d` object.
    * 
-   * @returns Number that represents object length.
+   * @returns `Number` that represents length of vector.
    */
   public getLength(): number {
     return Math.sqrt(this.x*this.x+this.y*this.y);
@@ -311,8 +311,8 @@ export class IntVector2d extends Vector2d {
    * {@link https://en.wikipedia.org/wiki/Unit_vector unit vector} 
    * of calling object. This method differs from {@link Vector2d.createUnitVector},
    * as it creates new `IntVector2d` with one coordinate equal to 0, and one equal
-   * to -1 or 1. In most cases, new object have coordinate equal to 1 or -1, if this
-   * coordinate had greater absolute value than other coordinate in calling object.
+   * to -1 or 1. In most cases, new object have certain coordinate equal to 1 or -1, if this
+   * coordinate had greater absolute value than other coordinate of calling object.
    * If absolute values of both coordinates of calling object are equal, then
    * `prioritizeAxisY` decides which coordinate is more important(, by default
    * more important is x axis).

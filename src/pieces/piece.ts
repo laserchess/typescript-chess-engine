@@ -1,14 +1,14 @@
 import { BoardVector2d } from "geometry";
 
 export enum PieceType {
-  KING = 0,
-  QUEEN = 1,
-  PAWN = 2,
-  BISHOP = 3,
-  ROOK = 4,
-  KNIGHT = 5,
-  MIRROR = 6,
-  LASGUN = 7
+  KING = "K",
+  QUEEN = "Q",
+  PAWN = "",
+  BISHOP = "B",
+  ROOK = "R",
+  KNIGHT = "N",
+  MIRROR = "M",
+  LASGUN = "L"
 }
 
 export interface PieceOpitons {
@@ -56,24 +56,7 @@ export abstract class Piece {
   }
 
   public toString(): string {
-    switch (this!.pieceType) {
-      case PieceType.KING:
-        return "K";
-      case PieceType.QUEEN:
-        return "Q";
-      case PieceType.PAWN:
-        return "";
-      case PieceType.BISHOP:
-        return "B";
-      case PieceType.ROOK:
-        return "R";
-      case PieceType.KNIGHT:
-        return "N";
-      case PieceType.MIRROR:
-        return "M";
-      case PieceType.LASGUN:
-        return "L";
-    }
+    return this.pieceType.valueOf();
   }
 
   public wasMoved(): boolean {

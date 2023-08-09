@@ -1,5 +1,5 @@
 import { BoardVector2d, Symmetry } from "geometry";
-import { Direction, Piece, PieceMovement, PieceOpitons, PieceType } from "pieces";
+import { Piece, PieceMovement, PieceOpitons, PieceType } from "pieces";
 
 export class KnightPiece extends Piece {
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
