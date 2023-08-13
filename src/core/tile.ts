@@ -62,15 +62,15 @@ export class Tile {
     return returnValue;
   }
   
-  public addPieceToTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
+  public addPieceMovesToTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
     return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.ADD);
   }
 
-  public removePieceFromTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
+  public removePieceMovesFromTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
     return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.DELETE);
   }
 
-  public checkIfPieceInTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
+  public checkIfPieceMovesInTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
     return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.HAS);
   }
 

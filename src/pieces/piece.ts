@@ -1,3 +1,4 @@
+import { Board } from "core/board.js";
 import { BoardVector2d } from "geometry";
 
 export enum PieceType {
@@ -36,7 +37,7 @@ export abstract class Piece {
     this.board = board;
     this.pieceType = options.pieceType;
     this.movement = options.movement;
-    this.defendsKingsFrom = [];
+    this.defendsKingsFrom = [[],[]];
   }
 
   public get position(): BoardVector2d {
