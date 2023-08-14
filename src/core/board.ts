@@ -15,7 +15,8 @@ export class Board {
   private readonly width: number;
   private readonly height: number;
   private readonly tiles: Map<BoardVector2d, Tile>;
-  private readonly piecesOfType: Map<PieceType, Piece[]>
+  private readonly piecesOfType: Map<PieceType, Piece[][]>;
+  private readonly kingsProtectors: [Piece[], Piece[]];
 
   private promotionManager: PromotionManager;
   private checkManager: CheckManager;
@@ -24,7 +25,8 @@ export class Board {
     this.width = width;
     this.height = height;
     this.tiles = new Map<BoardVector2d, Tile>();
-    this.piecesOfType = new Map<PieceType, Piece[]>();
+    this.piecesOfType = new Map<PieceType, Piece[][]>();
+    this.kingsProtectors = [[], []];
 
     for (let i = 0; i < width; i++) {
       for (let j = 0; j < height; j++) {
@@ -42,6 +44,18 @@ export class Board {
     // this.checkManager
   }
 
+  public getPiecesOfPlayer(playerId: number): Piece[] {
+    let playerPieces: Piece[] = [];
+    for (let type in PieceType) {
+      let pieceType: PieceType = PieceType[type as keyof typeof PieceType];
+      playerPieces = playerPieces.concat(this.piecesOfType.get(pieceType)![playerId]);
+    }
+    return playerPieces;
+  }
+  
+  public getKingProtectors(playerId: number): Piece[] {
+    return this.kingsProtectors[playerId];
+  }
   public isOutOfBounds(destination: BoardVector2d): boolean {
     return destination.x < 0 || destination.x >= this.width || destination.y < 0 || destination.y >= this.height;
   }
@@ -76,9 +90,9 @@ export class Board {
 
     tile.pieceOnTile = piece;
     
-    const pieceTypeArray: Piece[] = this.piecesOfType.get(piece.pieceType)!;
+    const pieceTypeArray: Piece[][] = this.piecesOfType.get(piece.pieceType)!;
     pieceTypeArray.length = Math.max(pieceTypeArray.length, piece.playerId + 1);
-    pieceTypeArray[piece.playerId] = piece as KingPiece;
+    pieceTypeArray[piece.playerId].push(piece);
   }
 
   public removePiece(piece: Piece): void {
@@ -96,6 +110,10 @@ export class Board {
     const requiredCaptureBool: boolean = captureBool;
     const playerId: number = piece.playerId;
     // TODO
+  }
+
+  public getPiecesOfType(playerId: number, pieceType: PieceType): Piece[] {
+    return this.piecesOfType.get(pieceType)![playerId];
   }
 
   public notifyPositionChange(origin: BoardVector2d, destination: BoardVector2d) {

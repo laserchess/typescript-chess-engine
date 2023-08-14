@@ -74,4 +74,7 @@ export class Tile {
     return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.HAS);
   }
 
+  public isPieceMovesEmpty(playerId: number, movePredictionsType: MovesPredictionsType): boolean{
+    return this.setHashMap.get(movePredictionsType)![playerId].size === 0; 
+  }
 }

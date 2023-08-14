@@ -23,7 +23,7 @@ export abstract class Piece {
   public readonly playerId: number;
   public readonly pieceType: PieceType;
   public readonly movement: PieceMovement;
-  public defendsKingsFrom: Piece[][];
+  public readonly defendsKingsFrom: [Piece | null, Piece | null];
   protected readonly board: Board;
   protected _position: BoardVector2d;
   protected moveCounter: number;
@@ -37,7 +37,7 @@ export abstract class Piece {
     this.board = board;
     this.pieceType = options.pieceType;
     this.movement = options.movement;
-    this.defendsKingsFrom = [[],[]];
+    this.defendsKingsFrom = [null, null];
   }
 
   public get position(): BoardVector2d {
