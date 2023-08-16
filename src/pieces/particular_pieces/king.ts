@@ -1,7 +1,7 @@
 import { PieceMoveType } from "core/move_type.js";
 import { BoardVector2d } from "geometry";
 import { Piece, PieceMovement, PieceOpitons, PieceType } from "pieces";
-import { AroundMovement } from "pieces/around_piece.js";
+import { CloseRangeMovement } from "pieces/around_piece.js";
 import { KnightPiece } from "pieces/particular_pieces/knight.js";
 
 
@@ -37,7 +37,7 @@ export class KingPiece extends Piece {
   
 }
 
-export class KingMovement extends AroundMovement {
+export class KingMovement extends CloseRangeMovement {
 
   public isCastlingLegal(castling: PieceMoveType): boolean {
     let potentialRook: Piece;

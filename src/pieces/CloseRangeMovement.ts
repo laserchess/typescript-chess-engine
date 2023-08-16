@@ -1,7 +1,7 @@
 import { BoardVector2d } from "geometry";
 import { Piece, PieceMovement } from "pieces";
 
-export class AroundMovement extends PieceMovement {
+export class CloseRangeMovement extends PieceMovement {
 
   // This method sets all around moves as capturableMoves.
   public updateMoves(): void {
