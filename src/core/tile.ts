@@ -2,9 +2,9 @@ import { BoardVector2d } from "geometry";
 import { Piece } from "pieces";
 
 export const enum MovesPredictionsType {
-  All = 1 << 0,
-  Legal = 1 << 1,
-  Capturable  = 1 << 2
+  All        = 1 << 0,
+  Legal      = 1 << 1,
+  Capturable = 1 << 2
 }
 
 const enum OperationType {

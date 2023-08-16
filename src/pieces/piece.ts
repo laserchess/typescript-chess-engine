@@ -2,11 +2,11 @@ import { Board } from "core/board.js";
 import { BoardVector2d } from "geometry";
 
 export enum PieceType {
-  KING = "K",
-  QUEEN = "Q",
-  PAWN = "",
+  KING   = "K",
+  QUEEN  = "Q",
+  PAWN   = "",
   BISHOP = "B",
-  ROOK = "R",
+  ROOK   = "R",
   KNIGHT = "N",
   MIRROR = "M",
   LASGUN = "L"
