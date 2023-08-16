@@ -1,4 +1,4 @@
-export enum PieceMoveType {
+export const enum PieceMoveType {
   MOVE = 1 << 0,
   CAPTURE = 1 << 1,
   KING_SIDE_CASTLING = 1 << 2,

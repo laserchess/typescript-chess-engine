@@ -1,13 +1,13 @@
 import { BoardVector2d } from "geometry";
 import { Piece } from "pieces";
 
-export enum MovesPredictionsType {
+export const enum MovesPredictionsType {
   ALL = 1 << 0,
   LEGAL = 1 << 1,
   CAPTURABLE  = 1 << 2
 }
 
-enum OperationType {
+const enum OperationType {
   ADD,
   DELETE,
   HAS

@@ -6,7 +6,7 @@ import { Integer } from "utils";
  * 
  * @enum {number}
  */
-export enum Symmetry {
+export const enum Symmetry {
   ORIGIN = 0,
   X_AXIS = 1,
   Y_AXIS = 2,
