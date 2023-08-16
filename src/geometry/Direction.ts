@@ -1,19 +1,19 @@
 import { BoardVector2d } from "geometry";
 
 export enum Direction {
-  LEFT_RANK             = 0,
-  UPPER_LEFT_DIAGONAL   = 1,
-  UPPER_FILE            = 2,
-  UPPER_RIGHT_DIAGONAL  = 3,
-  RIGHT_RANK            = 4,
-  BOTTOM_RIGHT_DIAGONAL = 5,
-  BOTTOM_FILE           = 6,
-  BOTTOM_LEFT_DIAGONAL  = 7
+  LeftRank            = 0,
+  UpperLeftDiagonal   = 1,
+  UpperFile           = 2,
+  UpperRightDiagonal  = 3,
+  RightRank           = 4,
+  BottomRightDiagonal = 5,
+  BottomFile          = 6,
+  BottomLeftDiagonal  = 7
 }
 
-export enum Rotation {
-  CLOCKWISE             = 0,
-  ANTICLOCKWISE         = 1
+export const enum Rotation {
+  Clockwise           = 0,
+  Anticlockwise       = 1
 }
 
 export namespace Direction {
@@ -53,21 +53,21 @@ export namespace Direction {
     }
     switch (coordinates.join(", ")) {
       case "-1, 0":
-        return Direction.LEFT_RANK;
+        return Direction.LeftRank;
       case "1, 0":
-        return Direction.RIGHT_RANK;
+        return Direction.RightRank;
       case "0, 1":
-        return Direction.UPPER_FILE;
+        return Direction.UpperFile;
       case "0, -1":
-        return Direction.BOTTOM_FILE;
+        return Direction.BottomFile;
       case "-1, 1":
-        return Direction.UPPER_LEFT_DIAGONAL;
+        return Direction.UpperLeftDiagonal;
       case "1, 1":
-        return Direction.UPPER_RIGHT_DIAGONAL;
+        return Direction.UpperRightDiagonal;
       case "1, -1":
-        return Direction.BOTTOM_RIGHT_DIAGONAL;
+        return Direction.BottomRightDiagonal;
       case "-1, -1":
-        return Direction.BOTTOM_LEFT_DIAGONAL;
+        return Direction.BottomLeftDiagonal;
       default:
         throw new Error("Wrong value of vector")
     }
@@ -76,42 +76,42 @@ export namespace Direction {
 
   export function toTuple(direction: Direction): [number, number] {
     switch (direction) {
-      case Direction.LEFT_RANK:
+      case Direction.LeftRank:
         return [-1, 0]
-      case Direction.RIGHT_RANK:
+      case Direction.RightRank:
         return [1, 0]
-      case Direction.UPPER_FILE:
+      case Direction.UpperFile:
         return [0, 1]
-      case Direction.BOTTOM_FILE:
+      case Direction.BottomFile:
         return [0, -1]
-      case Direction.UPPER_LEFT_DIAGONAL:
+      case Direction.UpperLeftDiagonal:
         return [-1, 1]
-      case Direction.UPPER_RIGHT_DIAGONAL:
+      case Direction.UpperRightDiagonal:
         return [1, 1]
-      case Direction.BOTTOM_RIGHT_DIAGONAL:
+      case Direction.BottomRightDiagonal:
         return [1, -1]
-      case Direction.BOTTOM_LEFT_DIAGONAL:
+      case Direction.BottomLeftDiagonal:
         return [-1, -1]
     }
   }
 
   export function toBoardVector2d(direction: Direction): BoardVector2d {
     switch (direction) {
-      case Direction.LEFT_RANK:
+      case Direction.LeftRank:
         return new BoardVector2d(-1, 0);
-      case Direction.RIGHT_RANK:
+      case Direction.RightRank:
         return new BoardVector2d(1, 0)
-      case Direction.UPPER_FILE:
+      case Direction.UpperFile:
         return new BoardVector2d(0, 1)
-      case Direction.BOTTOM_FILE:
+      case Direction.BottomFile:
         return new BoardVector2d(0, -1)
-      case Direction.UPPER_LEFT_DIAGONAL:
+      case Direction.UpperLeftDiagonal:
         return new BoardVector2d(-1, 1)
-      case Direction.UPPER_RIGHT_DIAGONAL:
+      case Direction.UpperRightDiagonal:
         return new BoardVector2d(1, 1)
-      case Direction.BOTTOM_RIGHT_DIAGONAL:
+      case Direction.BottomRightDiagonal:
         return new BoardVector2d(1, -1)
-      case Direction.BOTTOM_LEFT_DIAGONAL:
+      case Direction.BottomLeftDiagonal:
         return new BoardVector2d(-1, -1)
     }
   }

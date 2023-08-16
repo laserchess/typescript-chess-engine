@@ -2,15 +2,15 @@ import { BoardVector2d } from "geometry";
 import { Piece } from "pieces";
 
 export const enum MovesPredictionsType {
-  ALL = 1 << 0,
-  LEGAL = 1 << 1,
-  CAPTURABLE  = 1 << 2
+  All = 1 << 0,
+  Legal = 1 << 1,
+  Capturable  = 1 << 2
 }
 
 const enum OperationType {
-  ADD,
-  DELETE,
-  HAS
+  Add,
+  Delete,
+  Has
 }
 
 export class Tile {
@@ -29,9 +29,9 @@ export class Tile {
     this.inMovesCapturableOf = [new Set<Piece>(), new Set<Piece>()];
     this.setHashMap = new Map<MovesPredictionsType, Set<Piece>[]>(
       [
-        [MovesPredictionsType.ALL, this.inMovesAllOf],
-        [MovesPredictionsType.LEGAL, this.inMovesLegalOf],
-        [MovesPredictionsType.CAPTURABLE, this.inMovesCapturableOf],
+        [MovesPredictionsType.All, this.inMovesAllOf],
+        [MovesPredictionsType.Legal, this.inMovesLegalOf],
+        [MovesPredictionsType.Capturable, this.inMovesCapturableOf],
     ]
     )
   }
@@ -47,13 +47,13 @@ export class Tile {
       if ((movePredictionsType & movesEnumValue) === movesEnumValue) {
         let set: Set<Piece> = this.setHashMap.get(movesEnumValue)![piece.playerId]
         switch(operation){
-          case OperationType.ADD:
+          case OperationType.Add:
             set.add(piece);
           break;
-          case OperationType.DELETE:
+          case OperationType.Delete:
             returnValue = returnValue && set.delete(piece);
           break;
-          case OperationType.HAS:
+          case OperationType.Has:
             returnValue = returnValue && set.has(piece);
           break;
         }
@@ -63,15 +63,15 @@ export class Tile {
   }
   
   public addPieceMovesToTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
-    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.ADD);
+    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.Add);
   }
 
   public removePieceMovesFromTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
-    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.DELETE);
+    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.Delete);
   }
 
   public checkIfPieceMovesInTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
-    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.HAS);
+    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.Has);
   }
 
   public isPieceMovesEmpty(playerId: number, movePredictionsType: MovesPredictionsType): boolean{

@@ -42,10 +42,10 @@ export class KingMovement extends AroundMovement {
   public isCastlingLegal(castling: PieceMoveType): boolean {
     let potentialRook: Piece;
     let piece: KingPiece = this.piece as KingPiece;
-    if (castling === PieceMoveType.KING_SIDE_CASTLING) {
+    if (castling === PieceMoveType.KingSideCastling) {
       potentialRook = piece.kingRook;
     }
-    else if (castling === PieceMoveType.QUEEN_SIDE_CASTLING) {
+    else if (castling === PieceMoveType.QueebSideCastling) {
       potentialRook = piece.queenRook;
     }
     else {
@@ -81,11 +81,11 @@ export class KingMovement extends AroundMovement {
 
   public updateMoves(): void {
     super.updateMoves();
-    if (this.isCastlingLegal(PieceMoveType.KING_SIDE_CASTLING)) {
+    if (this.isCastlingLegal(PieceMoveType.KingSideCastling)) {
       this._legalMoves.push(this.piece.position.add(new BoardVector2d(2, 0)))
       this._allMoves.push(this.piece.position.add(new BoardVector2d(2, 0)))
     }
-    else if (this.isCastlingLegal(PieceMoveType.QUEEN_SIDE_CASTLING)) {
+    else if (this.isCastlingLegal(PieceMoveType.QueebSideCastling)) {
       this._legalMoves.push(this.piece.position.add(new BoardVector2d(-2, 0)))
       this._allMoves.push(this.piece.position.add(new BoardVector2d(-2, 0)))
     }

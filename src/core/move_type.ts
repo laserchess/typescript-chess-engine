@@ -1,15 +1,15 @@
 export const enum PieceMoveType {
-  MOVE = 1 << 0,
-  CAPTURE = 1 << 1,
-  KING_SIDE_CASTLING = 1 << 2,
-  QUEEN_SIDE_CASTLING = 1 << 3,
-  PROMOTION = 1 << 4,
-  CHECK = 1 << 5,
-  CHECKMATE = 1 << 6,
-  STALEMATE = 1 << 7,
-  DRAW = 1 << 8,
-  ROTATION = 1 << 9,
-  LASER_MATE = 1 << 10,
-  LASER_FIRED = 1 << 11,
-  LASER_HOLD = 1 << 12
+  Move = 1 << 0,
+  Capture = 1 << 1,
+  KingSideCastling = 1 << 2,
+  QueebSideCastling = 1 << 3,
+  Promotion = 1 << 4,
+  Check = 1 << 5,
+  Checkmate = 1 << 6,
+  Stalemate = 1 << 7,
+  Draw = 1 << 8,
+  Rotation = 1 << 9,
+  Lasermate = 1 << 10,
+  LaserFired = 1 << 11,
+  LaserCooldown = 1 << 12
 }
