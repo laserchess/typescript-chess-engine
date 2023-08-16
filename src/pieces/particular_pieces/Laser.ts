@@ -1,7 +1,7 @@
 import { BoardVector2d } from "geometry";
 import { DirectedPiece, Direction, PieceMovement, PieceOpitons, PieceType } from "pieces";
 
-export class LasgunPiece extends DirectedPiece {
+export class Laser extends DirectedPiece {
   public _maxToCharge?: number;
   public _currentCharge: number;
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
