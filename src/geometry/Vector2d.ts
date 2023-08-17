@@ -1,3 +1,4 @@
+import { Direction } from "geometry";
 import { Integer } from "utils";
 
 /**
@@ -6,11 +7,11 @@ import { Integer } from "utils";
  * 
  * @enum {number}
  */
-export enum Symmetry {
-  ORIGIN = 0,
-  X_AXIS = 1,
-  Y_AXIS = 2,
-  NONE   = 3
+export const enum Symmetry {
+  Origin = 0,
+  XAxis  = 1,
+  YAxis  = 2,
+  None   = 3
 }
 
 /**
@@ -198,23 +199,23 @@ export class Vector2d {
    * Method creates new, transformed by certain {@linkcode Symmetry}
    * enum, `Vector2d` object based on calling object.
    * Bellow effect of every {@linkcode Symmetry} value is described:
-   * - {@linkcode Symmetry.ORIGIN} - effect is the same as {@linkcode Vector2d.opposite}.
-   * - {@linkcode Symmetry.X_AXIS} - negate second coordinate.
-   * - {@linkcode Symmetry.Y_AXIS} - negate first coordinate.
-   * - {@linkcode Symmetry.NONE}   - effect is the same as {@linkcode Vector2d.copy}
+   * - {@linkcode Symmetry.Origin} - effect is the same as {@linkcode Vector2d.opposite}.
+   * - {@linkcode Symmetry.XAxis} - negate second coordinate.
+   * - {@linkcode Symmetry.YAxis} - negate first coordinate.
+   * - {@linkcode Symmetry.None}   - effect is the same as {@linkcode Vector2d.copy}
    * @summary Method returns new trasformed, acorrding to `symmetry`, `Vector2d`.
    * @param {Symmetry} symmetry - {@linkcode Symmetry} enum to be used to create new object.
    * @returns 
    */
   public applySymmetry<T extends Vector2d>(symmetry: Symmetry): T {
     switch (symmetry) {
-      case Symmetry.ORIGIN:
+      case Symmetry.Origin:
         return this.opposite();
-      case Symmetry.X_AXIS:
+      case Symmetry.XAxis:
         return this.createVector(this.x, -this.y) as T;
-      case Symmetry.Y_AXIS:
+      case Symmetry.YAxis:
         return this.createVector(-this.x, this.y) as T;
-      case Symmetry.NONE:
+      case Symmetry.None:
         return this.copy();
     }
   }
@@ -247,7 +248,12 @@ export class Vector2d {
   public createUnitVector<T extends Vector2d>(): T {
     return this.div(this.getLength());
   }
+
+
+  
 }
+
+
 
 /**
  * Class `IntVector2d`, derived from {@linkcode Vector2d}, represents any 2-dimensional vector
@@ -446,5 +452,49 @@ export class BoardVector2d extends IntVector2d {
    */
   public copy<T extends Vector2d>(): T {
     return this.createVector(this.x, this.y)  as T;
+  }
+
+  public getDirectedMoveFromTuple(increment: [number, number], board: Board): BoardVector2d[] {
+    const x: number = increment[0];
+    const y: number = increment[1];
+    if (x === 0 && y === 0) {
+      throw new Error("Increment tuple must be different than (0, 0)");
+    }
+
+    const xCoordinates: number[] = [];
+    const yCoordinates: number[] = [];
+    if (x !== 0) {
+      for (let i = this.x; i < (x > 0 ? board.width : -1); i += x) {
+        xCoordinates.push(i);
+      }
+    }
+    if (y !== 0) {
+      for (let i = this.y; i < (y > 0 ? board.width : -1); i += y) {
+        yCoordinates.push(i);
+      }
+    }
+    if (x === 0) {
+      for (let i = 0; i < yCoordinates.length; i++) {
+        xCoordinates.push(this.x);
+      }
+    }
+    if (y === 0) {
+      for (let i = 0; i < xCoordinates.length; i++) {
+        yCoordinates.push(this.y);
+      }
+    }
+
+    const moves: BoardVector2d[] = [];
+    for (let x of xCoordinates) {
+      for (let y of yCoordinates) {
+        moves.push(new BoardVector2d(x, y));
+      }
+    }
+
+    return moves;
+  }
+
+  public getSqares(direction: Direction, board: Board): BoardVector2d[] {
+    return this.getDirectedMoveFromTuple(Direction.toTuple(direction), board);
   }
 }

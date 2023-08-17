@@ -14,7 +14,7 @@ export class CheckManager {
   }
 
   public isCheckAt(position: BoardVector2d, playerId: number) {
-    return !this.board.getTile(position)?.isPieceMovesEmpty(playerId, MovesPredictionsType.CAPTURABLE);
+    return !this.board.getTile(position)?.isPieceMovesEmpty(playerId, MovesPredictionsType.Capturable);
   }
 
   public getCheckingPieces(playerId: number): Set<Piece> {
@@ -32,7 +32,7 @@ export class CheckManager {
       return false;
     }
     const position: BoardVector2d = this.board.getPiecesOfType(playerId, PieceType.KING)[0].position;
-    return this.board.getTile(position)!.isPieceMovesEmpty(enemyId, MovesPredictionsType.CAPTURABLE);
+    return this.board.getTile(position)!.isPieceMovesEmpty(enemyId, MovesPredictionsType.Capturable);
   }
 
   public isKingDead(playerId: number): boolean {

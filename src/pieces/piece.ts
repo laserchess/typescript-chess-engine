@@ -2,17 +2,17 @@ import { Board } from "core/board.js";
 import { BoardVector2d } from "geometry";
 
 export enum PieceType {
-  KING = "K",
-  QUEEN = "Q",
-  PAWN = "",
+  KING   = "K",
+  QUEEN  = "Q",
+  PAWN   = "",
   BISHOP = "B",
-  ROOK = "R",
+  ROOK   = "R",
   KNIGHT = "N",
   MIRROR = "M",
   LASGUN = "L"
 }
 
-export interface PieceOpitons {
+export interface PieceOptions {
   pieceType: PieceType,
   movement: PieceMovement
 }
@@ -29,7 +29,7 @@ export abstract class Piece {
   protected moveCounter: number;
 
 
-  public constructor(position: BoardVector2d, playerId: number, board: Board, options: PieceOpitons) {
+  public constructor(position: BoardVector2d, playerId: number, board: Board, options: PieceOptions) {
     this.initialPosition = position;
     this._position = position;
     this.playerId = playerId;
@@ -76,52 +76,5 @@ export abstract class Piece {
     this._position = destination;
     this.moveCounter += 1;
     this.board.notifyPositionChange(origin, destination);
-  }
-}
-
-export abstract class PieceMovement {
-  protected board: Board;
-  protected _piece?: Piece;
-  protected readonly _allMoves: BoardVector2d[];
-  protected readonly _legalMoves: BoardVector2d[];
-  protected readonly _capturableMoves: BoardVector2d[];
-
-  public constructor(board: Board) {
-    this.board = board;
-    this._allMoves = [];
-    this._legalMoves = [];
-    this._capturableMoves = [];
-  }
-
-  public set piece(piece: Piece) {
-    if (this._piece === undefined) {
-      this._piece = piece;
-    }
-  }
-
-  protected clearMoves(): void {
-    this._allMoves.length = 0;
-    this._legalMoves.length = 0;
-    this._capturableMoves.length = 0;
-  }
-
-  protected abstract updateMovesWrapped(): void;
-
-  public updateMoves(): void {
-    this.clearMoves()
-    this.updateMovesWrapped();
-  }
-
-
-  public get allMoves(): BoardVector2d[] {
-    return this._allMoves;
-  }
-
-  public get legalMoves(): BoardVector2d[] {
-    return this._legalMoves;
-  }
-
-  public get capturableMoves(): BoardVector2d[] {
-    return this._capturableMoves;
   }
 }

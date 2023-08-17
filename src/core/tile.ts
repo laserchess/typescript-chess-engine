@@ -1,16 +1,16 @@
 import { BoardVector2d } from "geometry";
 import { Piece } from "pieces";
 
-export enum MovesPredictionsType {
-  ALL = 1 << 0,
-  LEGAL = 1 << 1,
-  CAPTURABLE  = 1 << 2
+export const enum MovesPredictionsType {
+  All        = 1 << 0,
+  Legal      = 1 << 1,
+  Capturable = 1 << 2
 }
 
-enum OperationType {
-  ADD,
-  DELETE,
-  HAS
+const enum OperationType {
+  Add,
+  Delete,
+  Has
 }
 
 export class Tile {
@@ -29,9 +29,9 @@ export class Tile {
     this.inMovesCapturableOf = [new Set<Piece>(), new Set<Piece>()];
     this.setHashMap = new Map<MovesPredictionsType, Set<Piece>[]>(
       [
-        [MovesPredictionsType.ALL, this.inMovesAllOf],
-        [MovesPredictionsType.LEGAL, this.inMovesLegalOf],
-        [MovesPredictionsType.CAPTURABLE, this.inMovesCapturableOf],
+        [MovesPredictionsType.All, this.inMovesAllOf],
+        [MovesPredictionsType.Legal, this.inMovesLegalOf],
+        [MovesPredictionsType.Capturable, this.inMovesCapturableOf],
     ]
     )
   }
@@ -43,17 +43,17 @@ export class Tile {
   private fulfilSetsOperations(piece: Piece, movePredictionsType: MovesPredictionsType, operation: OperationType): boolean {
     let returnValue: boolean = true;
     for (let item in MovesPredictionsType){
-      let movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]
+      const movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]
       if ((movePredictionsType & movesEnumValue) === movesEnumValue) {
-        let set: Set<Piece> = this.setHashMap.get(movesEnumValue)![piece.playerId]
+        const set: Set<Piece> = this.setHashMap.get(movesEnumValue)![piece.playerId]
         switch(operation){
-          case OperationType.ADD:
+          case OperationType.Add:
             set.add(piece);
           break;
-          case OperationType.DELETE:
+          case OperationType.Delete:
             returnValue = returnValue && set.delete(piece);
           break;
-          case OperationType.HAS:
+          case OperationType.Has:
             returnValue = returnValue && set.has(piece);
           break;
         }
@@ -63,15 +63,15 @@ export class Tile {
   }
   
   public addPieceMovesToTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
-    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.ADD);
+    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.Add);
   }
 
   public removePieceMovesFromTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
-    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.DELETE);
+    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.Delete);
   }
 
   public checkIfPieceMovesInTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
-    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.HAS);
+    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.Has);
   }
 
   public isPieceMovesEmpty(playerId: number, movePredictionsType: MovesPredictionsType): boolean{
@@ -81,7 +81,7 @@ export class Tile {
   public getPieceMovesOfTile(playerId: number, movePredictionsType: MovesPredictionsType) {
     let piecesSet: Set<Piece> = new Set<Piece>;
     for (let item in MovesPredictionsType){
-      let movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]
+      const movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]
       if ((movePredictionsType & movesEnumValue) === movesEnumValue) {
         piecesSet = new Set([...piecesSet, ...this.setHashMap.get(movesEnumValue)![playerId]])
       }

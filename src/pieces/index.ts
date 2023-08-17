@@ -1,7 +1,7 @@
 import { 
   Piece,
   PieceType,
-  PieceOpitons,
+  PieceOptions,
   PieceMovement
 } from "./piece.js";
 
@@ -13,6 +13,6 @@ export {
   Piece,
   DirectedPiece,
   PieceType,
-  PieceOpitons,
+  PieceOptions as PieceOpitons,
   PieceMovement
 }

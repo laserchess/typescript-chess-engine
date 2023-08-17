@@ -1,11 +1,11 @@
 import { PieceMoveType } from "core/move_type.js";
 import { BoardVector2d } from "geometry";
 import { Piece, PieceMovement, PieceOpitons, PieceType } from "pieces";
-import { AroundMovement } from "pieces/around_piece.js";
-import { KnightPiece } from "pieces/particular_pieces/knight.js";
+import { CloseRangeMovement } from "pieces/around_piece.js";
+import { Knight } from "pieces/particular_pieces/knight.js";
 
 
-export class KingPiece extends Piece {
+export class King extends Piece {
   private _kingRook?: Piece;
   private _queenRook?: Piece;
 
@@ -37,15 +37,15 @@ export class KingPiece extends Piece {
   
 }
 
-export class KingMovement extends AroundMovement {
+export class KingMovement extends CloseRangeMovement {
 
   public isCastlingLegal(castling: PieceMoveType): boolean {
     let potentialRook: Piece;
-    let piece: KingPiece = this.piece as KingPiece;
-    if (castling === PieceMoveType.KING_SIDE_CASTLING) {
+    const piece: King = this.piece as King;
+    if (castling === PieceMoveType.KingSideCastling) {
       potentialRook = piece.kingRook;
     }
-    else if (castling === PieceMoveType.QUEEN_SIDE_CASTLING) {
+    else if (castling === PieceMoveType.QueebSideCastling) {
       potentialRook = piece.queenRook;
     }
     else {
@@ -81,11 +81,11 @@ export class KingMovement extends AroundMovement {
 
   protected updateMovesWrapped(): void {
     super.updateMoves();
-    if (this.isCastlingLegal(PieceMoveType.KING_SIDE_CASTLING)) {
+    if (this.isCastlingLegal(PieceMoveType.KingSideCastling)) {
       this._legalMoves.push(this.piece.position.add(new BoardVector2d(2, 0)))
       this._allMoves.push(this.piece.position.add(new BoardVector2d(2, 0)))
     }
-    else if (this.isCastlingLegal(PieceMoveType.QUEEN_SIDE_CASTLING)) {
+    else if (this.isCastlingLegal(PieceMoveType.QueebSideCastling)) {
       this._legalMoves.push(this.piece.position.add(new BoardVector2d(-2, 0)))
       this._allMoves.push(this.piece.position.add(new BoardVector2d(-2, 0)))
     }

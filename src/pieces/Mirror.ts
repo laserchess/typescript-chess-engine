@@ -1,8 +1,8 @@
 import { BoardVector2d } from "geometry";
 import { DirectedPiece, Direction, PieceOpitons, PieceType } from "pieces";
-import { AroundMovement } from "pieces/around_piece.js";
+import { CloseRangeMovement } from "pieces/around_piece.js";
 
-export class MirrorPiece extends DirectedPiece {
+export class Mirror extends DirectedPiece {
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
     let options: PieceOpitons =
     {
@@ -20,15 +20,15 @@ export class MirrorPiece extends DirectedPiece {
   }
 }
 
-export class MirrorMovement extends AroundMovement {
+export class MirrorMovement extends CloseRangeMovement {
 
   public turnClockwise(): void {
-    const piece: MirrorPiece = this.piece as MirrorPiece;
+    const piece: Mirror = this.piece as Mirror;
     piece.direction = Direction.turnDoubleRight(piece.direction)
   }
 
   public turnAnticlockwise(): void {
-    const piece: MirrorPiece = this.piece as MirrorPiece;
+    const piece: Mirror = this.piece as Mirror;
     piece.direction = Direction.turnDoubleLeft(piece.direction)
   }
 

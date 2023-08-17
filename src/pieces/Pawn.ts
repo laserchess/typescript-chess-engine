@@ -1,12 +1,12 @@
 import { BoardVector2d } from "geometry";
 import { DirectedPiece, PieceOpitons, PieceMovement, PieceType, Direction, Piece } from "pieces"
 
-export class PawnPiece extends DirectedPiece {
+export class Pawn extends DirectedPiece {
   private _enPassantPosition?: BoardVector2d;
   private _promotionPosition?: BoardVector2d;
 
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    let options: PieceOpitons =
+    const options: PieceOpitons =
     {
       pieceType: PieceType.PAWN,
       movement: new PawnMovement(board)
@@ -46,7 +46,7 @@ export class PawnPiece extends DirectedPiece {
 export class PawnMovement extends PieceMovement {
 
   public isEnPassantLegal(destination: BoardVector2d): boolean {
-    const piece: PawnPiece = this._piece as PawnPiece;
+    const piece: Pawn = this._piece as Pawn;
     const board: Board = this.board;
     const otherPiece: Piece = board.getPiece(destination.sub(Direction.toBoardVector2d(piece.direction!)));
     return otherPiece !== undefined

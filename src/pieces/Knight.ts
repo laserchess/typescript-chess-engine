@@ -1,13 +1,13 @@
 import { BoardVector2d, Symmetry } from "geometry";
 import { Piece, PieceMovement, PieceOpitons, PieceType } from "pieces";
 
-export class KnightPiece extends Piece {
+export class Knight extends Piece {
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    let options: PieceOpitons =
+    const options: PieceOpitons =
     {
       pieceType: PieceType.KNIGHT,
       movement: new KnightMovement(board)
-    }
+    };
     super(position, playerId, board, options);
     this.movement.piece = this;
   }
@@ -24,7 +24,7 @@ export class KnightMovement extends PieceMovement {
     const piece: KnightPiece = this._piece as KnightPiece;
     const board: Board = this.board;
     const baseVectors: BoardVector2d[] = [new BoardVector2d(1, 2), new BoardVector2d(2, 1)];
-    const symmetries: Symmetry[] = [Symmetry.NONE, Symmetry.X_AXIS, Symmetry.ORIGIN, Symmetry.Y_AXIS];
+    const symmetries: Symmetry[] = [Symmetry.None, Symmetry.XAxis, Symmetry.Origin, Symmetry.YAxis];
     const positions: BoardVector2d[] = []
 
     this.clearMoves();
