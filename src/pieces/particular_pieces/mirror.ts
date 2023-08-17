@@ -32,7 +32,7 @@ export class MirrorMovement extends AroundMovement {
     piece.direction = Direction.turnDoubleLeft(piece.direction)
   }
 
-  public updateMoves(): void {
+  protected updateMovesWrapped(): void {
     super.updateMoves();
     this._capturableMoves.length = 0;  
   }

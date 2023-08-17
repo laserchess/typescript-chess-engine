@@ -77,4 +77,15 @@ export class Tile {
   public isPieceMovesEmpty(playerId: number, movePredictionsType: MovesPredictionsType): boolean{
     return this.setHashMap.get(movePredictionsType)![playerId].size === 0; 
   }
+
+  public getPieceMovesOfTile(playerId: number, movePredictionsType: MovesPredictionsType) {
+    let piecesSet: Set<Piece> = new Set<Piece>;
+    for (let item in MovesPredictionsType){
+      let movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]
+      if ((movePredictionsType & movesEnumValue) === movesEnumValue) {
+        piecesSet = new Set([...piecesSet, ...this.setHashMap.get(movesEnumValue)![playerId]])
+      }
+    }
+    return piecesSet;
+  }
 }

@@ -15,12 +15,12 @@ export class KnightPiece extends Piece {
   public rangedCapture(destination: BoardVector2d) {
     this._position = destination;
     this.moveCounter += 1;
-    this.board.notifyRangedCapture(this, destination);
+    this.board.notifyRangedCapture(this.position, destination);
   }
 }
 
 export class KnightMovement extends PieceMovement {
-  public updateMoves(): void {
+  protected updateMovesWrapped(): void {
     const piece: KnightPiece = this._piece as KnightPiece;
     const board: Board = this.board;
     const baseVectors: BoardVector2d[] = [new BoardVector2d(1, 2), new BoardVector2d(2, 1)];

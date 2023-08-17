@@ -57,7 +57,7 @@ export class PawnMovement extends PieceMovement {
       && piece.isOnEnPassantPosition();
   }
 
-  public updateMoves(): void {
+  protected updateMovesWrapped(): void {
     const piece: PawnPiece = this._piece as PawnPiece;
     const board: Board = this.board;
     const direction: BoardVector2d = Direction.toBoardVector2d(piece.direction as Direction);

@@ -44,7 +44,7 @@ export class LasgunPiece extends DirectedPiece {
 }
 
 export class LasgunMovement extends PieceMovement {
-  public updateMoves(): void {
+  protected updateMovesWrapped(): void {
     // Hands up, don't move!
   }
 }

@@ -64,6 +64,14 @@ export class Board {
     return this.tiles.get(positon);
   }
 
+  public getTileOfPiece(piece: Piece): Tile {
+    const tile: Tile | undefined = this.tiles.get(piece.position)
+    if (tile === undefined) {
+      throw new Error("There is no tile with coordinates of passed piece.");
+    }
+    return tile;
+  } 
+
   public isPieceAt(positon: BoardVector2d): boolean {
     const tile: Tile | undefined = this.tiles.get(positon);
     if (tile === undefined) {

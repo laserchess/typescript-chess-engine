@@ -79,7 +79,7 @@ export class KingMovement extends AroundMovement {
     return false;
   }
 
-  public updateMoves(): void {
+  protected updateMovesWrapped(): void {
     super.updateMoves();
     if (this.isCastlingLegal(PieceMoveType.KING_SIDE_CASTLING)) {
       this._legalMoves.push(this.piece.position.add(new BoardVector2d(2, 0)))

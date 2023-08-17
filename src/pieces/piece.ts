@@ -105,7 +105,12 @@ export abstract class PieceMovement {
     this._capturableMoves.length = 0;
   }
 
-  public abstract updateMoves(): void;
+  protected abstract updateMovesWrapped(): void;
+
+  public updateMoves(): void {
+    this.clearMoves()
+    this.updateMovesWrapped();
+  }
 
 
   public get allMoves(): BoardVector2d[] {

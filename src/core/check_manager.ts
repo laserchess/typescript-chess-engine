@@ -1,5 +1,5 @@
 import { Board } from "core/board.js";
-import { MovesPredictionsType } from "core/tile.js";
+import { MovesPredictionsType, Tile } from "core/tile.js";
 import { Game } from "game.js";
 import { BoardVector2d } from "geometry";
 import { Piece, PieceType } from "pieces";
@@ -17,6 +17,15 @@ export class CheckManager {
     return !this.board.getTile(position)?.isPieceMovesEmpty(playerId, MovesPredictionsType.CAPTURABLE);
   }
 
+  public getCheckingPieces(playerId: number): Set<Piece> {
+    if (this.isKingDead(playerId)) {
+      throw new Error("King is dead. Unable to get checking pieces of dead king.");
+    }
+    const king: KingPiece = this.board.getPiecesOfType(playerId, PieceType.KING)[0] as KingPiece;
+    const tile: Tile = this.board.getTileOfPiece(king);
+    return tile.getPieceMovesOfTile(playerId, MovesPredictionsType.CAPTURABLE);
+  }
+
   public isKingUnderCheck(playerId: number): boolean {
     const enemyId: number = Game.getEnemyId(playerId);
     if (this.isKingDead(playerId)) {
@@ -31,22 +40,13 @@ export class CheckManager {
   }
 
   public canPieceMoveTo(piece: Piece, destination: BoardVector2d): boolean {
-
-  }
-
-  public canPlayerMove(playerId: number): boolean {
-    const king: KingPiece = this.board.getPiecesOfType(playerId, PieceType.KING)[0] as KingPiece;
-
-    // Can king move
-
-    for (let move of king.movement.legalMoves) {
-      if (!this.isCheckAt(move, king.playerId)) {
-        return true;
+    const playerId: number = piece.playerId;
+    if (this.isKingUnderCheck(playerId)) {
+      if (piece instanceof KingPiece) {
+        return !this.isCheckAt(destination, playerId);
       }
     }
-
-    const protectors: Piece[] = this.board.getKingProtectors(playerId);
-
-
   }
+
+
 }
