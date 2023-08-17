@@ -12,7 +12,7 @@ export enum PieceType {
   LASGUN = "L"
 }
 
-export interface PieceOpitons {
+export interface PieceOptions {
   pieceType: PieceType,
   movement: PieceMovement
 }
@@ -29,7 +29,7 @@ export abstract class Piece {
   protected moveCounter: number;
 
 
-  public constructor(position: BoardVector2d, playerId: number, board: Board, options: PieceOpitons) {
+  public constructor(position: BoardVector2d, playerId: number, board: Board, options: PieceOptions) {
     this.initialPosition = position;
     this._position = position;
     this.playerId = playerId;
