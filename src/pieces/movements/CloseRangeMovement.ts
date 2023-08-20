@@ -1,6 +1,6 @@
 import { Board, CaptureOptions } from "core/Board.js";
-import { BoardVector2d } from "geometry";
-import { Piece } from "pieces";
+import { BoardVector2d } from "@lc/geometry";
+import { Piece } from "@lc/pieces";
 import { PieceMovement } from "pieces/movements/PieceMovement.js";
 
 export class CloseRangeMovement extends PieceMovement {

@@ -3,8 +3,8 @@ import { CheckManager } from "core/CheckManager.js";
 import { PromotionManager } from "core/PromotionManager.js";
 import { Tile } from "core/Tile.js";
 import { Move } from "core/move.js";
-import { BoardVector2d } from "geometry";
-import { Piece, PieceType } from "pieces";
+import { BoardVector2d } from "@lc/geometry";
+import { Piece, PieceType } from "@lc/pieces";
 
 
 export const enum CaptureOptions {

@@ -1,6 +1,6 @@
 import { Board } from "core/Board.js";
-import { BoardVector2d } from "geometry";
-import { PieceMovement } from "pieces";
+import { BoardVector2d } from "@lc/geometry";
+import { PieceMovement } from "@lc/piece-movements";
 
 
 export enum PieceType {

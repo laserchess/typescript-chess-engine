@@ -1,6 +1,6 @@
 import { Board } from "core/Board.js";
-import { BoardVector2d, Direction } from "geometry";
-import { DirectedPiece, PieceOpitons, PieceType } from "pieces";
+import { BoardVector2d, Direction } from "@lc/geometry";
+import { DirectedPiece, PieceOpitons, PieceType } from "@lc/pieces";
 import { CloseRangeMovement } from "pieces/movements/CloseRangeMovement.js";
 
 

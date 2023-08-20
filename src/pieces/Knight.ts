@@ -1,6 +1,6 @@
 import { Board, CaptureOptions } from "core/Board.js";
-import { BoardVector2d, Symmetry } from "geometry";
-import { Piece, PieceOpitons, PieceType } from "pieces";
+import { BoardVector2d, Symmetry } from "@lc/geometry";
+import { Piece, PieceOpitons, PieceType } from "@lc/pieces";
 import { PieceMovement } from "pieces/movements/PieceMovement.js";
 
 export class Knight extends Piece {

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "@jest/globals";
-import { IntVector2d, Vector2d, BoardVector2d, Symmetry } from "geometry";
-import { Integer } from "utils";
+import { IntVector2d, Vector2d, BoardVector2d, Symmetry } from "@lc/geometry";
+import { Integer } from "@lc/utils";
 
 describe("Vector2d", () => {
 

@@ -1,8 +1,8 @@
 import { Board } from "core/Board.js";
 import { MovesPredictionsType, Tile } from "core/Tile.js";
 import { Game } from "game.js";
-import { BoardVector2d } from "geometry";
-import { Piece, PieceType } from "pieces";
+import { BoardVector2d } from "@lc/geometry";
+import { Piece, PieceType } from "@lc/pieces";
 import { King } from "pieces/King.js";
 
 

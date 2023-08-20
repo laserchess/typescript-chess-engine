@@ -1,6 +1,6 @@
 import { Board } from "core/Board.js";
-import { BoardVector2d, Direction } from "geometry";
-import { Piece, PieceOpitons } from "pieces";
+import { BoardVector2d, Direction } from "@lc/geometry";
+import { Piece, PieceOpitons } from "@lc/pieces";
 
 export class DirectedPiece extends Piece {
   protected _direction?: Direction;

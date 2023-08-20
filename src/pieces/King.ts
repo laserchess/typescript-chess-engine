@@ -1,8 +1,7 @@
-import { Board, CaptureOptions } from "core/Board.js";
-import { MoveType } from "core/move.js";
-import { BoardVector2d } from "geometry";
-import { Piece, PieceMovement, PieceOpitons, PieceType } from "pieces";
-import { CloseRangeMovement } from "pieces/movements/CloseRangeMovement.js";
+import { Board, MoveType, CaptureOptions } from "@lc/core";
+import { BoardVector2d } from "@lc/geometry";
+import { Piece, PieceOpitons, PieceType } from "@lc/pieces";
+import { CloseRangeMovement } from "@lc/piece-movements";
 
 
 

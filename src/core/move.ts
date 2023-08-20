@@ -1,6 +1,6 @@
-import { BoardVector2d } from "geometry";
+import { BoardVector2d } from "@lc/geometry";
 import { Rotation } from "geometry/Direction.js";
-import { Piece } from "pieces";
+import { Piece } from "@lc/pieces";
 
 export const enum MoveType {
   Move              = 1 << 0,

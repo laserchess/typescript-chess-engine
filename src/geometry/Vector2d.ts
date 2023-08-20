@@ -1,6 +1,6 @@
-import { Direction } from "geometry";
-import { Integer } from "utils";
-import { Board } from "core";
+import { Direction } from "@lc/geometry";
+import { Integer } from "@lc/utils";
+import { Board } from "@lc/core";
 
 /**
  * Enum that represents possible symmetry transformation

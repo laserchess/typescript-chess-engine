@@ -1,6 +1,6 @@
 import { NotImplementedError } from "utils/error.js";
-import { BoardVector2d, Direction } from "geometry";
-import { Piece } from "pieces";
+import { BoardVector2d, Direction } from "@lc/geometry";
+import { Piece } from "@lc/pieces";
 
 export class LongRangeMovement /** extends PieceMovement */ {
   constructor(ranged: Piece) {
