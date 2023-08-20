@@ -1,4 +1,4 @@
-import { Piece } from "./Piece.js";
+import { Piece } from "@lc/pieces";
 
 class LongRangePiece extends Piece {
 

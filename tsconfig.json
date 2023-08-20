@@ -3,7 +3,7 @@
     "target": "es6",
     "strict": true,
     "outDir": "build",
-    "module": "es6",
+    "module": "nodenext",
     "moduleResolution": "nodenext",
     "removeComments": false,
     "resolveJsonModule": true,

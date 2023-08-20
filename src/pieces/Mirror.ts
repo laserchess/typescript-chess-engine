@@ -1,7 +1,7 @@
 import { Board } from "@lc/core";
 import { BoardVector2d, Direction } from "@lc/geometry";
-import { DirectedPiece, PieceOptions, PieceType } from "./index.js";
-import { CloseRangeMovement } from "./movements/index.js";
+import { DirectedPiece, PieceOptions, PieceType } from "@lc/pieces";
+import { CloseRangeMovement } from "@lc/piece-movements";
 
 
 export class Mirror extends DirectedPiece {
