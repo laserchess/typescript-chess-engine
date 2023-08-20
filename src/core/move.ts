@@ -2,7 +2,7 @@ import { BoardVector2d } from "geometry";
 import { Rotation } from "geometry/Direction.js";
 import { Piece } from "pieces";
 
-export const enum PieceMoveType {
+export const enum MoveType {
   Move              = 1 << 0,
   Capture           = 1 << 1,
   KingSideCastling  = 1 << 2,
@@ -23,6 +23,6 @@ export interface Move {
   origin: BoardVector2d,
   destination: BoardVector2d,
   captured: Piece,
-  moveType: PieceMoveType,
+  moveType: MoveType,
   rotation: Rotation
 }
