@@ -1,6 +1,7 @@
+import { Board } from "core/Board.js";
 import { BoardVector2d } from "geometry";
 import { Piece } from "pieces";
-import { Board } from "core/board.js";
+
 
 export abstract class PieceMovement {
   protected board: Board;
@@ -17,9 +18,7 @@ export abstract class PieceMovement {
   }
 
   public set piece(piece: Piece) {
-    if (this._piece === undefined) {
-      this._piece = piece;
-    }
+    this._piece = piece;
   }
 
   protected clearMoves(): void {
@@ -28,8 +27,12 @@ export abstract class PieceMovement {
     this._capturableMoves.length = 0;
   }
 
-  public abstract updateMoves(): void;
+  protected abstract updateMovesWrapped(): void;
 
+  public updateMoves(): void {
+    this.clearMoves();
+    this.updateMovesWrapped();
+  }
 
   public get allMoves(): BoardVector2d[] {
     return this._allMoves;

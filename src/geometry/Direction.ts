@@ -35,13 +35,13 @@ export namespace Direction {
   }
 
   export function turnByStep(direction: Direction, turnNumber: number): Direction {
-    if (turnNumber > 0) {
+    if (turnNumber >= 0) {
       return (direction.valueOf() + turnNumber) % 8 as Direction;
     }
-    else if (turnNumber < 0) {
+    else {
       const turnsLeft = Math.abs(turnNumber) - direction.valueOf();
       if (turnsLeft < 0) {
-        return Math.abs(turnsLeft);
+        return Math.abs(turnsLeft) as Direction;
       }
       return 7 - (turnsLeft % 8) as Direction;
     }

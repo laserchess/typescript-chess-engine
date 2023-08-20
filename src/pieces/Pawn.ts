@@ -1,5 +1,6 @@
-import { BoardVector2d } from "geometry";
-import { DirectedPiece, PieceOpitons, PieceMovement, PieceType, Direction, Piece } from "pieces"
+import { Board, CaptureOptions } from "core/Board.js";
+import { BoardVector2d, Direction } from "geometry";
+import { DirectedPiece, PieceOpitons, PieceMovement, PieceType, Piece } from "pieces"
 
 export class Pawn extends DirectedPiece {
   private _enPassantPosition?: BoardVector2d;
@@ -19,20 +20,22 @@ export class Pawn extends DirectedPiece {
     if (direction % 2 === 1) {
       throw new Error("Direction for PawnPiece mustn't be diagonal.");
     }
-    super.direction = direction;
+    super._direction = direction;
+  }
+
+  public get direction(): Direction | undefined {
+    return this._direction;
   }
 
   public set enPassantPosition(position: BoardVector2d) {
-    if (this._enPassantPosition === undefined) {
-      this._enPassantPosition = position;
-    }
+    this._enPassantPosition = position;
   }
 
   public set promotionPosition(position: BoardVector2d) {
-    if (this._promotionPosition === undefined) {
-      this._promotionPosition = position;
-    }
+    this._promotionPosition = position;
   }
+
+  
 
   public isOnEnPassantPosition(): boolean {
     return this._enPassantPosition === this._position;
@@ -48,17 +51,17 @@ export class PawnMovement extends PieceMovement {
   public isEnPassantLegal(destination: BoardVector2d): boolean {
     const piece: Pawn = this._piece as Pawn;
     const board: Board = this.board;
-    const otherPiece: Piece = board.getPiece(destination.sub(Direction.toBoardVector2d(piece.direction!)));
-    return otherPiece !== undefined
-      && otherPiece.isSameColor(piece)
+    const otherPiece: Piece | null = board.getPiece(destination.sub(Direction.toBoardVector2d(piece.direction!)));
+    return otherPiece !== null
+      && !otherPiece.isSameColor(piece)
       && otherPiece.pieceType === PieceType.PAWN
-      && board.canMoveTo(destination)
-      && board.getLastMove().piece === otherPiece
+      && board.canMoveTo(destination, piece, CaptureOptions.RequiredCapture)
+      && board.getLastMove()?.piece !== null
       && piece.isOnEnPassantPosition();
   }
 
   protected updateMovesWrapped(): void {
-    const piece: PawnPiece = this._piece as PawnPiece;
+    const piece: Pawn = this._piece as Pawn;
     const board: Board = this.board;
     const direction: BoardVector2d = Direction.toBoardVector2d(piece.direction as Direction);
     const captureDeltas: BoardVector2d[] = [
@@ -72,7 +75,7 @@ export class PawnMovement extends PieceMovement {
 
     if (!board.isOutOfBounds(piece.position.add(direction))) {
       this._allMoves.push(piece.position.add(direction));
-      if (board.canMoveTo(piece.position.add(direction), piece)) {
+      if (board.canMoveTo(piece.position.add(direction), piece, CaptureOptions.NoCapture)) {
         this._legalMoves.push(piece.position.add(direction));
       }
     }
@@ -83,7 +86,7 @@ export class PawnMovement extends PieceMovement {
       this._allMoves.push(piece.position.add(direction.mul(2)));
       if (
         !piece.wasMoved()
-        && board.canMoveTo(piece.position.add(direction.mul(2)), piece)
+        && board.canMoveTo(piece.position.add(direction.mul(2)), piece, CaptureOptions.NoCapture)
         && this.legalMoves.length > 0
       ) {
         this._legalMoves.push(piece.position.add(direction.mul(2)));
@@ -96,7 +99,7 @@ export class PawnMovement extends PieceMovement {
       let position: BoardVector2d = piece.position.add(increment);
       if (!board.isOutOfBounds(position)) {
         this._allMoves.push(position);
-        if (!board.canMoveTo(position, piece)) { // Additional data
+        if (!board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) { // Additional data
           this._legalMoves.push(position.copy());
           this._capturableMoves.push(position.copy());
         }

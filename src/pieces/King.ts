@@ -1,8 +1,10 @@
-import { PieceMoveType } from "core/move_type.js";
+import { Board, CaptureOptions } from "core/Board.js";
+import { PieceMoveType } from "core/move.js";
 import { BoardVector2d } from "geometry";
 import { Piece, PieceMovement, PieceOpitons, PieceType } from "pieces";
-import { CloseRangeMovement } from "pieces/around_piece.js";
-import { Knight } from "pieces/particular_pieces/knight.js";
+import { CloseRangeMovement } from "pieces/movements/CloseRangeMovement.js";
+;
+
 
 
 export class King extends Piece {
@@ -45,7 +47,7 @@ export class KingMovement extends CloseRangeMovement {
     if (castling === PieceMoveType.KingSideCastling) {
       potentialRook = piece.kingRook;
     }
-    else if (castling === PieceMoveType.QueebSideCastling) {
+    else if (castling === PieceMoveType.QueenSideCastling) {
       potentialRook = piece.queenRook;
     }
     else {
@@ -69,7 +71,7 @@ export class KingMovement extends CloseRangeMovement {
 
       currentPosition = this.piece.position;
       while (currentPosition !== potentialRook.position) {
-        if (!this.board.canMoveTo(currentPosition, this.piece)) {
+        if (!this.board.canMoveTo(currentPosition, this.piece, CaptureOptions.NoCapture)) {
           return false;
         }
         currentPosition = currentPosition.add(fromKingUnitVector);
@@ -85,7 +87,7 @@ export class KingMovement extends CloseRangeMovement {
       this._legalMoves.push(this.piece.position.add(new BoardVector2d(2, 0)))
       this._allMoves.push(this.piece.position.add(new BoardVector2d(2, 0)))
     }
-    else if (this.isCastlingLegal(PieceMoveType.QueebSideCastling)) {
+    else if (this.isCastlingLegal(PieceMoveType.QueenSideCastling)) {
       this._legalMoves.push(this.piece.position.add(new BoardVector2d(-2, 0)))
       this._allMoves.push(this.piece.position.add(new BoardVector2d(-2, 0)))
     }

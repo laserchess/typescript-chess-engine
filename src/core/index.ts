@@ -1,3 +1,3 @@
-import { PieceMoveType } from "core/move_type.js";
+import { PieceMoveType } from "core/move.js";
 
 export { PieceMoveType }
