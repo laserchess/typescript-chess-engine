@@ -1,16 +1,10 @@
 import { BoardVector2d } from "geometry";
 import { Piece } from "pieces";
 
-export const enum MovesPredictionsType {
+export enum MovesPredictionsType {
   All        = 1 << 0,
   Legal      = 1 << 1,
   Capturable = 1 << 2
-}
-
-const enum OperationType {
-  Add,
-  Delete,
-  Has
 }
 
 export class Tile {
@@ -20,7 +14,7 @@ export class Tile {
   private inMovesLegalOf: Set<Piece>[];
   private inMovesCapturableOf: Set<Piece>[];
   private setHashMap: Map<MovesPredictionsType, Set<Piece>[]>;
-  public pieceOnTile?: Piece;
+  public pieceOnTile: Piece | null;
   
   public constructor(coordinates: BoardVector2d) {
     this._coordinates = coordinates;
@@ -34,44 +28,40 @@ export class Tile {
         [MovesPredictionsType.Capturable, this.inMovesCapturableOf],
     ]
     )
+    this.pieceOnTile = null;
   }
 
   public get coordinates(): BoardVector2d {
     return this._coordinates;
   }
   
-  private fulfilSetsOperations(piece: Piece, movePredictionsType: MovesPredictionsType, operation: OperationType): boolean {
-    let returnValue: boolean = true;
+  public addPieceMovesToTile(piece: Piece, movePredictionsType: MovesPredictionsType): void {
     for (let item in MovesPredictionsType){
       const movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]
       if ((movePredictionsType & movesEnumValue) === movesEnumValue) {
-        const set: Set<Piece> = this.setHashMap.get(movesEnumValue)![piece.playerId]
-        switch(operation){
-          case OperationType.Add:
-            set.add(piece);
-          break;
-          case OperationType.Delete:
-            returnValue = returnValue && set.delete(piece);
-          break;
-          case OperationType.Has:
-            returnValue = returnValue && set.has(piece);
-          break;
-        }
+        this.setHashMap.get(movesEnumValue)![piece.playerId].add(piece);
       }
     }
-    return returnValue;
-  }
-  
-  public addPieceMovesToTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
-    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.Add);
   }
 
-  public removePieceMovesFromTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
-    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.Delete);
+  public removePieceMovesFromTile(piece: Piece, movePredictionsType: MovesPredictionsType): void {
+    for (let item in MovesPredictionsType){
+      const movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]
+      if ((movePredictionsType & movesEnumValue) === movesEnumValue) {
+        this.setHashMap.get(movesEnumValue)![piece.playerId].delete(piece);
+      }
+    }
+    this.checkIfPieceMovesInTile(piece, MovesPredictionsType.All | MovesPredictionsType.Capturable)
   }
 
   public checkIfPieceMovesInTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
-    return this.fulfilSetsOperations(piece, movePredictionsType, OperationType.Has);
+    for (let item in MovesPredictionsType){
+      const movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]
+      if ((movePredictionsType & movesEnumValue) === movesEnumValue) {
+        return this.setHashMap.get(movesEnumValue)![piece.playerId].has(piece);
+      }
+    }
+    return false;
   }
 
   public isPieceMovesEmpty(playerId: number, movePredictionsType: MovesPredictionsType): boolean{

@@ -1,5 +1,6 @@
 import { Direction } from "geometry";
 import { Integer } from "utils";
+import { Board } from "core";
 
 /**
  * Enum that represents possible symmetry transformation

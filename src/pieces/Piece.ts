@@ -1,6 +1,7 @@
 import { Board } from "core/Board.js";
 import { BoardVector2d } from "geometry";
-import { PieceMovement } from "./movements/PieceMovement.js";
+import { PieceMovement } from "pieces";
+
 
 export enum PieceType {
   KING   = "K",

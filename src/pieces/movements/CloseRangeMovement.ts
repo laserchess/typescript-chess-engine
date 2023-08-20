@@ -1,16 +1,14 @@
-import { Board } from "core";
+import { Board, CaptureOptions } from "core/Board.js";
 import { BoardVector2d } from "geometry";
 import { Piece } from "pieces";
-import { PieceMovement } from "piece/movements";
+import { PieceMovement } from "pieces/movements/PieceMovement.js";
 
 export class CloseRangeMovement extends PieceMovement {
 
   // This method sets all around moves as capturableMoves.
-  public updateMoves(): void {
+  protected updateMovesWrapped(): void {
     const piece: Piece = this._piece as Piece;
     const board: Board = this.board;
-
-    this.clearMoves();
 
     for (let scalar1 of [-1, 1, 0]) {
       for (let scalar2 of [-1, 1, 0]) {
@@ -20,12 +18,13 @@ export class CloseRangeMovement extends PieceMovement {
         let newVector: BoardVector2d = new BoardVector2d(scalar1, scalar2).add(piece.position);
         if (!board.isOutOfBounds(newVector)) {
           this._allMoves.push(newVector);
-          if (board.canMoveTo(newVector, piece)) {
+          if (board.canMoveTo(newVector, piece, CaptureOptions.OptionalCapture)) {
             this._legalMoves.push(newVector.copy());
+            if (board.canMoveTo(newVector, piece, CaptureOptions.RequiredCapture)) { // Additional data
+              this._capturableMoves.push(newVector.copy());
+            }
           }
-          if (board.canMoveTo(newVector, piece)) { // Additional data
-            this._capturableMoves.push(newVector.copy());
-          }
+
         }
       }
     }

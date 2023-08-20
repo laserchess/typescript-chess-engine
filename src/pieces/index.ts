@@ -2,8 +2,11 @@ import {
   Piece,
   PieceType,
   PieceOptions,
+} from "./Piece.js";
+
+import {
   PieceMovement
-} from "./piece.js";
+} from "./movements/PieceMovement.js"
 
 import {
   DirectedPiece

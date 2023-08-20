@@ -1,3 +1,7 @@
+import { BoardVector2d } from "geometry";
+import { Rotation } from "geometry/Direction.js";
+import { Piece } from "pieces";
+
 export const enum PieceMoveType {
   Move              = 1 << 0,
   Capture           = 1 << 1,
@@ -12,4 +16,13 @@ export const enum PieceMoveType {
   Lasermate         = 1 << 10,
   LaserFired        = 1 << 11,
   LaserCooldown     = 1 << 12
+}
+
+export interface Move {
+  piece: Piece,
+  origin: BoardVector2d,
+  destination: BoardVector2d,
+  captured: Piece,
+  moveType: PieceMoveType,
+  rotation: Rotation
 }
