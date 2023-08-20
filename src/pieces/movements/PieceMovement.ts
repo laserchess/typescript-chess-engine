@@ -1,6 +1,6 @@
 import { BoardVector2d } from "geometry";
 import { Piece } from "pieces";
-import { Board } from "core/board.js";
+import { Board } from "core/Board.js";
 
 export abstract class PieceMovement {
   protected board: Board;

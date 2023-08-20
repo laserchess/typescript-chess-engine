@@ -1,5 +1,7 @@
+import { Board } from "core";
 import { BoardVector2d } from "geometry";
-import { Piece, PieceMovement } from "pieces";
+import { Piece } from "pieces";
+import { PieceMovement } from "piece/movements";
 
 export class CloseRangeMovement extends PieceMovement {
 

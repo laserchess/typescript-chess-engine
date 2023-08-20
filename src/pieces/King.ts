@@ -1,7 +1,7 @@
 import { PieceMoveType } from "core/move_type.js";
 import { BoardVector2d } from "geometry";
 import { Piece, PieceMovement, PieceOpitons, PieceType } from "pieces";
-import { CloseRangeMovement } from "pieces/around_piece.js";
+import { CloseRangeMovement } from "piecesCloseRangeMovement.js";
 import { Knight } from "pieces/particular_pieces/knight.js";
 
 

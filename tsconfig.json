@@ -10,18 +10,11 @@
     "esModuleInterop": true,
     "baseUrl": "src",
     "paths": {
-      "geometry": [
-        "geometry/index.ts"
-      ],
-      "utils": [
-        "utils/index.ts"
-      ],
-      "pieces":[
-        "pieces/index.ts"
-      ],
-      "core":[
-        "cores/index.ts"
-      ]
+      "geometry": [ "geometry/index.ts" ],
+      "utils": [ "utils/index.ts" ],
+      "pieces": [ "pieces/index.ts" ],
+      "piece/movements": [ "pieces/movements/index.ts" ],
+      "core": [ "core/index.ts" ]
 
     }
   },

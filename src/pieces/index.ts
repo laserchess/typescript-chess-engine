@@ -7,7 +7,7 @@ import {
 
 import {
   DirectedPiece
-} from "./directed_piece.js"
+} from "./DirectedPiece.js"
 
 export {
   Piece,

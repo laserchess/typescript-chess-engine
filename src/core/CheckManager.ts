@@ -1,9 +1,9 @@
-import { Board } from "core/board.js";
+import { Board } from "core/Board.js";
 import { MovesPredictionsType, Tile } from "core/tile.js";
 import { Game } from "game.js";
 import { BoardVector2d } from "geometry";
 import { Piece, PieceType } from "pieces";
-import { KingPiece } from "pieces/particular_pieces/king.js";
+import { KingPiece } from "pieces/particular_pieces/King.js";
 
 
 export class CheckManager {

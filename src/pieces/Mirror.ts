@@ -1,6 +1,6 @@
 import { BoardVector2d } from "geometry";
 import { DirectedPiece, Direction, PieceOpitons, PieceType } from "pieces";
-import { CloseRangeMovement } from "pieces/around_piece.js";
+import { CloseRangeMovement } from "piecesCloseRangeMovement.js";
 
 export class Mirror extends DirectedPiece {
   public constructor(position: BoardVector2d, playerId: number, board: Board) {

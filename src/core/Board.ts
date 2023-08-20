@@ -1,10 +1,10 @@
-import { CheckManager } from "core/check_manager.js";
-import { PromotionManager } from "core/promotion_manager.js";
+import { CheckManager } from "core/CheckManager.js";
+import { PromotionManager } from "core/PromotionManager.js";
 import { Tile } from "core/tile.js";
 import { BoardVector2d } from "geometry";
 import { Piece, PieceType } from "pieces";
-import { KingPiece } from "pieces/particular_pieces/king.js";
-import { LasgunPiece } from "pieces/particular_pieces/lasgun.js";
+import { KingPiece } from "pieces/particular_pieces/King.js";
+import { LasgunPiece } from "pieces/particular_pieces/Laser.js";
 
 interface CanMoveToOptios {
   capture: boolean;
