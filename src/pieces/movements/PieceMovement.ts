@@ -1,4 +1,4 @@
-import { Board } from "core/Board.js";
+import { Board } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
 import { Piece } from "@lc/pieces";
 

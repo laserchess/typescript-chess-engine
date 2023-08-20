@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import chalk from "chalk";
 
 const NAME: string = "TS Laser Chess";
 

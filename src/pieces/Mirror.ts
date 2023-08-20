@@ -1,12 +1,12 @@
-import { Board } from "core/Board.js";
+import { Board } from "@lc/core";
 import { BoardVector2d, Direction } from "@lc/geometry";
-import { DirectedPiece, PieceOpitons, PieceType } from "@lc/pieces";
-import { CloseRangeMovement } from "pieces/movements/CloseRangeMovement.js";
+import { DirectedPiece, PieceOptions, PieceType } from "./index.js";
+import { CloseRangeMovement } from "./movements/index.js";
 
 
 export class Mirror extends DirectedPiece {
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    let options: PieceOpitons =
+    let options: PieceOptions =
     {
       pieceType: PieceType.MIRROR,
       movement: new MirrorMovement(board)

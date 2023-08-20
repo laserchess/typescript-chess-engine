@@ -1,5 +1,5 @@
-import { NotImplementedError } from "utils/error.js";
-import { BoardVector2d, Direction } from "@lc/geometry";
+import { NotImplementedError } from "@lc/utils";
+import { BoardVector2d } from "@lc/geometry";
 import { Piece } from "@lc/pieces";
 
 export class LongRangeMovement /** extends PieceMovement */ {

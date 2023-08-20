@@ -1,8 +1,10 @@
 
-import { CheckManager } from "core/CheckManager.js";
-import { PromotionManager } from "core/PromotionManager.js";
-import { Tile } from "core/Tile.js";
-import { Move } from "core/move.js";
+import {
+  CheckManager,
+  PromotionManager,
+  Tile,
+  Move
+} from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
 

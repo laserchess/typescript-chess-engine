@@ -1,6 +1,6 @@
 import { Board, MoveType, CaptureOptions } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
-import { Piece, PieceOpitons, PieceType } from "@lc/pieces";
+import { Piece, PieceOptions, PieceType } from "@lc/pieces";
 import { CloseRangeMovement } from "@lc/piece-movements";
 
 
@@ -10,7 +10,7 @@ export class King extends Piece {
   private _queenRook?: Piece;
 
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    const options: PieceOpitons =
+    const options: PieceOptions =
     {
       pieceType: PieceType.KING,
       movement: new KingMovement(board)
