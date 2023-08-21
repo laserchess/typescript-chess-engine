@@ -56,7 +56,7 @@ export class PawnMovement extends PieceMovement {
       && !otherPiece.isSameColor(piece)
       && otherPiece.pieceType === PieceType.PAWN
       && board.canMoveTo(destination, piece, CaptureOptions.RequiredCapture)
-      && board.getLastMove()?.piece !== null
+      && board.lastMove?.piece !== null
       && piece.isOnEnPassantPosition();
   }
 
