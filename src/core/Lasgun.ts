@@ -1,6 +1,6 @@
-import { Board } from "core/Board.js";
-import { BoardVector2d, Direction } from "geometry";
-import { DirectedPiece, PieceMovement, PieceOpitons, PieceType } from "pieces";
+import { Board } from "@lc/core";
+import { BoardVector2d, Direction } from "@lc/geometry";
+
 
 export class Lasgun {
   private _maxToCharge?: number;

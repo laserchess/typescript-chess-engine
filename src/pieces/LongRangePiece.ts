@@ -1,6 +1,4 @@
-import { NotImplementedError } from "utils/error.js";
-import { BoardVector2d } from "geometry";
-import { Piece } from "./Piece.js";
+import { Piece } from "@lc/pieces";
 
 class LongRangePiece extends Piece {
 

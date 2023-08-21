@@ -1,4 +1,4 @@
-import { BoardVector2d } from "geometry";
+import { BoardVector2d } from "@lc/geometry";
 
 export enum Direction {
   LeftRank            = 0,

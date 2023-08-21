@@ -1,10 +1,12 @@
 
-import { CheckManager } from "core/CheckManager.js";
-import { PromotionManager } from "core/PromotionManager.js";
-import { Tile } from "core/Tile.js";
-import { Move } from "core/move.js";
-import { BoardVector2d } from "geometry";
-import { Piece, PieceType } from "pieces";
+import {
+  CheckManager,
+  PromotionManager,
+  Tile,
+  Move
+} from "@lc/core";
+import { BoardVector2d } from "@lc/geometry";
+import { Piece, PieceType } from "@lc/pieces";
 
 
 export const enum CaptureOptions {
@@ -14,8 +16,8 @@ export const enum CaptureOptions {
 }
 
 export class Board {
-  private readonly width: number;
-  private readonly height: number;
+  public readonly width: number;
+  public readonly height: number;
   private readonly tiles: Map<BoardVector2d, Tile>;
   private readonly piecesOfType: Map<PieceType, Piece[][]>;
   private readonly kingsProtectors: [Piece[], Piece[]];

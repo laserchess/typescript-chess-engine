@@ -1,8 +1,7 @@
-import { BoardVector2d } from "geometry";
-import { Rotation } from "geometry/Direction.js";
-import { Piece, PieceType } from "pieces";
+import { BoardVector2d, Rotation } from "@lc/geometry";
+import { Piece, PieceType } from "@lc/pieces";
 
-export const enum PieceMoveType {
+export const enum MoveType {
   Move              = 1 << 0,
   Capture           = 1 << 1,
   KingSideCastling  = 1 << 2,
@@ -26,7 +25,7 @@ export const enum BoardMoveType {
 export interface SendableMove {
   origin: BoardVector2d,
   destination: BoardVector2d,
-  moveType: PieceMoveType & BoardMoveType,
+  moveType: MoveType & BoardMoveType,
   rotation: Rotation
   promotedTo: PieceType
 }

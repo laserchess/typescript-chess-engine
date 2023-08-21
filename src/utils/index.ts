@@ -1,7 +1,2 @@
-import {
-  Integer
-} from "./int.js";
-
-export {
-  Integer
-};
+export { NotImplementedError } from "./error.js";
+export { Integer } from "./int.js";

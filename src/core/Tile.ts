@@ -1,5 +1,5 @@
-import { BoardVector2d } from "geometry";
-import { Piece } from "pieces";
+import { BoardVector2d } from "@lc/geometry";
+import { Piece } from "@lc/pieces";
 
 export enum MovesPredictionsType {
   All        = 1 << 0,

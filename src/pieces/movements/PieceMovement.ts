@@ -1,6 +1,6 @@
-import { Board } from "core/Board.js";
-import { BoardVector2d } from "geometry";
-import { Piece } from "pieces";
+import { Board } from "@lc/core";
+import { BoardVector2d } from "@lc/geometry";
+import { Piece } from "@lc/pieces";
 
 
 export abstract class PieceMovement {

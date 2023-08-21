@@ -1,13 +1,14 @@
-import { Board, CaptureOptions } from "core/Board.js";
-import { BoardVector2d, Direction } from "geometry";
-import { DirectedPiece, PieceOpitons, PieceMovement, PieceType, Piece } from "pieces"
+import { Board, CaptureOptions } from "@lc/core";
+import { BoardVector2d, Direction } from "@lc/geometry";
+import { DirectedPiece, PieceOptions, PieceType, Piece } from "@lc/pieces";
+import { PieceMovement } from "@lc/piece-movements";
 
 export class Pawn extends DirectedPiece {
   private _enPassantPosition?: BoardVector2d;
   private _promotionPosition?: BoardVector2d;
 
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    const options: PieceOpitons =
+    const options: PieceOptions =
     {
       pieceType: PieceType.PAWN,
       movement: new PawnMovement(board)

@@ -1,6 +1,7 @@
-import { Board } from "core/Board.js";
-import { BoardVector2d } from "geometry";
-import { PieceMovement } from "pieces";
+import { Board } from "@lc/core";
+import { BoardVector2d } from "@lc/geometry";
+import { PieceMovement } from "@lc/piece-movements";
+
 
 export enum PieceType {
   KING   = "K",

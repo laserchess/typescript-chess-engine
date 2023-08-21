@@ -1,11 +1,11 @@
-import { Board, CaptureOptions } from "core/Board.js";
-import { BoardVector2d, Symmetry } from "geometry";
-import { Piece, PieceOpitons, PieceType } from "pieces";
-import { PieceMovement } from "pieces/movements/PieceMovement.js";
+import { Board, CaptureOptions } from "@lc/core";
+import { BoardVector2d, Symmetry } from "@lc/geometry";
+import { Piece, PieceOptions, PieceType } from "@lc/pieces";
+import { PieceMovement } from "@lc/piece-movements";
 
 export class Knight extends Piece {
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    const options: PieceOpitons =
+    const options: PieceOptions =
     {
       pieceType: PieceType.KNIGHT,
       movement: new KnightMovement(board)
