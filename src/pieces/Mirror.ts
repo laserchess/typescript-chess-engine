@@ -1,7 +1,8 @@
-import { Board } from "@lc/core";
-import { BoardVector2d, Direction } from "@lc/geometry";
+import { Board, Move } from "@lc/core";
+import { BoardVector2d, Direction, Rotation } from "@lc/geometry";
 import { DirectedPiece, PieceOptions, PieceType } from "@lc/pieces";
 import { CloseRangeMovement } from "@lc/piece-movements";
+import { ObjectsUtilities } from "utils/ObjectUtilities.js";
 
 
 export class Mirror extends DirectedPiece {
@@ -40,6 +41,15 @@ export class MirrorMovement extends CloseRangeMovement {
 
   protected updateMovesWrapped(): void {
     super.updateMoves();
-    this._capturableMoves.length = 0;  
+    this._capturableMoves.length = 0;
+    let move: Partial<Move> = {
+      rotation: Rotation.Anticlockwise
+    }  
+    this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+    this._allMoves.push(ObjectsUtilities.objectDeepcopy(move));
+    
+    move.rotation = Rotation.Clockwise;
+    this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+    this._allMoves.push(move);
   }
 }

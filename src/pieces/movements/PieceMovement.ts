@@ -1,4 +1,4 @@
-import { Board } from "@lc/core";
+import { Board, Move } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
 import { Piece } from "@lc/pieces";
 
@@ -6,9 +6,9 @@ import { Piece } from "@lc/pieces";
 export abstract class PieceMovement {
   protected board: Board;
   protected _piece?: Piece;
-  protected readonly _allMoves: BoardVector2d[];
-  protected readonly _legalMoves: BoardVector2d[];
-  protected readonly _capturableMoves: BoardVector2d[];
+  protected readonly _allMoves: Partial<Move>[];
+  protected readonly _legalMoves: Partial<Move>[];
+  protected readonly _capturableMoves: Partial<Move>[];
 
   public constructor(board: Board) {
     this.board = board;
@@ -34,15 +34,15 @@ export abstract class PieceMovement {
     this.updateMovesWrapped();
   }
 
-  public get allMoves(): BoardVector2d[] {
+  public get allMoves(): Partial<Move>[] {
     return this._allMoves;
   }
 
-  public get legalMoves(): BoardVector2d[] {
+  public get legalMoves(): Partial<Move>[] {
     return this._legalMoves;
   }
 
-  public get capturableMoves(): BoardVector2d[] {
+  public get capturableMoves(): Partial<Move>[] {
     return this._capturableMoves;
   }
 }

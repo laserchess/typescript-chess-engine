@@ -1,7 +1,8 @@
-import { Board, CaptureOptions } from "@lc/core";
+import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
 import { BoardVector2d, Symmetry } from "@lc/geometry";
 import { Piece, PieceOptions, PieceType } from "@lc/pieces";
 import { PieceMovement } from "@lc/piece-movements";
+import { ObjectsUtilities } from "utils/ObjectUtilities.js";
 
 export class Knight extends Piece {
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
@@ -38,12 +39,25 @@ export class KnightMovement extends PieceMovement {
     }
 
     for (let position of positions) {
+      let move: Partial<Move> = {
+        destination: position,
+        moveType: MoveType.Move
+      }
       if (!board.isOutOfBounds(position)) {
-        this._allMoves.push(position);
+        this._allMoves.push(move);
         if (board.canMoveTo(position, piece, CaptureOptions.OptionalCapture)) {
-          this._legalMoves.push(position);
+          move = ObjectsUtilities.objectDeepcopy(move);
+          this._legalMoves.push(move);
           if (board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) {
-            this._capturableMoves.push(position);
+            move = ObjectsUtilities.objectDeepcopy(move);
+            move.moveType! &= MoveType.Capture
+            this._capturableMoves.push(move);
+
+            move = {
+              destination: position,
+              moveType: MoveType.RangedCapture
+            }
+            this._capturableMoves.push(move);
           }
         }
       }
