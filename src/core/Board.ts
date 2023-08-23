@@ -21,7 +21,9 @@ export class Board {
   private readonly tiles: Map<BoardVector2d, Tile>;
   private readonly piecesOfType: Map<PieceType, Piece[][]>;
   private readonly kingsProtectors: [Piece[], Piece[]];
-  
+  private readonly movesHistory: [Move[], Move[]];
+  private _lastMove: Move | null;
+
   private promotionManager?: PromotionManager;
   private checkManager?: CheckManager;
 
@@ -31,6 +33,8 @@ export class Board {
     this.tiles = new Map<BoardVector2d, Tile>();
     this.piecesOfType = new Map<PieceType, Piece[][]>();
     this.kingsProtectors = [[], []];
+    this.movesHistory = [[], []];
+    this._lastMove = null;
     for (let i = 0; i < width; i++) {
       for (let j = 0; j < height; j++) {
         let place: BoardVector2d = new BoardVector2d(i, j);
@@ -160,8 +164,8 @@ export class Board {
 
   }
 
-  public getLastMove(): Move | null {
-    return null
+  public get lastMove(): Move | null {
+    return this._lastMove;
   }
 
   public isCheckAt(position: BoardVector2d, playerId: number): boolean {

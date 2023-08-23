@@ -1,18 +1,15 @@
 import { BoardVector2d, Rotation } from "@lc/geometry";
-import { Piece } from "@lc/pieces";
+import { Piece, PieceType } from "@lc/pieces";
 
-export const enum PieceMoveType {
+export const enum MoveType {
   Move              = 1 << 0,
   Capture           = 1 << 1,
   RangedCapture     = 1 << 2,
   EnPassant         = 1 << 3,
   KingSideCastling  = 1 << 4,
   QueenSideCastling = 1 << 5,
-  Promotion         = 1 << 6,
-  Rotation          = 1 << 7
-}
-
-export const enum BoardMoveType {
+  Rotation          = 1 << 6,
+  Promotion         = 1 << 7,
   Check             = 1 << 8,
   Checkmate         = 1 << 9,
   Stalemate         = 1 << 10,
@@ -23,10 +20,13 @@ export const enum BoardMoveType {
 }
 
 export interface Move {
-  piece: Piece,
   origin: BoardVector2d,
   destination: BoardVector2d,
-  captured: Piece,
-  moveType: PieceMoveType & BoardMoveType,
-  rotation: Rotation
+  moveType: MoveType,
+  rotation: Rotation | null
+  promotedTo: PieceType | null
+  piece: Piece,
+  captured: Piece | null,
 }
+
+

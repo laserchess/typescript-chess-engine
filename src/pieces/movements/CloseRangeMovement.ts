@@ -1,7 +1,8 @@
-import { Board, CaptureOptions } from "@lc/core";
+import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
 import { Piece } from "@lc/pieces";
 import { PieceMovement } from "@lc/piece-movements";
+import { ObjectsUtilities } from "utils/ObjectUtilities.js";
 
 export class CloseRangeMovement extends PieceMovement {
 
@@ -16,12 +17,20 @@ export class CloseRangeMovement extends PieceMovement {
           continue;
         }
         let newVector: BoardVector2d = new BoardVector2d(scalar1, scalar2).add(piece.position);
+        let move: Partial<Move> = {
+          destination: newVector,
+        }
         if (!board.isOutOfBounds(newVector)) {
-          this._allMoves.push(newVector);
+          move = ObjectsUtilities.objectDeepcopy(move);
+          move.moveType = MoveType.Move
+          this._allMoves.push(move);
           if (board.canMoveTo(newVector, piece, CaptureOptions.OptionalCapture)) {
-            this._legalMoves.push(newVector.copy());
-            if (board.canMoveTo(newVector, piece, CaptureOptions.RequiredCapture)) { // Additional data
-              this._capturableMoves.push(newVector.copy());
+            move = ObjectsUtilities.objectDeepcopy(move);
+            this._legalMoves.push(move);
+            if (board.canMoveTo(newVector, piece, CaptureOptions.RequiredCapture)) {
+              move.moveType! &= MoveType.Capture;
+              move = ObjectsUtilities.objectDeepcopy(move);
+              this._capturableMoves.push(move);
             }
           }
 
