@@ -3,10 +3,13 @@ import {
   CheckManager,
   PromotionManager,
   Tile,
-  Move
+  Move,
+  MoveType
 } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
+import { MoveOrder } from "game.js";
+import { IllegalMoveError } from "utils/error.js";
 
 
 export const enum CaptureOptions {
@@ -154,6 +157,14 @@ export class Board {
 
   public getPiecesOfType(playerId: number, pieceType: PieceType): Piece[] {
     return this.piecesOfType.get(pieceType)![playerId];
+  }
+
+  public move(move: MoveOrder, playerId: number): void {
+    let moves: Partial<Move>[];
+    let pieceToMove: Piece | null = this.getTile(move.origin).pieceOnTile;
+    if (pieceToMove === null) {
+      throw new IllegalMoveError("There is no piece")
+    }
   }
 
   public notifyPositionChange(origin: BoardVector2d, destination: BoardVector2d) {
