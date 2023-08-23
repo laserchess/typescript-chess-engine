@@ -3,3 +3,9 @@ export class NotImplementedError extends Error {
     super(message);
   }
 }
+
+export class IllegalMoveError extends Error {
+  constructor(message?: string) {
+    super(message);
+  }
+}
