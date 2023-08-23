@@ -1,6 +1,5 @@
 import { BoardVector2d, Rotation } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
-import { ObjectsUtilities } from "utils/ObjectUtilities.js";
 
 export const enum MoveType {
   Move              = 1 << 0,
