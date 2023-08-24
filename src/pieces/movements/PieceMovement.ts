@@ -5,20 +5,17 @@ import { Piece } from "@lc/pieces";
 
 export abstract class PieceMovement {
   protected board: Board;
-  protected _piece?: Piece;
+  protected piece: Piece;
   public readonly allMoves: Partial<Move>[];
   public readonly legalMoves: Partial<Move>[];
   public readonly capturableMoves: Partial<Move>[];
 
-  public constructor(board: Board) {
+  public constructor(piece: Piece, board: Board) {
+    this.piece           = piece;
     this.board           = board;
     this.allMoves        = [];
     this.legalMoves      = [];
     this.capturableMoves = [];
-  }
-
-  public set piece(piece: Piece) {
-    this._piece = piece;
   }
 
   protected clearMoves(): void {

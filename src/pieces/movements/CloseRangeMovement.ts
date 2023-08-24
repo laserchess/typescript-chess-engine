@@ -8,7 +8,7 @@ export class CloseRangeMovement extends PieceMovement {
 
   // This method sets all around moves as capturableMoves.
   protected updateMovesWrapped(): void {
-    const piece: Piece = this._piece as Piece;
+    const piece: Piece = this.piece as Piece;
     const board: Board = this.board;
 
     for (let scalar1 of [-1, 1, 0]) {

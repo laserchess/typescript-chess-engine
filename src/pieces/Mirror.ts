@@ -6,15 +6,11 @@ import { ObjectsUtilities } from "utils/ObjectUtilities.js";
 
 
 export class Mirror extends DirectedPiece {
-  public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    let options: PieceOptions =
-    {
-      pieceType: PieceType.MIRROR,
-      movement: new MirrorMovement(board)
-    }
-    super(position, playerId, board, options);
-    this.movement.piece = this
+  protected override initType(): void {
+    this.pieceType = PieceType.MIRROR;
+    this.movement  = new MirrorMovement(this, this.board);
   }
+
   public set direction(direction: Direction) {
     if (direction % 2 === 0) {
       throw new Error("Direction for MirrorPiece have to be diagonal.");

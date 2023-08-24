@@ -1,5 +1,3 @@
 import { Piece } from "@lc/pieces";
 
-class LongRangePiece extends Piece {
-
-}
+abstract class LongRangePiece extends Piece { }

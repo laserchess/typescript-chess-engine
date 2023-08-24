@@ -8,14 +8,9 @@ export class Pawn extends DirectedPiece {
   private _enPassantPosition?: BoardVector2d;
   private _promotionPosition?: BoardVector2d;
 
-  public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    const options: PieceOptions =
-    {
-      pieceType: PieceType.PAWN,
-      movement: new PawnMovement(board)
-    }
-    super(position, playerId, board, options);
-    this.movement.piece = this
+  protected override initType(): void {
+    this.pieceType = PieceType.PAWN;
+    this.movement  = new PawnMovement(this, this.board);
   }
 
   public set direction(direction: Direction) {
@@ -51,7 +46,7 @@ export class Pawn extends DirectedPiece {
 export class PawnMovement extends PieceMovement {
 
   public isEnPassantLegal(destination: BoardVector2d): boolean {
-    const piece: Pawn = this._piece as Pawn;
+    const piece: Pawn = this.piece as Pawn;
     const board: Board = this.board;
     const otherPiece: Piece | null = board.getPiece(destination.sub(Direction.toBoardVector2d(piece.direction!)));
     return otherPiece !== null
@@ -63,7 +58,7 @@ export class PawnMovement extends PieceMovement {
   }
 
   protected updateMovesWrapped(): void {
-    const piece: Pawn = this._piece as Pawn;
+    const piece: Pawn = this.piece as Pawn;
     const board: Board = this.board;
     const direction: BoardVector2d = Direction.toBoardVector2d(piece.direction as Direction);
     const captureDeltas: BoardVector2d[] = [

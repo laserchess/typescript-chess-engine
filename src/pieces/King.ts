@@ -10,14 +10,9 @@ export class King extends Piece {
   private _kingRook?: Piece;
   private _queenRook?: Piece;
 
-  public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    const options: PieceOptions =
-    {
-      pieceType: PieceType.KING,
-      movement: new KingMovement(board)
-    }
-    super(position, playerId, board, options);
-    this.movement.piece = this;
+  protected override initType(): void {
+    this.pieceType = PieceType.KING;
+    this.movement  = new KingMovement(this, this.board);
   }
 
   public set kingRook(rook: Piece) {

@@ -23,24 +23,26 @@ export abstract class Piece {
 
   public readonly initialPosition: BoardVector2d;
   public readonly playerId: number;
-  public readonly pieceType: PieceType;
-  public readonly movement: PieceMovement;
-  public readonly defendsKingsFrom: [Piece | null, Piece | null];
   protected readonly board: Board;
+  public pieceType!: PieceType;
+  public movement!: PieceMovement;
+  public readonly defendsKingsFrom: [Piece | null, Piece | null];
   protected _position: BoardVector2d;
   protected moveCounter: number;
 
 
-  public constructor(position: BoardVector2d, playerId: number, board: Board, options: PieceOptions) {
+  public constructor(position: BoardVector2d, playerId: number, board: Board) {
     this.initialPosition = position;
     this._position = position;
     this.playerId = playerId;
     this.moveCounter = 0;
     this.board = board;
-    this.pieceType = options.pieceType;
-    this.movement = options.movement;
     this.defendsKingsFrom = [null, null];
+
+    this.initType();
   }
+
+  protected abstract initType(): void;
 
   public get position(): BoardVector2d {
     return this._position;
