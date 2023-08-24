@@ -24,8 +24,8 @@ export abstract class Piece {
   public readonly initialPosition: BoardVector2d;
   public readonly playerId: number;
   protected readonly board: Board;
-  public pieceType!: PieceType;
-  public movement!: PieceMovement;
+  protected _pieceType!: PieceType;
+  protected _movement!: PieceMovement;
   public readonly defendsKingsFrom: [Piece | null, Piece | null];
   protected _position: BoardVector2d;
   protected moveCounter: number;
@@ -48,6 +48,20 @@ export abstract class Piece {
     return this._position;
   }
 
+  public get pieceType(): PieceType {
+    if (!this._pieceType) {
+      throw new Error("Piece type is not initialised");
+    }
+    return this._pieceType;
+  }
+
+  public get movement(): PieceMovement {
+    if (!this._movement) {
+      throw new Error("Piece movement is not initialised");
+    }
+    return this._movement;
+  }
+
   public equals(other: any): boolean {
     if (other! instanceof Piece) {
       return false;
@@ -56,12 +70,12 @@ export abstract class Piece {
       && this._position === other.position
       && this.playerId === other.playerId
       && this.moveCounter === other.playerId
-      && this.movement === other.movement
-      && this.pieceType === other.pieceType
+      && this._movement === other.movement
+      && this._pieceType === other.pieceType
   }
 
   public toString(): string {
-    return this.pieceType.valueOf();
+    return this._pieceType.valueOf();
   }
 
   public wasMoved(): boolean {

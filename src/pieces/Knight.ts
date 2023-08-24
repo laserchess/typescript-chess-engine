@@ -6,8 +6,8 @@ import { ObjectsUtilities } from "utils/ObjectUtilities.js";
 
 export class Knight extends Piece {
   protected override initType(): void {
-    this.pieceType = PieceType.KNIGHT;
-    this.movement  = new KnightMovement(this, this.board);
+    this._pieceType = PieceType.KNIGHT;
+    this._movement  = new KnightMovement(this, this.board);
   }
 
   public rangedCapture(destination: BoardVector2d) {

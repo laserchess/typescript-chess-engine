@@ -11,8 +11,8 @@ export class King extends Piece {
   private _queenRook?: Piece;
 
   protected override initType(): void {
-    this.pieceType = PieceType.KING;
-    this.movement  = new KingMovement(this, this.board);
+    this._pieceType = PieceType.KING;
+    this._movement  = new KingMovement(this, this.board);
   }
 
   public set kingRook(rook: Piece) {

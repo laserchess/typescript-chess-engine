@@ -9,8 +9,8 @@ export class Pawn extends DirectedPiece {
   private _promotionPosition?: BoardVector2d;
 
   protected override initType(): void {
-    this.pieceType = PieceType.PAWN;
-    this.movement  = new PawnMovement(this, this.board);
+    this._pieceType = PieceType.PAWN;
+    this._movement  = new PawnMovement(this, this.board);
   }
 
   public set direction(direction: Direction) {

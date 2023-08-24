@@ -7,8 +7,8 @@ import { ObjectsUtilities } from "utils/ObjectUtilities.js";
 
 export class Mirror extends DirectedPiece {
   protected override initType(): void {
-    this.pieceType = PieceType.MIRROR;
-    this.movement  = new MirrorMovement(this, this.board);
+    this._pieceType = PieceType.MIRROR;
+    this._movement  = new MirrorMovement(this, this.board);
   }
 
   public set direction(direction: Direction) {
