@@ -11,7 +11,7 @@ export class King extends Piece {
   private _queenRook?: Piece;
 
   protected override initType(): void {
-    this._pieceType = PieceType.KING;
+    this._type = PieceType.KING;
     this._movement  = new KingMovement(this, this.board);
   }
 
@@ -49,7 +49,7 @@ export class KingMovement extends CloseRangeMovement {
     }
     
     if (
-      potentialRook.pieceType === PieceType.ROOK
+      potentialRook.type === PieceType.ROOK
       && !potentialRook.wasMoved()
       && !this.piece.wasMoved()
     ) {

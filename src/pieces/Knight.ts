@@ -6,7 +6,7 @@ import { ObjectsUtilities } from "utils/ObjectUtilities.js";
 
 export class Knight extends Piece {
   protected override initType(): void {
-    this._pieceType = PieceType.KNIGHT;
+    this._type = PieceType.KNIGHT;
     this._movement  = new KnightMovement(this, this.board);
   }
 

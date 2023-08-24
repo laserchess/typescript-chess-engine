@@ -7,7 +7,7 @@ import { ObjectsUtilities } from "utils/ObjectUtilities.js";
 
 export class Mirror extends DirectedPiece {
   protected override initType(): void {
-    this._pieceType = PieceType.MIRROR;
+    this._type = PieceType.MIRROR;
     this._movement  = new MirrorMovement(this, this.board);
   }
 

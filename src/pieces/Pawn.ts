@@ -9,7 +9,7 @@ export class Pawn extends DirectedPiece {
   private _promotionPosition?: BoardVector2d;
 
   protected override initType(): void {
-    this._pieceType = PieceType.PAWN;
+    this._type = PieceType.PAWN;
     this._movement  = new PawnMovement(this, this.board);
   }
 
@@ -51,7 +51,7 @@ export class PawnMovement extends PieceMovement {
     const otherPiece: Piece | null = board.getPiece(destination.sub(Direction.toBoardVector2d(piece.direction!)));
     return otherPiece !== null
       && !otherPiece.isSameColor(piece)
-      && otherPiece.pieceType === PieceType.PAWN
+      && otherPiece.type === PieceType.PAWN
       && board.canMoveTo(destination, piece, CaptureOptions.RequiredCapture)
       && board.lastMove?.piece !== null
       && piece.isOnEnPassantPosition();
