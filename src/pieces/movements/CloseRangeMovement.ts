@@ -23,14 +23,14 @@ export class CloseRangeMovement extends PieceMovement {
         if (!board.isOutOfBounds(newVector)) {
           move = ObjectsUtilities.objectDeepcopy(move);
           move.moveType = MoveType.Move
-          this._allMoves.push(move);
+          this.allMoves.push(move);
           if (board.canMoveTo(newVector, piece, CaptureOptions.OptionalCapture)) {
             move = ObjectsUtilities.objectDeepcopy(move);
-            this._legalMoves.push(move);
+            this.legalMoves.push(move);
             if (board.canMoveTo(newVector, piece, CaptureOptions.RequiredCapture)) {
               move.moveType! &= MoveType.Capture;
               move = ObjectsUtilities.objectDeepcopy(move);
-              this._capturableMoves.push(move);
+              this.capturableMoves.push(move);
             }
           }
 

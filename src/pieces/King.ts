@@ -87,16 +87,16 @@ export class KingMovement extends CloseRangeMovement {
         destination: this.piece.position.add(new BoardVector2d(2, 0)) as BoardVector2d,
         moveType: MoveType.Move & MoveType.KingSideCastling
       }
-      this._legalMoves.push(move)
-      this._allMoves.push(ObjectsUtilities.objectDeepcopy(move));
+      this.legalMoves.push(move)
+      this.allMoves.push(ObjectsUtilities.objectDeepcopy(move));
     }
     else if (this.isCastlingLegal(MoveType.QueenSideCastling)) {
       let move: Partial<Move> = {
         destination: this.piece.position.add(new BoardVector2d(-2, 0)) as BoardVector2d,
         moveType: MoveType.Move & MoveType.KingSideCastling
       }
-      this._legalMoves.push(move)
-      this._allMoves.push(ObjectsUtilities.objectDeepcopy(move));
+      this.legalMoves.push(move)
+      this.allMoves.push(ObjectsUtilities.objectDeepcopy(move));
     }
   }
 }

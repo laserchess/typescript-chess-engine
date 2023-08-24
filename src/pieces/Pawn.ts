@@ -80,9 +80,9 @@ export class PawnMovement extends PieceMovement {
         destination: piece.position.add(direction) as BoardVector2d,
         moveType: MoveType.Move
       } 
-      this._allMoves.push(move);
+      this.allMoves.push(move);
       if (board.canMoveTo(piece.position.add(direction), piece, CaptureOptions.NoCapture)) {
-        this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+        this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
       }
     }
 
@@ -93,13 +93,13 @@ export class PawnMovement extends PieceMovement {
         destination: piece.position.add(direction.mul(2)) as BoardVector2d,
         moveType: MoveType.Move
       }
-      this._allMoves.push(move);
+      this.allMoves.push(move);
       if (
         !piece.wasMoved()
         && board.canMoveTo(piece.position.add(direction.mul(2)), piece, CaptureOptions.NoCapture)
         && this.legalMoves.length > 0
       ) {
-        this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+        this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
       }
     }
 
@@ -112,10 +112,10 @@ export class PawnMovement extends PieceMovement {
         moveType: MoveType.Move & MoveType.Capture
       }
       if (!board.isOutOfBounds(position)) {
-        this._allMoves.push(move);
+        this.allMoves.push(move);
         if (!board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) { // Additional data
-          this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
-          this._capturableMoves.push(ObjectsUtilities.objectDeepcopy(move));
+          this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+          this.capturableMoves.push(ObjectsUtilities.objectDeepcopy(move));
         }
       }
 
@@ -131,16 +131,16 @@ export class PawnMovement extends PieceMovement {
           moveType: MoveType.Move & MoveType.Capture
         }
         if (this.isEnPassantLegal(tmpPosition)) {
-          this._allMoves.push(move);
-          this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
-          this._capturableMoves.push(ObjectsUtilities.objectDeepcopy(move));
+          this.allMoves.push(move);
+          this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+          this.capturableMoves.push(ObjectsUtilities.objectDeepcopy(move));
         }
       }
     }
 
     // Promotion flag
 
-    let commonMoves: Partial<Move>[] = [...this._allMoves,...this._legalMoves,...this._capturableMoves];
+    let commonMoves: Partial<Move>[] = [...this.allMoves,...this.legalMoves,...this.capturableMoves];
     for (let move of commonMoves) {
       if ((this.piece as Pawn).promotionPosition.y === move.destination!.y) {
         move.moveType! &= MoveType.Promotion;
