@@ -32,11 +32,11 @@ export abstract class Piece {
 
 
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    this.initialPosition = position;
-    this._position = position;
-    this.playerId = playerId;
-    this.moveCounter = 0;
-    this.board = board;
+    this.initialPosition  = position;
+    this._position        = position;
+    this.playerId         = playerId;
+    this.moveCounter      = 0;
+    this.board            = board;
     this.defendsKingsFrom = [null, null];
 
     this.initType();
