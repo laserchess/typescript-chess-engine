@@ -86,9 +86,9 @@ export abstract class Piece {
   }
 
   public move(destination: BoardVector2d) {
-    const origin: BoardVector2d = this.position.copy();
+    // const origin: BoardVector2d = this.position.copy();
     this.position = destination;
     this.moveCounter += 1;
-    this.board.notifyPositionChange(origin, destination);
+    // this.board.notifyPositionChange(origin, destination);
   }
 }

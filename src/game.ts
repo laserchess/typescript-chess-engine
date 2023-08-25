@@ -35,8 +35,8 @@ export class Game {
     return (playerId + 1) % 2;
   }
 
-  public move(move: MoveOrder): void {
-    this._board!.move(move, this._currentPlayer);
+  public move(/* move: MoveOrder */): void {
+    // this._board!.move(move, this._currentPlayer);
     this._currentPlayer = Game.getEnemyId(this._currentPlayer);
   }
 
