@@ -1,8 +1,8 @@
 import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
 import { BoardVector2d, Symmetry } from "@lc/geometry";
-import { Piece, PieceOptions, PieceType } from "@lc/pieces";
+import { Piece, PieceType } from "@lc/pieces";
 import { PieceMovement } from "@lc/piece-movements";
-import { ObjectsUtilities } from "utils/ObjectUtilities.js";
+import { ObjectsUtilities } from "@lc/utils";
 
 export class Knight extends Piece {
   protected override initType(): void {
@@ -11,9 +11,9 @@ export class Knight extends Piece {
   }
 
   public rangedCapture(destination: BoardVector2d) {
-    this._position = destination;
+    this.position = destination;
     this.moveCounter += 1;
-    this.board.notifyRangedCapture(this.position, destination);
+    // this.board.notifyRangedCapture(this.position, destination);
   }
 }
 
@@ -27,13 +27,13 @@ export class KnightMovement extends PieceMovement {
     const symmetries: Symmetry[] = [Symmetry.None, Symmetry.XAxis, Symmetry.Origin, Symmetry.YAxis];
     const positions: BoardVector2d[] = []
 
-    for (let symmetry of symmetries) {
-      for (let vector of baseVectors) {
+    for (const symmetry of symmetries) {
+      for (const vector of baseVectors) {
         positions.push(piece.position.add(vector.applySymmetry(symmetry)));
       }
     }
 
-    for (let position of positions) {
+    for (const position of positions) {
       let move: Partial<Move> = {
         destination: position,
         moveType: MoveType.Move

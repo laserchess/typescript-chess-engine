@@ -36,7 +36,7 @@ export class Tile {
   }
   
   public addPieceMovesToTile(piece: Piece, movePredictionsType: MovesPredictionsType): void {
-    for (let item in MovesPredictionsType){
+    for (const item in MovesPredictionsType){
       const movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]
       if ((movePredictionsType & movesEnumValue) === movesEnumValue) {
         this.setHashMap.get(movesEnumValue)![piece.playerId].add(piece);
@@ -45,7 +45,7 @@ export class Tile {
   }
 
   public removePieceMovesFromTile(piece: Piece, movePredictionsType: MovesPredictionsType): void {
-    for (let item in MovesPredictionsType){
+    for (const item in MovesPredictionsType){
       const movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]
       if ((movePredictionsType & movesEnumValue) === movesEnumValue) {
         this.setHashMap.get(movesEnumValue)![piece.playerId].delete(piece);
@@ -55,7 +55,7 @@ export class Tile {
   }
 
   public checkIfPieceMovesInTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
-    for (let item in MovesPredictionsType){
+    for (const item in MovesPredictionsType){
       const movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]
       if ((movePredictionsType & movesEnumValue) === movesEnumValue) {
         return this.setHashMap.get(movesEnumValue)![piece.playerId].has(piece);
@@ -70,7 +70,7 @@ export class Tile {
 
   public getPieceMovesOfTile(playerId: number, movePredictionsType: MovesPredictionsType) {
     let piecesSet: Set<Piece> = new Set<Piece>;
-    for (let item in MovesPredictionsType){
+    for (const item in MovesPredictionsType){
       const movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]
       if ((movePredictionsType & movesEnumValue) === movesEnumValue) {
         piecesSet = new Set([...piecesSet, ...this.setHashMap.get(movesEnumValue)![playerId]])

@@ -27,13 +27,13 @@ export abstract class Piece {
   protected _type!: PieceType;
   protected _movement!: PieceMovement;
   public readonly defendsKingsFrom: [Piece | null, Piece | null];
-  protected _position: BoardVector2d;
+  public position: BoardVector2d;
   protected moveCounter: number;
 
 
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
     this.initialPosition  = position;
-    this._position        = position;
+    this.position         = position;
     this.playerId         = playerId;
     this.moveCounter      = 0;
     this.board            = board;
@@ -43,10 +43,6 @@ export abstract class Piece {
   }
 
   protected abstract initType(): void;
-
-  public get position(): BoardVector2d {
-    return this._position;
-  }
 
   public get type(): PieceType {
     if (!this._type) {
@@ -62,20 +58,20 @@ export abstract class Piece {
     return this._movement;
   }
 
-  public equals(other: any): boolean {
-    if (other! instanceof Piece) {
+  public equals(other: unknown): boolean {
+    if (!(other instanceof Piece)) {
       return false;
     }
     return this.initialPosition === other.initialPosition
-      && this._position === other.position
-      && this.playerId === other.playerId
-      && this.moveCounter === other.playerId
-      && this._movement === other.movement
-      && this._type === other.pieceType
+        && this.position === other.position
+        && this.playerId === other.playerId
+        && this.moveCounter === other.playerId
+        && this._movement === other.movement
+        && this.type === other.type
   }
 
   public toString(): string {
-    return this._type.valueOf();
+    return this.type.valueOf();
   }
 
   public wasMoved(): boolean {
@@ -90,8 +86,8 @@ export abstract class Piece {
   }
 
   public move(destination: BoardVector2d) {
-    const origin: BoardVector2d = this._position.copy();
-    this._position = destination;
+    const origin: BoardVector2d = this.position.copy();
+    this.position = destination;
     this.moveCounter += 1;
     this.board.notifyPositionChange(origin, destination);
   }

@@ -486,8 +486,8 @@ export class BoardVector2d extends IntVector2d {
     }
 
     const moves: BoardVector2d[] = [];
-    for (let x of xCoordinates) {
-      for (let y of yCoordinates) {
+    for (const x of xCoordinates) {
+      for (const y of yCoordinates) {
         moves.push(new BoardVector2d(x, y));
       }
     }

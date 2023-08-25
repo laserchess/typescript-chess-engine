@@ -1,3 +1,3 @@
 export { NotImplementedError, IllegalMoveError } from "./error.js";
-export { Integer } from "./int.js";
-export { ObjectsUtilities } from "./ObjectUtilities.js"
+export * as Integer from "./int.js";
+export * as ObjectsUtilities from "./ObjectUtilities.js"

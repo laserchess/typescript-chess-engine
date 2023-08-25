@@ -3,8 +3,7 @@ import {
   CheckManager,
   PromotionManager,
   Tile,
-  Move,
-  MoveType
+  Move
 } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
@@ -40,13 +39,13 @@ export class Board {
     this._lastMove = null;
     for (let i = 0; i < width; i++) {
       for (let j = 0; j < height; j++) {
-        let place: BoardVector2d = new BoardVector2d(i, j);
+        const place: BoardVector2d = new BoardVector2d(i, j);
         this.tiles.set(place, new Tile(place.copy()));
       }
     }
 
-    for (let item in PieceType){
-      let pieceType: PieceType = PieceType[item as keyof typeof PieceType];
+    for (const item in PieceType){
+      const pieceType: PieceType = PieceType[item as keyof typeof PieceType];
       this.piecesOfType.set(pieceType, []);
     }
 
@@ -57,8 +56,8 @@ export class Board {
 
   public getPiecesOfPlayer(playerId: number): Piece[] {
     let playerPieces: Piece[] = [];
-    for (let type in PieceType) {
-      let pieceType: PieceType = PieceType[type as keyof typeof PieceType];
+    for (const type in PieceType) {
+      const pieceType: PieceType = PieceType[type as keyof typeof PieceType];
       playerPieces = playerPieces.concat(this.piecesOfType.get(pieceType)![playerId]);
     }
     return playerPieces;
@@ -96,7 +95,7 @@ export class Board {
   }
 
   public addPieces(pieces: Piece[]): void {
-    for (let piece of pieces) {
+    for (const piece of pieces) {
       this.addPiece(piece);
     }
   }
@@ -125,7 +124,7 @@ export class Board {
   }
 
   public canMoveTo(destination: BoardVector2d, piece: Piece, capture: CaptureOptions): boolean {
-    const playerId: number = piece.playerId;
+    // const playerId: number = piece.playerId;
 
     // Check, if position after moving is in bounds of board.
 
@@ -159,19 +158,19 @@ export class Board {
     return this.piecesOfType.get(pieceType)![playerId];
   }
 
-  public move(move: MoveOrder, playerId: number): void {
-    let moves: Partial<Move>[];
-    let pieceToMove: Piece | null = this.getTile(move.origin).pieceOnTile;
+  public move(move: MoveOrder, /* playerId: number */): void {
+    // const moves: Partial<Move>[];
+    const pieceToMove: Piece | null = this.getTile(move.origin).pieceOnTile;
     if (pieceToMove === null) {
       throw new IllegalMoveError("There is no piece")
     }
   }
 
-  public notifyPositionChange(origin: BoardVector2d, destination: BoardVector2d) {
+  public notifyPositionChange(/* origin: BoardVector2d, destination: BoardVector2d */) {
 
   }
 
-  public notifyRangedCapture(origin: BoardVector2d, destination: BoardVector2d) {
+  public notifyRangedCapture(/* origin: BoardVector2d, destination: BoardVector2d */) {
 
   }
 
@@ -179,7 +178,7 @@ export class Board {
     return this._lastMove;
   }
 
-  public isCheckAt(position: BoardVector2d, playerId: number): boolean {
+  public isCheckAt(/* position: BoardVector2d, playerId: number */): boolean {
     return false;
   }
   

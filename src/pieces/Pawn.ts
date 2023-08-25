@@ -1,6 +1,6 @@
 import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
 import { BoardVector2d, Direction } from "@lc/geometry";
-import { DirectedPiece, PieceOptions, PieceType, Piece } from "@lc/pieces";
+import { DirectedPiece, PieceType, Piece } from "@lc/pieces";
 import { PieceMovement } from "@lc/piece-movements";
 import { ObjectsUtilities } from "utils/ObjectUtilities.js";
 
@@ -35,11 +35,11 @@ export class Pawn extends DirectedPiece {
   
 
   public isOnEnPassantPosition(): boolean {
-    return this._enPassantPosition === this._position;
+    return this._enPassantPosition === this.position;
   }
 
   public isOnPromotionPosition(): boolean {
-    return this._promotionPosition!.y === this._position.y;
+    return this._promotionPosition!.y === this.position.y;
   }
 }
 
@@ -71,7 +71,7 @@ export class PawnMovement extends PieceMovement {
     // Advance 1 square
 
     if (!board.isOutOfBounds(piece.position.add(direction))) {
-      let move: Partial<Move> = {
+      const move: Partial<Move> = {
         destination: piece.position.add(direction) as BoardVector2d,
         moveType: MoveType.Move
       } 
@@ -84,7 +84,7 @@ export class PawnMovement extends PieceMovement {
     // Advance 2 squares
 
     if (!board.isOutOfBounds(piece.position.add(direction.mul(2)))) {
-      let move: Partial<Move> = {
+      const move: Partial<Move> = {
         destination: piece.position.add(direction.mul(2)) as BoardVector2d,
         moveType: MoveType.Move
       }
@@ -100,9 +100,9 @@ export class PawnMovement extends PieceMovement {
 
     // Capture
 
-    for (let increment of captureDeltas) {
-      let position: BoardVector2d = piece.position.add(increment);
-      let move: Partial<Move> = {
+    for (const increment of captureDeltas) {
+      const position: BoardVector2d = piece.position.add(increment);
+      const move: Partial<Move> = {
         destination: position,
         moveType: MoveType.Move & MoveType.Capture
       }
@@ -119,9 +119,9 @@ export class PawnMovement extends PieceMovement {
     // En Passant
 
     if (piece.isOnEnPassantPosition()) {
-      for (let position of captureDeltas) {
-        let tmpPosition: BoardVector2d = piece.position.add(position);
-        let move: Partial<Move> = {
+      for (const position of captureDeltas) {
+        const tmpPosition: BoardVector2d = piece.position.add(position);
+        const move: Partial<Move> = {
           destination: position,
           moveType: MoveType.Move & MoveType.Capture
         }
@@ -135,8 +135,8 @@ export class PawnMovement extends PieceMovement {
 
     // Promotion flag
 
-    let commonMoves: Partial<Move>[] = [...this.allMoves,...this.legalMoves,...this.capturableMoves];
-    for (let move of commonMoves) {
+    const commonMoves: Partial<Move>[] = [...this.allMoves,...this.legalMoves,...this.capturableMoves];
+    for (const move of commonMoves) {
       if ((this.piece as Pawn).promotionPosition.y === move.destination!.y) {
         move.moveType! &= MoveType.Promotion;
       }
