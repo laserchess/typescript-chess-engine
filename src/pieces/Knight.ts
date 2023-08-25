@@ -41,10 +41,10 @@ export class KnightMovement extends PieceMovement {
       if (!board.isOutOfBounds(position)) {
         this.allMoves.push(move);
         if (board.canMoveTo(position, piece, CaptureOptions.OptionalCapture)) {
-          move = ObjectsUtilities.objectDeepcopy(move);
+          move = ObjectsUtilities.deepCopy(move);
           this.legalMoves.push(move);
           if (board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) {
-            move = ObjectsUtilities.objectDeepcopy(move);
+            move = ObjectsUtilities.deepCopy(move);
             move.moveType! &= MoveType.Capture
             this.capturableMoves.push(move);
 

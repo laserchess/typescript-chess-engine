@@ -77,7 +77,7 @@ export class PawnMovement extends PieceMovement {
       } 
       this.allMoves.push(move);
       if (board.canMoveTo(piece.position.add(direction), piece, CaptureOptions.NoCapture)) {
-        this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+        this.legalMoves.push(ObjectsUtilities.deepCopy(move));
       }
     }
 
@@ -94,7 +94,7 @@ export class PawnMovement extends PieceMovement {
         && board.canMoveTo(piece.position.add(direction.mul(2)), piece, CaptureOptions.NoCapture)
         && this.legalMoves.length > 0
       ) {
-        this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+        this.legalMoves.push(ObjectsUtilities.deepCopy(move));
       }
     }
 
@@ -109,8 +109,8 @@ export class PawnMovement extends PieceMovement {
       if (!board.isOutOfBounds(position)) {
         this.allMoves.push(move);
         if (!board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) { // Additional data
-          this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
-          this.capturableMoves.push(ObjectsUtilities.objectDeepcopy(move));
+          this.legalMoves.push(ObjectsUtilities.deepCopy(move));
+          this.capturableMoves.push(ObjectsUtilities.deepCopy(move));
         }
       }
 
@@ -127,8 +127,8 @@ export class PawnMovement extends PieceMovement {
         }
         if (this.isEnPassantLegal(tmpPosition)) {
           this.allMoves.push(move);
-          this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
-          this.capturableMoves.push(ObjectsUtilities.objectDeepcopy(move));
+          this.legalMoves.push(ObjectsUtilities.deepCopy(move));
+          this.capturableMoves.push(ObjectsUtilities.deepCopy(move));
         }
       }
     }

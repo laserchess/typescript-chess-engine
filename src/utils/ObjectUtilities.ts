@@ -8,41 +8,23 @@
 //     return result;
 //   }
 // }
+export function deepCopy(obj: object): object {
+  if (obj instanceof Date) {
+    return new Date(obj);
+  }
 
-// export function deepCopy(obj: unknown): Object {
+  if (obj instanceof Array) {
+    const arrayCopy: unknown[] = [];
+    for (let i = 0; i < obj.length; i++) {
+      arrayCopy[i] = typeof obj[i] === "object" ? deepCopy(obj[i]) : obj[i];
+    }
+    return arrayCopy;
+  }
 
-//   // Handle the 3 simple types, and null or undefined
-//   if (null == obj || "object" != typeof obj) {
-//     return obj;
-//   } 
-
-//   // Handle Date
-//   if (obj instanceof Date) {
-//     const copy: Date = new Date();
-//     copy.setTime(obj.getTime());
-//     return copy;
-//   }
-
-//   // Handle Array
-//   if (obj instanceof Array) {
-//     const copy: Array<unknown> = [];
-//     for (let i = 0, len = obj.length; i < len; i++) {
-//       copy[i] = deepCopy(obj[i]);
-//     }
-//     return copy;
-//   }
-
-//   // Handle object
-//   if (typeof obj === "object") {
-//     const copy: typeof obj = {};
-//     for (const property in obj) {
-//       if (!(property in obj)) {
-//         continue;
-//       }
-//       copy[property] = deepCopy(obj[property as typeof keyof obj]);
-//     }
-//     return copy;
-//   }
-
-//   throw new Error("Unable to copy obj! Its type isn't supported.");
-// }
+  const objectCopy: Record<string, unknown> = {};
+  for (const property in obj) {
+    const objectProperty = property as keyof typeof obj;
+    objectCopy[property] = typeof obj[objectProperty] === "object" ? deepCopy(obj) : obj[objectProperty];
+  }
+  return objectCopy;
+}

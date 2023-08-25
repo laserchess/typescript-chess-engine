@@ -41,11 +41,11 @@ export class MirrorMovement extends CloseRangeMovement {
     const move: Partial<Move> = {
       rotation: Rotation.Anticlockwise
     }  
-    this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
-    this.allMoves.push(ObjectsUtilities.objectDeepcopy(move));
+    this.legalMoves.push(ObjectsUtilities.deepCopy(move));
+    this.allMoves.push(ObjectsUtilities.deepCopy(move));
     
     move.rotation = Rotation.Clockwise;
-    this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+    this.legalMoves.push(ObjectsUtilities.deepCopy(move));
     this.allMoves.push(move);
   }
 }

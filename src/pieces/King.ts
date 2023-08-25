@@ -83,7 +83,7 @@ export class KingMovement extends CloseRangeMovement {
         moveType: MoveType.Move & MoveType.KingSideCastling
       }
       this.legalMoves.push(move)
-      this.allMoves.push(ObjectsUtilities.objectDeepcopy(move));
+      this.allMoves.push(ObjectsUtilities.deepCopy(move));
     }
     else if (this.isCastlingLegal(MoveType.QueenSideCastling)) {
       const move: Partial<Move> = {
@@ -91,7 +91,7 @@ export class KingMovement extends CloseRangeMovement {
         moveType: MoveType.Move & MoveType.KingSideCastling
       }
       this.legalMoves.push(move)
-      this.allMoves.push(ObjectsUtilities.objectDeepcopy(move));
+      this.allMoves.push(ObjectsUtilities.deepCopy(move));
     }
   }
 }
