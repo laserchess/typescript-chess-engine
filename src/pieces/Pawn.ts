@@ -2,7 +2,7 @@ import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
 import { BoardVector2d, Direction } from "@lc/geometry";
 import { DirectedPiece, PieceType, Piece } from "@lc/pieces";
 import { PieceMovement } from "@lc/piece-movements";
-import { ObjectsUtilities } from "@lc/utils";
+import { ObjectUtilities } from "@lc/utils";
 
 export class Pawn extends DirectedPiece {
   private _enPassantPosition?: BoardVector2d;
@@ -77,7 +77,7 @@ export class PawnMovement extends PieceMovement {
       } 
       this.allMoves.push(move);
       if (board.canMoveTo(piece.position.add(direction), piece, CaptureOptions.NoCapture)) {
-        this.legalMoves.push(ObjectsUtilities.deepCopy(move));
+        this.legalMoves.push(ObjectUtilities.deepCopy(move));
       }
     }
 
@@ -94,7 +94,7 @@ export class PawnMovement extends PieceMovement {
         && board.canMoveTo(piece.position.add(direction.mul(2)), piece, CaptureOptions.NoCapture)
         && this.legalMoves.length > 0
       ) {
-        this.legalMoves.push(ObjectsUtilities.deepCopy(move));
+        this.legalMoves.push(ObjectUtilities.deepCopy(move));
       }
     }
 
@@ -109,8 +109,8 @@ export class PawnMovement extends PieceMovement {
       if (!board.isOutOfBounds(position)) {
         this.allMoves.push(move);
         if (!board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) { // Additional data
-          this.legalMoves.push(ObjectsUtilities.deepCopy(move));
-          this.capturableMoves.push(ObjectsUtilities.deepCopy(move));
+          this.legalMoves.push(ObjectUtilities.deepCopy(move));
+          this.capturableMoves.push(ObjectUtilities.deepCopy(move));
         }
       }
 
@@ -127,8 +127,8 @@ export class PawnMovement extends PieceMovement {
         }
         if (this.isEnPassantLegal(tmpPosition)) {
           this.allMoves.push(move);
-          this.legalMoves.push(ObjectsUtilities.deepCopy(move));
-          this.capturableMoves.push(ObjectsUtilities.deepCopy(move));
+          this.legalMoves.push(ObjectUtilities.deepCopy(move));
+          this.capturableMoves.push(ObjectUtilities.deepCopy(move));
         }
       }
     }

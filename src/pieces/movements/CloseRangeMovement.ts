@@ -2,7 +2,7 @@ import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
 import { Piece } from "@lc/pieces";
 import { PieceMovement } from "@lc/piece-movements";
-import { ObjectsUtilities } from "@lc/utils";
+import { ObjectUtilities } from "@lc/utils";
 
 export class CloseRangeMovement extends PieceMovement {
 
@@ -21,15 +21,15 @@ export class CloseRangeMovement extends PieceMovement {
           destination: newVector,
         }
         if (!board.isOutOfBounds(newVector)) {
-          move = ObjectsUtilities.deepCopy(move);
+          move = ObjectUtilities.deepCopy(move);
           move.moveType = MoveType.Move
           this.allMoves.push(move);
           if (board.canMoveTo(newVector, piece, CaptureOptions.OptionalCapture)) {
-            move = ObjectsUtilities.deepCopy(move);
+            move = ObjectUtilities.deepCopy(move);
             this.legalMoves.push(move);
             if (board.canMoveTo(newVector, piece, CaptureOptions.RequiredCapture)) {
               move.moveType! &= MoveType.Capture;
-              move = ObjectsUtilities.deepCopy(move);
+              move = ObjectUtilities.deepCopy(move);
               this.capturableMoves.push(move);
             }
           }

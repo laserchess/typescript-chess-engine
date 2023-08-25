@@ -2,7 +2,7 @@ import { Move } from "@lc/core";
 import { Direction, Rotation } from "@lc/geometry";
 import { DirectedPiece, PieceType } from "@lc/pieces";
 import { CloseRangeMovement } from "@lc/piece-movements";
-import { ObjectsUtilities } from "@lc/utils";
+import { ObjectUtilities } from "@lc/utils";
 
 
 export class Mirror extends DirectedPiece {
@@ -41,11 +41,11 @@ export class MirrorMovement extends CloseRangeMovement {
     const move: Partial<Move> = {
       rotation: Rotation.Anticlockwise
     }  
-    this.legalMoves.push(ObjectsUtilities.deepCopy(move));
-    this.allMoves.push(ObjectsUtilities.deepCopy(move));
+    this.legalMoves.push(ObjectUtilities.deepCopy(move));
+    this.allMoves.push(ObjectUtilities.deepCopy(move));
     
     move.rotation = Rotation.Clockwise;
-    this.legalMoves.push(ObjectsUtilities.deepCopy(move));
+    this.legalMoves.push(ObjectUtilities.deepCopy(move));
     this.allMoves.push(move);
   }
 }

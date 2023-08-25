@@ -2,7 +2,7 @@ import { MoveType, CaptureOptions, Move } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
 import { CloseRangeMovement } from "@lc/piece-movements";
-import { ObjectsUtilities } from "@lc/utils";
+import { ObjectUtilities } from "@lc/utils";
 
 
 
@@ -83,7 +83,7 @@ export class KingMovement extends CloseRangeMovement {
         moveType: MoveType.Move & MoveType.KingSideCastling
       }
       this.legalMoves.push(move)
-      this.allMoves.push(ObjectsUtilities.deepCopy(move));
+      this.allMoves.push(ObjectUtilities.deepCopy(move));
     }
     else if (this.isCastlingLegal(MoveType.QueenSideCastling)) {
       const move: Partial<Move> = {
@@ -91,7 +91,7 @@ export class KingMovement extends CloseRangeMovement {
         moveType: MoveType.Move & MoveType.KingSideCastling
       }
       this.legalMoves.push(move)
-      this.allMoves.push(ObjectsUtilities.deepCopy(move));
+      this.allMoves.push(ObjectUtilities.deepCopy(move));
     }
   }
 }

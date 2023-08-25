@@ -2,7 +2,7 @@ import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
 import { BoardVector2d, Symmetry } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
 import { PieceMovement } from "@lc/piece-movements";
-import { ObjectsUtilities } from "@lc/utils";
+import { ObjectUtilities } from "@lc/utils";
 
 export class Knight extends Piece {
   protected override initType(): void {
@@ -41,10 +41,10 @@ export class KnightMovement extends PieceMovement {
       if (!board.isOutOfBounds(position)) {
         this.allMoves.push(move);
         if (board.canMoveTo(position, piece, CaptureOptions.OptionalCapture)) {
-          move = ObjectsUtilities.deepCopy(move);
+          move = ObjectUtilities.deepCopy(move);
           this.legalMoves.push(move);
           if (board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) {
-            move = ObjectsUtilities.deepCopy(move);
+            move = ObjectUtilities.deepCopy(move);
             move.moveType! &= MoveType.Capture
             this.capturableMoves.push(move);
 

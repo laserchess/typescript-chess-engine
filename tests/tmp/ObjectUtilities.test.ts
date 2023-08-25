@@ -3,7 +3,7 @@ import { MoveType, Move, Board } from "@lc/core";
 import { Rotation } from "@lc/geometry";
 import { BoardVector2d } from "@lc/geometry";
 import { King } from "@lc/pieces";
-import { ObjectsUtilities } from "@lc/utils";
+import { ObjectUtilities } from "@lc/utils";
 
 describe("Vector2d", () => {
   // So shitty name.
