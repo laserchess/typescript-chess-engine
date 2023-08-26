@@ -10,14 +10,9 @@ export class King extends Piece {
   private _kingRook?: Piece;
   private _queenRook?: Piece;
 
-  public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    const options: PieceOptions =
-    {
-      pieceType: PieceType.KING,
-      movement: new KingMovement(board)
-    }
-    super(position, playerId, board, options);
-    this.movement.piece = this;
+  protected override initType(): void {
+    this._type = PieceType.KING;
+    this._movement  = new KingMovement(this, this.board);
   }
 
   public set kingRook(rook: Piece) {
@@ -54,7 +49,7 @@ export class KingMovement extends CloseRangeMovement {
     }
     
     if (
-      potentialRook.pieceType === PieceType.ROOK
+      potentialRook.type === PieceType.ROOK
       && !potentialRook.wasMoved()
       && !this.piece.wasMoved()
     ) {
@@ -87,16 +82,16 @@ export class KingMovement extends CloseRangeMovement {
         destination: this.piece.position.add(new BoardVector2d(2, 0)) as BoardVector2d,
         moveType: MoveType.Move & MoveType.KingSideCastling
       }
-      this._legalMoves.push(move)
-      this._allMoves.push(ObjectsUtilities.objectDeepcopy(move));
+      this.legalMoves.push(move)
+      this.allMoves.push(ObjectsUtilities.objectDeepcopy(move));
     }
     else if (this.isCastlingLegal(MoveType.QueenSideCastling)) {
       let move: Partial<Move> = {
         destination: this.piece.position.add(new BoardVector2d(-2, 0)) as BoardVector2d,
         moveType: MoveType.Move & MoveType.KingSideCastling
       }
-      this._legalMoves.push(move)
-      this._allMoves.push(ObjectsUtilities.objectDeepcopy(move));
+      this.legalMoves.push(move)
+      this.allMoves.push(ObjectsUtilities.objectDeepcopy(move));
     }
   }
 }

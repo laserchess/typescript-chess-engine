@@ -109,7 +109,7 @@ export class Board {
     const tile: Tile  = this.getTile(piece.position);
     tile.pieceOnTile = piece;
     
-    const pieceTypeArray: Piece[][] = this.piecesOfType.get(piece.pieceType)!;
+    const pieceTypeArray: Piece[][] = this.piecesOfType.get(piece.type)!;
     pieceTypeArray.length = Math.max(pieceTypeArray.length, piece.playerId + 1);
     pieceTypeArray[piece.playerId].push(piece);
   }

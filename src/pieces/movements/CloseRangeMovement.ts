@@ -8,7 +8,7 @@ export class CloseRangeMovement extends PieceMovement {
 
   // This method sets all around moves as capturableMoves.
   protected updateMovesWrapped(): void {
-    const piece: Piece = this._piece as Piece;
+    const piece: Piece = this.piece as Piece;
     const board: Board = this.board;
 
     for (let scalar1 of [-1, 1, 0]) {
@@ -23,14 +23,14 @@ export class CloseRangeMovement extends PieceMovement {
         if (!board.isOutOfBounds(newVector)) {
           move = ObjectsUtilities.objectDeepcopy(move);
           move.moveType = MoveType.Move
-          this._allMoves.push(move);
+          this.allMoves.push(move);
           if (board.canMoveTo(newVector, piece, CaptureOptions.OptionalCapture)) {
             move = ObjectsUtilities.objectDeepcopy(move);
-            this._legalMoves.push(move);
+            this.legalMoves.push(move);
             if (board.canMoveTo(newVector, piece, CaptureOptions.RequiredCapture)) {
               move.moveType! &= MoveType.Capture;
               move = ObjectsUtilities.objectDeepcopy(move);
-              this._capturableMoves.push(move);
+              this.capturableMoves.push(move);
             }
           }
 

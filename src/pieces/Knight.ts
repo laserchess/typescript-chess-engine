@@ -5,14 +5,9 @@ import { PieceMovement } from "@lc/piece-movements";
 import { ObjectsUtilities } from "utils/ObjectUtilities.js";
 
 export class Knight extends Piece {
-  public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    const options: PieceOptions =
-    {
-      pieceType: PieceType.KNIGHT,
-      movement: new KnightMovement(board)
-    };
-    super(position, playerId, board, options);
-    this.movement.piece = this;
+  protected override initType(): void {
+    this._type = PieceType.KNIGHT;
+    this._movement  = new KnightMovement(this, this.board);
   }
 
   public rangedCapture(destination: BoardVector2d) {
@@ -26,7 +21,7 @@ export class KnightMovement extends PieceMovement {
 
 
   protected updateMovesWrapped(): void {
-    const piece: Knight = this._piece as Knight;
+    const piece: Knight = this.piece as Knight;
     const board: Board = this.board;
     const baseVectors: BoardVector2d[] = [new BoardVector2d(1, 2), new BoardVector2d(2, 1)];
     const symmetries: Symmetry[] = [Symmetry.None, Symmetry.XAxis, Symmetry.Origin, Symmetry.YAxis];
@@ -44,20 +39,20 @@ export class KnightMovement extends PieceMovement {
         moveType: MoveType.Move
       }
       if (!board.isOutOfBounds(position)) {
-        this._allMoves.push(move);
+        this.allMoves.push(move);
         if (board.canMoveTo(position, piece, CaptureOptions.OptionalCapture)) {
           move = ObjectsUtilities.objectDeepcopy(move);
-          this._legalMoves.push(move);
+          this.legalMoves.push(move);
           if (board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) {
             move = ObjectsUtilities.objectDeepcopy(move);
             move.moveType! &= MoveType.Capture
-            this._capturableMoves.push(move);
+            this.capturableMoves.push(move);
 
             move = {
               destination: position,
               moveType: MoveType.RangedCapture
             }
-            this._capturableMoves.push(move);
+            this.capturableMoves.push(move);
           }
         }
       }

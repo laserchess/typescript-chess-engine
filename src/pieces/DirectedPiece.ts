@@ -2,10 +2,10 @@ import { Board } from "@lc/core";
 import { BoardVector2d, Direction } from "@lc/geometry";
 import { Piece, PieceOptions } from "@lc/pieces";
 
-export class DirectedPiece extends Piece {
+export abstract class DirectedPiece extends Piece {
   protected _direction?: Direction;
 
-  public constructor(position: BoardVector2d, playerId: number, board: Board, options: PieceOptions) {
-    super(position, playerId, board, options);
+  public get direction(): Direction | undefined {
+    return this._direction;
   }
 }

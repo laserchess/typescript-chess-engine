@@ -8,14 +8,9 @@ export class Pawn extends DirectedPiece {
   private _enPassantPosition?: BoardVector2d;
   private _promotionPosition?: BoardVector2d;
 
-  public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    const options: PieceOptions =
-    {
-      pieceType: PieceType.PAWN,
-      movement: new PawnMovement(board)
-    }
-    super(position, playerId, board, options);
-    this.movement.piece = this
+  protected override initType(): void {
+    this._type = PieceType.PAWN;
+    this._movement  = new PawnMovement(this, this.board);
   }
 
   public set direction(direction: Direction) {
@@ -51,19 +46,19 @@ export class Pawn extends DirectedPiece {
 export class PawnMovement extends PieceMovement {
 
   public isEnPassantLegal(destination: BoardVector2d): boolean {
-    const piece: Pawn = this._piece as Pawn;
+    const piece: Pawn = this.piece as Pawn;
     const board: Board = this.board;
     const otherPiece: Piece | null = board.getPiece(destination.sub(Direction.toBoardVector2d(piece.direction!)));
     return otherPiece !== null
       && !otherPiece.isSameColor(piece)
-      && otherPiece.pieceType === PieceType.PAWN
+      && otherPiece.type === PieceType.PAWN
       && board.canMoveTo(destination, piece, CaptureOptions.RequiredCapture)
       && board.lastMove?.piece !== null
       && piece.isOnEnPassantPosition();
   }
 
   protected updateMovesWrapped(): void {
-    const piece: Pawn = this._piece as Pawn;
+    const piece: Pawn = this.piece as Pawn;
     const board: Board = this.board;
     const direction: BoardVector2d = Direction.toBoardVector2d(piece.direction as Direction);
     const captureDeltas: BoardVector2d[] = [
@@ -80,9 +75,9 @@ export class PawnMovement extends PieceMovement {
         destination: piece.position.add(direction) as BoardVector2d,
         moveType: MoveType.Move
       } 
-      this._allMoves.push(move);
+      this.allMoves.push(move);
       if (board.canMoveTo(piece.position.add(direction), piece, CaptureOptions.NoCapture)) {
-        this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+        this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
       }
     }
 
@@ -93,13 +88,13 @@ export class PawnMovement extends PieceMovement {
         destination: piece.position.add(direction.mul(2)) as BoardVector2d,
         moveType: MoveType.Move
       }
-      this._allMoves.push(move);
+      this.allMoves.push(move);
       if (
         !piece.wasMoved()
         && board.canMoveTo(piece.position.add(direction.mul(2)), piece, CaptureOptions.NoCapture)
         && this.legalMoves.length > 0
       ) {
-        this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+        this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
       }
     }
 
@@ -112,10 +107,10 @@ export class PawnMovement extends PieceMovement {
         moveType: MoveType.Move & MoveType.Capture
       }
       if (!board.isOutOfBounds(position)) {
-        this._allMoves.push(move);
+        this.allMoves.push(move);
         if (!board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) { // Additional data
-          this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
-          this._capturableMoves.push(ObjectsUtilities.objectDeepcopy(move));
+          this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+          this.capturableMoves.push(ObjectsUtilities.objectDeepcopy(move));
         }
       }
 
@@ -131,16 +126,16 @@ export class PawnMovement extends PieceMovement {
           moveType: MoveType.Move & MoveType.Capture
         }
         if (this.isEnPassantLegal(tmpPosition)) {
-          this._allMoves.push(move);
-          this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
-          this._capturableMoves.push(ObjectsUtilities.objectDeepcopy(move));
+          this.allMoves.push(move);
+          this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+          this.capturableMoves.push(ObjectsUtilities.objectDeepcopy(move));
         }
       }
     }
 
     // Promotion flag
 
-    let commonMoves: Partial<Move>[] = [...this._allMoves,...this._legalMoves,...this._capturableMoves];
+    let commonMoves: Partial<Move>[] = [...this.allMoves,...this.legalMoves,...this.capturableMoves];
     for (let move of commonMoves) {
       if ((this.piece as Pawn).promotionPosition.y === move.destination!.y) {
         move.moveType! &= MoveType.Promotion;

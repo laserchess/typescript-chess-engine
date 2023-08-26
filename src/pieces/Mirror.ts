@@ -6,20 +6,16 @@ import { ObjectsUtilities } from "utils/ObjectUtilities.js";
 
 
 export class Mirror extends DirectedPiece {
-  public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    let options: PieceOptions =
-    {
-      pieceType: PieceType.MIRROR,
-      movement: new MirrorMovement(board)
-    }
-    super(position, playerId, board, options);
-    this.movement.piece = this
+  protected override initType(): void {
+    this._type = PieceType.MIRROR;
+    this._movement  = new MirrorMovement(this, this.board);
   }
+
   public set direction(direction: Direction) {
     if (direction % 2 === 0) {
       throw new Error("Direction for MirrorPiece have to be diagonal.");
     }
-    super._direction = direction;
+    this._direction = direction;
   }
 
   public get direction(): Direction | undefined {
@@ -41,15 +37,15 @@ export class MirrorMovement extends CloseRangeMovement {
 
   protected updateMovesWrapped(): void {
     super.updateMoves();
-    this._capturableMoves.length = 0;
+    this.capturableMoves.length = 0;
     let move: Partial<Move> = {
       rotation: Rotation.Anticlockwise
     }  
-    this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
-    this._allMoves.push(ObjectsUtilities.objectDeepcopy(move));
+    this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+    this.allMoves.push(ObjectsUtilities.objectDeepcopy(move));
     
     move.rotation = Rotation.Clockwise;
-    this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
-    this._allMoves.push(move);
+    this.legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
+    this.allMoves.push(move);
   }
 }
