@@ -10,11 +10,11 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "paths": {
-      "@lc/core":            [ "./core/index.ts" ],
-      "@lc/utils":           [ "./utils/index.ts" ],
-      "@lc/geometry":        [ "./geometry/index.ts" ],
-      "@lc/pieces":          [ "./pieces/index.ts" ],
-      "@lc/piece-movements": [ "./pieces/movements/index.ts" ]
+      "@lc/core":            [ "core/index.ts" ],
+      "@lc/utils":           [ "utils/index.ts" ],
+      "@lc/geometry":        [ "geometry/index.ts" ],
+      "@lc/pieces":          [ "pieces/index.ts" ],
+      "@lc/piece-movements": [ "pieces/movements/index.ts" ]
     }
   },
   "include": [
