@@ -1,19 +1,4 @@
-import { Board } from "core/Board.js";
-import { Rotation } from "geometry/Direction.js";
-import { BoardVector2d } from "geometry/Vector2d.js";
-
-export interface MoveOrder {
-  origin: BoardVector2d,
-  destination: BoardVector2d | null,
-  fireLaser: boolean,
-  rotation: Rotation | null
-}
-
-// export interface AdditonalMoveOrderData {
-//   playerId: number,
-
-// }
-
+import { Board } from "@lc/core";
 
 export class Game {
   private _currentPlayer: number;

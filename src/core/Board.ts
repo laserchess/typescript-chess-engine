@@ -1,14 +1,13 @@
-
 import {
   CheckManager,
   PromotionManager,
   Tile,
-  Move
+  Move,
+  MoveOrder
 } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
-import { MoveOrder } from "game.js";
-import { IllegalMoveError } from "utils/error.js";
+import { IllegalMoveError } from "@lc/utils";
 
 
 export const enum CaptureOptions {
