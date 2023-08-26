@@ -5,8 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "build-clean": "rm -rf build && tsc",
+    "build": "tsc --project tsconfig.prod.json",
+    "build-clean": "rm -rf build && npm run build",
     "dev": "tsc --watch",
     "test": "jest",
     "lint": "eslint . --ext .ts"
