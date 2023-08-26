@@ -24,7 +24,9 @@ export function deepCopy(obj: object): object {
   const objectCopy: Record<string, unknown> = {};
   for (const property in obj) {
     const objectProperty = property as keyof typeof obj;
-    objectCopy[property] = typeof obj[objectProperty] === "object" ? deepCopy(obj) : obj[objectProperty];
+    objectCopy[property] = typeof obj[objectProperty] === "object"
+                         ? deepCopy(obj[objectProperty])
+                         : obj[objectProperty];
   }
   return objectCopy;
 }

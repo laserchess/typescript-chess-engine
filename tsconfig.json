@@ -2,13 +2,13 @@
   "compilerOptions": {
     "target": "es6",
     "strict": true,
+    "baseUrl": "src",
     "outDir": "build",
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "removeComments": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "baseUrl": "src",
     "paths": {
       "@lc/core":            [ "core/index.ts" ],
       "@lc/utils":           [ "utils/index.ts" ],
@@ -18,8 +18,7 @@
     }
   },
   "include": [
-    "src/**/*",
-    "tests/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules/**/*"
