@@ -15,7 +15,7 @@ export class Mirror extends DirectedPiece {
     if (direction % 2 === 0) {
       throw new Error("Direction for MirrorPiece have to be diagonal.");
     }
-    super._direction = direction;
+    this._direction = direction;
   }
 
   public get direction(): Direction | undefined {
