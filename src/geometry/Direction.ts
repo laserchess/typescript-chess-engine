@@ -1,4 +1,4 @@
-export enum Direction {
+export const enum Direction {
   LeftRank            = 0,
   UpperLeftDiagonal   = 1,
   UpperFile           = 2,
@@ -6,7 +6,8 @@ export enum Direction {
   RightRank           = 4,
   BottomRightDiagonal = 5,
   BottomFile          = 6,
-  BottomLeftDiagonal  = 7
+  BottomLeftDiagonal  = 7,
+  Last
 }
 
 export const enum Rotation {

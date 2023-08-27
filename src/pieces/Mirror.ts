@@ -27,12 +27,12 @@ export class MirrorMovement extends CloseRangeMovement {
 
   public turnClockwise(): void {
     const piece: Mirror = this.piece as Mirror;
-    piece.direction = DirectionUtils.turnDoubleRight(piece.direction!);
+    piece.direction = DirectionUtils.rotateDoubleClockwise(piece.direction!);
   }
 
   public turnAnticlockwise(): void {
     const piece: Mirror = this.piece as Mirror;
-    piece.direction = DirectionUtils.turnDoubleLeft(piece.direction!);
+    piece.direction = DirectionUtils.rotateDoubleAnticlockwise(piece.direction!);
   }
 
   protected updateMovesWrapped(): void {

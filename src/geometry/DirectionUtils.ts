@@ -1,35 +1,33 @@
 import { BoardVector2d, Direction } from "@lc/geometry";
 
-export function turnLeft(direction: Direction): Direction {
-  return (direction.valueOf() + 7) % 8 as Direction;
-}
-
-export function turnRight(direction: Direction): Direction {
-  return (direction.valueOf() + 1) % 8 as Direction;
-}
-
-export function turnDoubleLeft(direction: Direction): Direction {
-  return turnLeft(turnLeft(direction)) as Direction;
-}
-
-export function turnDoubleRight(direction: Direction): Direction {
-  return turnRight(turnRight(direction)) as Direction;
-}
-
-export function turnByStep(direction: Direction, turnNumber: number): Direction {
-  if (turnNumber >= 0) {
-    return (direction.valueOf() + turnNumber) % 8 as Direction;
+export function rotate(direction: Direction, steps: number): Direction {
+  if (steps >= 0) {
+    return (direction + steps) % Direction.Last as Direction;
   }
   else {
-    const turnsLeft = Math.abs(turnNumber) - direction.valueOf();
-    if (turnsLeft < 0) {
-      return Math.abs(turnsLeft) as Direction;
-    }
-    return 7 - (turnsLeft % 8) as Direction;
+    const notNormalizedDirection = (direction + steps) % Direction.Last;
+    const normalizedDirection = Direction.Last - notNormalizedDirection;
+    return normalizedDirection;
   }
 }
 
-export function createFrom(coordinates: BoardVector2d | [number, number]): Direction {
+export function rotateClockwise(direction: Direction): Direction {
+  return rotate(direction, 1);
+}
+
+export function rotateAnticlockwise(direction: Direction): Direction {
+  return rotate(direction, -1);
+}
+
+export function rotateDoubleClockwise(direction: Direction): Direction {
+  return rotate(direction, 2);
+}
+
+export function rotateDoubleAnticlockwise(direction: Direction): Direction {
+  return rotate(direction, -2);
+}
+
+export function fromCoords(coordinates: BoardVector2d | [number, number]): Direction {
   if (coordinates instanceof BoardVector2d) {
     coordinates = coordinates.toTuple();
   }
@@ -52,10 +50,9 @@ export function createFrom(coordinates: BoardVector2d | [number, number]): Direc
     case "-1, -1":
       return Direction.BottomLeftDiagonal;
     default:
-      throw new Error("Wrong value of vector");
+      throw new Error(`Invalid coordinates '${coordinates}'`);
   }
 }
-
 
 export function toTuple(direction: Direction): [number, number] {
   switch (direction) {
@@ -75,6 +72,8 @@ export function toTuple(direction: Direction): [number, number] {
       return [1, -1];
     case Direction.BottomLeftDiagonal:
       return [-1, -1];
+    default:
+      throw new Error("Invalid direction");
   }
 }
 
@@ -96,5 +95,7 @@ export function toBoardVector2d(direction: Direction): BoardVector2d {
       return new BoardVector2d(1, -1);
     case Direction.BottomLeftDiagonal:
       return new BoardVector2d(-1, -1);
+    default:
+      throw new Error("Invalid direction");
   }
 }
