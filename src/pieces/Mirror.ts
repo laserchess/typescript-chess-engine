@@ -1,5 +1,5 @@
 import { Move } from "@lc/core";
-import { Direction, Rotation } from "@lc/geometry";
+import { Direction, DirectionUtils, Rotation } from "@lc/geometry";
 import { DirectedPiece, PieceType } from "@lc/pieces";
 import { CloseRangeMovement } from "@lc/piece-movements";
 import { ObjectUtilities } from "@lc/utils";
@@ -27,12 +27,12 @@ export class MirrorMovement extends CloseRangeMovement {
 
   public turnClockwise(): void {
     const piece: Mirror = this.piece as Mirror;
-    piece.direction = Direction.turnDoubleRight(piece.direction!);
+    piece.direction = DirectionUtils.turnDoubleRight(piece.direction!);
   }
 
   public turnAnticlockwise(): void {
     const piece: Mirror = this.piece as Mirror;
-    piece.direction = Direction.turnDoubleLeft(piece.direction!);
+    piece.direction = DirectionUtils.turnDoubleLeft(piece.direction!);
   }
 
   protected updateMovesWrapped(): void {

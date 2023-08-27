@@ -1,5 +1,5 @@
 import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
-import { BoardVector2d, Direction } from "@lc/geometry";
+import { BoardVector2d, Direction, DirectionUtils } from "@lc/geometry";
 import { DirectedPiece, PieceType, Piece } from "@lc/pieces";
 import { PieceMovement } from "@lc/piece-movements";
 import { ObjectUtilities } from "@lc/utils";
@@ -48,7 +48,7 @@ export class PawnMovement extends PieceMovement {
   public isEnPassantLegal(destination: BoardVector2d): boolean {
     const piece: Pawn = this.piece as Pawn;
     const board: Board = this.board;
-    const otherPiece: Piece | null = board.getPiece(destination.sub(Direction.toBoardVector2d(piece.direction!)));
+    const otherPiece: Piece | null = board.getPiece(destination.sub(DirectionUtils.toBoardVector2d(piece.direction!)));
     return otherPiece !== null
       && !otherPiece.isSameColor(piece)
       && otherPiece.type === PieceType.PAWN
@@ -60,10 +60,10 @@ export class PawnMovement extends PieceMovement {
   protected updateMovesWrapped(): void {
     const piece: Pawn = this.piece as Pawn;
     const board: Board = this.board;
-    const direction: BoardVector2d = Direction.toBoardVector2d(piece.direction as Direction);
+    const direction: BoardVector2d = DirectionUtils.toBoardVector2d(piece.direction as Direction);
     const captureDeltas: BoardVector2d[] = [
-      Direction.toBoardVector2d(piece.direction!).reverseAxis().add(Direction.toBoardVector2d(piece.direction!)),
-      Direction.toBoardVector2d(piece.direction!).reverseAxis().opposite().add(Direction.toBoardVector2d(piece.direction!))
+      DirectionUtils.toBoardVector2d(piece.direction!).reverseAxis().add(DirectionUtils.toBoardVector2d(piece.direction!)),
+      DirectionUtils.toBoardVector2d(piece.direction!).reverseAxis().opposite().add(DirectionUtils.toBoardVector2d(piece.direction!))
     ]
 
     this.clearMoves();
