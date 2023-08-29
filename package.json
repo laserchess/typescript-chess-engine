@@ -20,6 +20,7 @@
     "eslint": "^8.47.0",
     "typedoc": "^0.24.8",
     "typescript": "^5.1.6",
+    "vite-tsconfig-paths": "^4.2.0",
     "vitest": "^0.34.3",
     "webpack": "^5.88.1"
   },
