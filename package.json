@@ -8,7 +8,7 @@
     "build": "tsc --project tsconfig.prod.json",
     "build-clean": "rm -rf build && npm run build",
     "dev": "tsc --watch",
-    "test": "jest",
+    "test": "vitest",
     "lint": "eslint . --ext .ts"
   },
   "keywords": [],
@@ -28,6 +28,7 @@
     "ts-loader": "^9.4.4",
     "typedoc": "^0.24.8",
     "typescript": "^5.1.6",
+    "vitest": "^0.34.3",
     "webpack": "^5.88.1"
   },
   "dependencies": {
