@@ -75,7 +75,7 @@ export class KingMovement extends CloseRangeMovement {
     return false;
   }
 
-  protected updateMovesWrapped(): void {
+  protected updateMoves(): void {
     super.updateMoves();
     if (this.isCastlingLegal(MoveType.KingSideCastling)) {
       const move: Partial<Move> = {

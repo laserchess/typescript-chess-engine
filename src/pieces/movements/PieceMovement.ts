@@ -5,6 +5,7 @@ import { Piece } from "@lc/pieces";
 export abstract class PieceMovement {
   protected board: Board;
   protected piece: Piece;
+  protected lastUpdate: number;
   public readonly allMoves: Partial<Move>[];
   public readonly legalMoves: Partial<Move>[];
   public readonly capturableMoves: Partial<Move>[];
@@ -12,6 +13,7 @@ export abstract class PieceMovement {
   public constructor(piece: Piece, board: Board) {
     this.piece           = piece;
     this.board           = board;
+    this.lastUpdate      = 0;
     this.allMoves        = [];
     this.legalMoves      = [];
     this.capturableMoves = [];
@@ -23,10 +25,5 @@ export abstract class PieceMovement {
     this.capturableMoves.length = 0;
   }
 
-  protected abstract updateMovesWrapped(): void;
-
-  public updateMoves(): void {
-    this.clearMoves();
-    this.updateMovesWrapped();
-  }
+  protected abstract updateMoves(): void;
 }

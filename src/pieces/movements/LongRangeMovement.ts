@@ -14,7 +14,8 @@ export class LongRangeMovement extends PieceMovement {
     this.directions = directions;
   }
 
-  protected override updateMovesWrapped(): void {
+  protected override updateMoves(): void {
+    this.clearMoves();
 
   }
 

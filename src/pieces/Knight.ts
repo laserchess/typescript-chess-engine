@@ -20,7 +20,7 @@ export class Knight extends Piece {
 export class KnightMovement extends PieceMovement {
 
 
-  protected updateMovesWrapped(): void {
+  protected updateMoves(): void {
     const piece: Knight = this.piece as Knight;
     const board: Board = this.board;
     const baseVectors: BoardVector2d[] = [new BoardVector2d(1, 2), new BoardVector2d(2, 1)];

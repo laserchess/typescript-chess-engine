@@ -35,7 +35,7 @@ export class MirrorMovement extends CloseRangeMovement {
     piece.direction = DirectionUtils.rotateDoubleAnticlockwise(piece.direction!);
   }
 
-  protected updateMovesWrapped(): void {
+  protected updateMoves(): void {
     super.updateMoves();
     this.capturableMoves.length = 0;
     const move: Partial<Move> = {
