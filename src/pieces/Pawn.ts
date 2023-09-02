@@ -58,18 +58,17 @@ export class PawnMovement extends PieceMovement {
   }
 
   protected updateMoves(): void {
+    this.preUpdateMoves();
+
     const piece: Pawn = this.piece as Pawn;
     const board: Board = this.board;
     const direction: BoardVector2d = DirectionUtils.toBoardVector2d(piece.direction as Direction);
     const captureDeltas: BoardVector2d[] = [
       DirectionUtils.toBoardVector2d(piece.direction!).reverseAxis().add(DirectionUtils.toBoardVector2d(piece.direction!)),
       DirectionUtils.toBoardVector2d(piece.direction!).reverseAxis().opposite().add(DirectionUtils.toBoardVector2d(piece.direction!))
-    ]
-
-    this.clearMoves();
+    ];
 
     // Advance 1 square
-
     if (!board.isOutOfBounds(piece.position.add(direction))) {
       const move: Partial<Move> = {
         destination: piece.position.add(direction) as BoardVector2d,
@@ -82,7 +81,6 @@ export class PawnMovement extends PieceMovement {
     }
 
     // Advance 2 squares
-
     if (!board.isOutOfBounds(piece.position.add(direction.mul(2)))) {
       const move: Partial<Move> = {
         destination: piece.position.add(direction.mul(2)) as BoardVector2d,
@@ -99,7 +97,6 @@ export class PawnMovement extends PieceMovement {
     }
 
     // Capture
-
     for (const increment of captureDeltas) {
       const position: BoardVector2d = piece.position.add(increment);
       const move: Partial<Move> = {
@@ -113,11 +110,9 @@ export class PawnMovement extends PieceMovement {
           this.capturableMoves.push(ObjectUtilities.deepCopy(move));
         }
       }
-
     }
 
     // En Passant
-
     if (piece.isOnEnPassantPosition()) {
       for (const position of captureDeltas) {
         const tmpPosition: BoardVector2d = piece.position.add(position);
@@ -134,7 +129,6 @@ export class PawnMovement extends PieceMovement {
     }
 
     // Promotion flag
-
     const commonMoves: Partial<Move>[] = [...this.allMoves,...this.legalMoves,...this.capturableMoves];
     for (const move of commonMoves) {
       if ((this.piece as Pawn).promotionPosition.y === move.destination!.y) {
@@ -142,4 +136,5 @@ export class PawnMovement extends PieceMovement {
       }
     }
   }
+
 }

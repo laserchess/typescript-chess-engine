@@ -25,5 +25,9 @@ export abstract class PieceMovement {
     this.capturableMoves.length = 0;
   }
 
+  protected preUpdateMoves(): void {
+    this.clearMoves();
+  }
+
   protected abstract updateMoves(): void;
 }

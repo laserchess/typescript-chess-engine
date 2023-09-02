@@ -8,7 +8,7 @@ export class CloseRangeMovement extends PieceMovement {
 
   // This method sets all around moves as capturableMoves.
   public override updateMoves(): void {
-    this.clearMoves();
+    this.preUpdateMoves();
 
     const piece: Piece = this.piece as Piece;
     const board: Board = this.board;

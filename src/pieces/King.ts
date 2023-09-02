@@ -76,7 +76,8 @@ export class KingMovement extends CloseRangeMovement {
   }
 
   protected updateMoves(): void {
-    super.updateMoves();
+    this.preUpdateMoves();
+
     if (this.isCastlingLegal(MoveType.KingSideCastling)) {
       const move: Partial<Move> = {
         destination: this.piece.position.add(new BoardVector2d(2, 0)) as BoardVector2d,

@@ -15,7 +15,7 @@ export class LongRangeMovement extends PieceMovement {
   }
 
   protected override updateMoves(): void {
-    this.clearMoves();
+    this.preUpdateMoves();
 
   }
 

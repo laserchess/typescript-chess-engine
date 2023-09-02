@@ -36,7 +36,8 @@ export class MirrorMovement extends CloseRangeMovement {
   }
 
   protected updateMoves(): void {
-    super.updateMoves();
+    this.preUpdateMoves();
+
     this.capturableMoves.length = 0;
     const move: Partial<Move> = {
       rotation: Rotation.Anticlockwise
@@ -48,4 +49,5 @@ export class MirrorMovement extends CloseRangeMovement {
     this.legalMoves.push(ObjectUtilities.deepCopy(move));
     this.allMoves.push(move);
   }
+
 }
