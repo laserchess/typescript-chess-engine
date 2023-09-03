@@ -152,7 +152,6 @@ export class Board {
     return false;
   }
 
-
   public getPiecesOfType(playerId: number, pieceType: PieceType): Piece[] {
     return this.piecesOfType.get(pieceType)![playerId];
   }
@@ -180,5 +179,5 @@ export class Board {
   public isCheckAt(/* position: BoardVector2d, playerId: number */): boolean {
     return false;
   }
-  
+
 }
