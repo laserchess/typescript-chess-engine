@@ -1,25 +1,21 @@
-import { Board, Move } from "@lc/core";
-import { BoardVector2d, Direction, Rotation } from "@lc/geometry";
-import { DirectedPiece, PieceOptions, PieceType } from "@lc/pieces";
+import { Move } from "@lc/core";
+import { Direction, Rotation } from "@lc/geometry";
+import { DirectedPiece, PieceType } from "@lc/pieces";
 import { CloseRangeMovement } from "@lc/piece-movements";
-import { ObjectsUtilities } from "utils/ObjectUtilities.js";
+import { ObjectUtilities } from "@lc/utils";
 
 
 export class Mirror extends DirectedPiece {
-  public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    let options: PieceOptions =
-    {
-      pieceType: PieceType.MIRROR,
-      movement: new MirrorMovement(board)
-    }
-    super(position, playerId, board, options);
-    this.movement.piece = this
+  protected override initType(): void {
+    this._type = PieceType.MIRROR;
+    this._movement  = new MirrorMovement(this, this.board);
   }
+
   public set direction(direction: Direction) {
     if (direction % 2 === 0) {
       throw new Error("Direction for MirrorPiece have to be diagonal.");
     }
-    super._direction = direction;
+    this._direction = direction;
   }
 
   public get direction(): Direction | undefined {
@@ -41,15 +37,15 @@ export class MirrorMovement extends CloseRangeMovement {
 
   protected updateMovesWrapped(): void {
     super.updateMoves();
-    this._capturableMoves.length = 0;
-    let move: Partial<Move> = {
+    this.capturableMoves.length = 0;
+    const move: Partial<Move> = {
       rotation: Rotation.Anticlockwise
     }  
-    this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
-    this._allMoves.push(ObjectsUtilities.objectDeepcopy(move));
+    this.legalMoves.push(ObjectUtilities.deepCopy(move));
+    this.allMoves.push(ObjectUtilities.deepCopy(move));
     
     move.rotation = Rotation.Clockwise;
-    this._legalMoves.push(ObjectsUtilities.objectDeepcopy(move));
-    this._allMoves.push(move);
+    this.legalMoves.push(ObjectUtilities.deepCopy(move));
+    this.allMoves.push(move);
   }
 }

@@ -29,4 +29,9 @@ export interface Move {
   captured: Piece | null,
 }
 
-
+export interface MoveOrder {
+  origin: BoardVector2d,
+  destination: BoardVector2d | null,
+  fireLaser: boolean,
+  rotation: Rotation | null
+}

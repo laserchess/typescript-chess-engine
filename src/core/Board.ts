@@ -1,16 +1,19 @@
-
 import {
   CheckManager,
   PromotionManager,
   Tile,
   Move,
-  MoveType
+  MoveOrder
 } from "@lc/core";
 import { BoardVector2d, Rotation } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
+<<<<<<< HEAD
 import { Lasgun } from "core/Lasgun.js";
 import { MoveOrder } from "game.js";
 import { IllegalMoveError } from "utils/error.js";
+=======
+import { IllegalMoveError } from "@lc/utils";
+>>>>>>> ce3418d779863c4f753b114c41dc43e9e0d8da6a
 
 
 export const enum CaptureOptions {
@@ -42,13 +45,13 @@ export class Board {
     this._lastMove = null;
     for (let i = 0; i < width; i++) {
       for (let j = 0; j < height; j++) {
-        let place: BoardVector2d = new BoardVector2d(i, j);
+        const place: BoardVector2d = new BoardVector2d(i, j);
         this.tiles.set(place, new Tile(place.copy()));
       }
     }
 
-    for (let item in PieceType){
-      let pieceType: PieceType = PieceType[item as keyof typeof PieceType];
+    for (const item in PieceType){
+      const pieceType: PieceType = PieceType[item as keyof typeof PieceType];
       this.piecesOfType.set(pieceType, []);
     }
 
@@ -59,8 +62,8 @@ export class Board {
 
   public getPiecesOfPlayer(playerId: number): Piece[] {
     let playerPieces: Piece[] = [];
-    for (let type in PieceType) {
-      let pieceType: PieceType = PieceType[type as keyof typeof PieceType];
+    for (const type in PieceType) {
+      const pieceType: PieceType = PieceType[type as keyof typeof PieceType];
       playerPieces = playerPieces.concat(this.piecesOfType.get(pieceType)![playerId]);
     }
     return playerPieces;
@@ -98,7 +101,7 @@ export class Board {
   }
 
   public addPieces(pieces: Piece[]): void {
-    for (let piece of pieces) {
+    for (const piece of pieces) {
       this.addPiece(piece);
     }
   }
@@ -111,7 +114,7 @@ export class Board {
     const tile: Tile  = this.getTile(piece.position);
     tile.pieceOnTile = piece;
     
-    const pieceTypeArray: Piece[][] = this.piecesOfType.get(piece.pieceType)!;
+    const pieceTypeArray: Piece[][] = this.piecesOfType.get(piece.type)!;
     pieceTypeArray.length = Math.max(pieceTypeArray.length, piece.playerId + 1);
     pieceTypeArray[piece.playerId].push(piece);
   }
@@ -127,7 +130,7 @@ export class Board {
   }
 
   public canMoveTo(destination: BoardVector2d, piece: Piece, capture: CaptureOptions): boolean {
-    const playerId: number = piece.playerId;
+    // const playerId: number = piece.playerId;
 
     // Check, if position after moving is in bounds of board.
 
@@ -225,11 +228,11 @@ export class Board {
 
   }
 
-  public notifyPositionChange(origin: BoardVector2d, destination: BoardVector2d) {
+  public notifyPositionChange(/* origin: BoardVector2d, destination: BoardVector2d */) {
 
   }
 
-  public notifyRangedCapture(origin: BoardVector2d, destination: BoardVector2d) {
+  public notifyRangedCapture(/* origin: BoardVector2d, destination: BoardVector2d */) {
 
   }
 
@@ -237,7 +240,7 @@ export class Board {
     return this._lastMove;
   }
 
-  public isCheckAt(position: BoardVector2d, playerId: number): boolean {
+  public isCheckAt(/* position: BoardVector2d, playerId: number */): boolean {
     return false;
   }
   
