@@ -11,7 +11,6 @@ export enum PieceType {
   ROOK   = "R",
   KNIGHT = "N",
   MIRROR = "M",
-  LASGUN = "L"
 }
 
 export interface PieceOptions {

@@ -6,8 +6,9 @@ import {
   Move,
   MoveType
 } from "@lc/core";
-import { BoardVector2d } from "@lc/geometry";
+import { BoardVector2d, Rotation } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
+import { Lasgun } from "core/Lasgun.js";
 import { MoveOrder } from "game.js";
 import { IllegalMoveError } from "utils/error.js";
 
@@ -25,6 +26,7 @@ export class Board {
   private readonly piecesOfType: Map<PieceType, Piece[][]>;
   private readonly kingsProtectors: [Piece[], Piece[]];
   private readonly movesHistory: [Move[], Move[]];
+  private readonly lasguns!: [Lasgun, Lasgun];
   private _lastMove: Move | null;
 
   private promotionManager?: PromotionManager;
@@ -159,12 +161,68 @@ export class Board {
     return this.piecesOfType.get(pieceType)![playerId];
   }
 
+  private getSpecificMove(move: MoveOrder, playerId: number): Partial<Move> {
+    let pieceToMove: Piece | null = this.getTile(move.origin).pieceOnTile;
+    
+    if (move.destination !== null && move.rotation !== null) {
+      throw new IllegalMoveError("Unable to roatate and move piece at once.");
+    }
+
+    if (move.rotation === null && move.destination === null) {
+      throw new IllegalMoveError("Piece have to either rotate or move.");
+    }
+
+    if (move.destination === null && move.rotation === null) {
+      throw new IllegalMoveError("Unable to roatate and move piece at once.");
+    }
+
+
+    if (move.fireLaser === true && !this.lasguns[playerId].isLoaded()) {
+      throw new IllegalMoveError("Lasgun is not loaded yet.");
+    }
+
+    if (pieceToMove === null) {
+      throw new IllegalMoveError("There is no piece that has this position.");
+    }
+
+    if (!pieceToMove.isSameColor(playerId)) {
+      throw new IllegalMoveError("Piece standing on origin position is enemy's piece.");
+    }
+
+    if (pieceToMove.pieceType !== PieceType.KNIGHT && move.rangedCapture === true) {
+      throw new IllegalMoveError("Only knight can capture without moving.");
+    }
+
+    if (pieceToMove.pieceType !== PieceType.MIRROR && move.rotation !== null) {
+      throw new IllegalMoveError("Only mirror can rotate.");
+    }
+
+    if (move.rotation !== null) {
+      for (let predictedMove of pieceToMove.movement.legalMoves) {
+        if (move.rotation === predictedMove.rotation) {
+          predictedMove.piece = pieceToMove;
+          return predictedMove;
+        }
+      }
+    }
+
+    if (move.destination !== null) {
+      for (let predictedMove of pieceToMove.movement.legalMoves) {
+        if (move.destination === predictedMove.destination) {
+          predictedMove.piece = pieceToMove;
+          return predictedMove;
+        }
+      }
+    }
+  }
+
   public move(move: MoveOrder, playerId: number): void {
     let moves: Partial<Move>[];
     let pieceToMove: Piece | null = this.getTile(move.origin).pieceOnTile;
-    if (pieceToMove === null) {
-      throw new IllegalMoveError("There is no piece")
-    }
+    this.validateBasicMoveProperties(move, playerId);
+    
+
+
   }
 
   public notifyPositionChange(origin: BoardVector2d, destination: BoardVector2d) {

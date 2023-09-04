@@ -6,13 +6,10 @@ export interface MoveOrder {
   origin: BoardVector2d,
   destination: BoardVector2d | null,
   fireLaser: boolean,
-  rotation: Rotation | null
+  rotation: Rotation | null,
+  rangedCapture: boolean,
 }
 
-// export interface AdditonalMoveOrderData {
-//   playerId: number,
-
-// }
 
 
 export class Game {
