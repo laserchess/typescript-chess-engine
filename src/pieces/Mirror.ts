@@ -1,9 +1,8 @@
-import { Move } from "@lc/core";
+import { Move, MoveType } from "@lc/core";
 import { Direction, Rotation } from "@lc/geometry";
 import { DirectedPiece, PieceType } from "@lc/pieces";
 import { CloseRangeMovement } from "@lc/piece-movements";
 import { ObjectUtilities } from "@lc/utils";
-
 
 export class Mirror extends DirectedPiece {
   protected override initType(): void {
@@ -21,19 +20,38 @@ export class Mirror extends DirectedPiece {
   public get direction(): Direction | undefined {
     return this._direction;
   }
+  
+  private turnClockwise(): void {
+    this.direction = Direction.turnDoubleRight(this.direction!);
+  }
+
+  private turnAnticlockwise(): void {
+    this.direction = Direction.turnDoubleLeft(this.direction!);
+  }
+
+  private turn(rotation: Rotation): void {
+    switch(rotation) {
+      case Rotation.Anticlockwise:
+        this.turnAnticlockwise();
+      break;
+      case Rotation.Anticlockwise:
+        this.turnClockwise();
+      break;
+    }
+  }
+
+  public override move(move: Move): void {
+    if ((move.moveType & MoveType.Rotation) === MoveType.Rotation) {
+      this.moveCounter++;
+      this.turn(move.rotation!);
+    }
+    else {
+      super.move(move);
+    }
+  }
 }
 
 export class MirrorMovement extends CloseRangeMovement {
-
-  public turnClockwise(): void {
-    const piece: Mirror = this.piece as Mirror;
-    piece.direction = Direction.turnDoubleRight(piece.direction!);
-  }
-
-  public turnAnticlockwise(): void {
-    const piece: Mirror = this.piece as Mirror;
-    piece.direction = Direction.turnDoubleLeft(piece.direction!);
-  }
 
   protected updateMovesWrapped(): void {
     super.updateMoves();

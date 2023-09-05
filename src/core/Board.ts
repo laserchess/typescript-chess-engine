@@ -3,17 +3,13 @@ import {
   PromotionManager,
   Tile,
   Move,
-  MoveOrder
+  MoveOrder,
+  MoveType
 } from "@lc/core";
-import { BoardVector2d, Rotation } from "@lc/geometry";
-import { Piece, PieceType } from "@lc/pieces";
-<<<<<<< HEAD
-import { Lasgun } from "core/Lasgun.js";
-import { MoveOrder } from "game.js";
-import { IllegalMoveError } from "utils/error.js";
-=======
+import { BoardVector2d, Direction, Rotation, Symmetry } from "@lc/geometry";
+import { Pawn, Piece, PieceType } from "@lc/pieces";
 import { IllegalMoveError } from "@lc/utils";
->>>>>>> ce3418d779863c4f753b114c41dc43e9e0d8da6a
+import { Lasgun } from "@lc/core";
 
 
 export const enum CaptureOptions {
@@ -58,6 +54,12 @@ export class Board {
 
     // this.promotionManager
     // this.checkManager
+  }
+
+  public updateAllTiles() {
+    for (let tile of this.tiles) {
+      tile[1].clearAllPredictions();
+    }
   }
 
   public getPiecesOfPlayer(playerId: number): Piece[] {
@@ -166,6 +168,10 @@ export class Board {
 
   private getSpecificMove(move: MoveOrder, playerId: number): Partial<Move> {
     let pieceToMove: Piece | null = this.getTile(move.origin).pieceOnTile;
+
+    if (pieceToMove === null) {
+      throw new IllegalMoveError("There is no piece on origin postion.");
+    }
     
     if (move.destination !== null && move.rotation !== null) {
       throw new IllegalMoveError("Unable to roatate and move piece at once.");
@@ -175,10 +181,13 @@ export class Board {
       throw new IllegalMoveError("Piece have to either rotate or move.");
     }
 
-    if (move.destination === null && move.rotation === null) {
+    if (move.destination !== null && move.rotation !== null) {
       throw new IllegalMoveError("Unable to roatate and move piece at once.");
     }
 
+    if (move.rangedCapture === true && move.rotation !== null) {
+      throw new IllegalMoveError("Piece cannot rotate and range capture a piece in one move.");
+    }
 
     if (move.fireLaser === true && !this.lasguns[playerId].isLoaded()) {
       throw new IllegalMoveError("Lasgun is not loaded yet.");
@@ -191,19 +200,25 @@ export class Board {
     if (!pieceToMove.isSameColor(playerId)) {
       throw new IllegalMoveError("Piece standing on origin position is enemy's piece.");
     }
-
-    if (pieceToMove.pieceType !== PieceType.KNIGHT && move.rangedCapture === true) {
+    if (pieceToMove.type !== PieceType.KNIGHT && move.rangedCapture === true) {
       throw new IllegalMoveError("Only knight can capture without moving.");
     }
 
-    if (pieceToMove.pieceType !== PieceType.MIRROR && move.rotation !== null) {
+    if (pieceToMove.type !== PieceType.MIRROR && move.rotation !== null) {
       throw new IllegalMoveError("Only mirror can rotate.");
+    }
+    
+    if (move.rangedCapture === true) {
+      for (let predictedMove of pieceToMove.movement.legalMoves) {
+        if ((predictedMove.moveType! & MoveType.RangedCapture) === MoveType.RangedCapture && move.destination === predictedMove.destination) {
+          return predictedMove;
+        }
+      }
     }
 
     if (move.rotation !== null) {
       for (let predictedMove of pieceToMove.movement.legalMoves) {
         if (move.rotation === predictedMove.rotation) {
-          predictedMove.piece = pieceToMove;
           return predictedMove;
         }
       }
@@ -212,29 +227,57 @@ export class Board {
     if (move.destination !== null) {
       for (let predictedMove of pieceToMove.movement.legalMoves) {
         if (move.destination === predictedMove.destination) {
-          predictedMove.piece = pieceToMove;
           return predictedMove;
         }
       }
     }
+
+    throw new IllegalMoveError("Unable to perform such move.");
+  }
+
+  private buildMove(piece: Piece, pieceMove: Partial<Move>, moveOrder: MoveOrder): Move {
+    const ultimateMove: Move = {
+      destination: pieceMove.destination ?? null,
+      moveType: pieceMove.moveType!,
+      rotation: pieceMove.rotation ?? null,
+      origin: piece.position,
+      piece: piece,
+      promotedTo: null,
+      captured: null
+    }
+
+    if ((MoveType.EnPassant & ultimateMove.moveType) === MoveType.EnPassant) {
+      const directionVector: BoardVector2d = Direction.toBoardVector2d((piece as Pawn).direction!).opposite();
+      const enemyPositon: BoardVector2d = ultimateMove.destination!.add(directionVector);
+      const enemyPiece: Piece = this.getPiece(enemyPositon)!;
+      ultimateMove.captured = enemyPiece;
+    }
+
+    else if ((MoveType.Capture & ultimateMove.moveType) === MoveType.Capture) {
+      const enemyPiece: Piece = this.getPiece(ultimateMove.destination!)!;
+      ultimateMove.captured = enemyPiece;
+    }
+    
+    else if ((MoveType.RangedCapture & ultimateMove.moveType) === MoveType.RangedCapture) {
+      const enemyPiece: Piece = this.getPiece(ultimateMove.destination!)!;
+      ultimateMove.captured = enemyPiece;
+    }
+
+    if (moveOrder.fireLaser === true) {
+      ultimateMove.moveType |= MoveType.LaserFired
+    }
+    return ultimateMove;
   }
 
   public move(move: MoveOrder, playerId: number): void {
-    let moves: Partial<Move>[];
-    let pieceToMove: Piece | null = this.getTile(move.origin).pieceOnTile;
-    this.validateBasicMoveProperties(move, playerId);
+    const moveFromPiece: Partial<Move> = this.getSpecificMove(move, playerId);
+    const pieceToMove: Piece  = this.getTile(move.origin).pieceOnTile!;
+    const moveToAnalyze: Move = this.buildMove(pieceToMove, moveFromPiece, move);
     
-
-
-  }
-
-  public notifyPositionChange(/* origin: BoardVector2d, destination: BoardVector2d */) {
+    pieceToMove.move(moveToAnalyze);
 
   }
 
-  public notifyRangedCapture(/* origin: BoardVector2d, destination: BoardVector2d */) {
-
-  }
 
   public get lastMove(): Move | null {
     return this._lastMove;

@@ -1,4 +1,4 @@
-import { Board } from "@lc/core";
+import { Board, Move } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
 import { PieceMovement } from "@lc/piece-movements";
 
@@ -84,10 +84,8 @@ export abstract class Piece {
     return this.playerId === other;
   }
 
-  public move(destination: BoardVector2d) {
-    // const origin: BoardVector2d = this.position.copy();
-    this.position = destination;
-    this.moveCounter += 1;
-    // this.board.notifyPositionChange(origin, destination);
+  public move(move: Move): void {
+    this.position = move.destination!.copy();
+    this.moveCounter++;
   }
 }

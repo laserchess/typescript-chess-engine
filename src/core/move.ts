@@ -10,6 +10,7 @@ export const enum MoveType {
   QueenSideCastling = 1 << 5,
   Rotation          = 1 << 6,
   Promotion         = 1 << 7,
+  
   Check             = 1 << 8,
   Checkmate         = 1 << 9,
   Stalemate         = 1 << 10,
@@ -20,10 +21,11 @@ export const enum MoveType {
 }
 
 export interface Move {
-  origin: BoardVector2d,
-  destination: BoardVector2d,
+  destination: BoardVector2d | null,
   moveType: MoveType,
-  rotation: Rotation | null
+  rotation: Rotation | null,
+  
+  origin: BoardVector2d,
   promotedTo: PieceType | null
   piece: Piece,
   captured: Piece | null,
@@ -33,5 +35,6 @@ export interface MoveOrder {
   origin: BoardVector2d,
   destination: BoardVector2d | null,
   fireLaser: boolean,
-  rotation: Rotation | null
+  rotation: Rotation | null,
+  rangedCapture: boolean
 }

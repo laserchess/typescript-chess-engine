@@ -35,6 +35,13 @@ export class Tile {
     return this._coordinates;
   }
   
+  public clearAllPredictions(): void {
+    for(let sets of this.setHashMap) {
+      sets[1][0].clear();
+      sets[1][1].clear();
+    }
+  }
+
   public addPieceMovesToTile(piece: Piece, movePredictionsType: MovesPredictionsType): void {
     for (const item in MovesPredictionsType){
       const movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]

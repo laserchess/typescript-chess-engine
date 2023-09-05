@@ -138,7 +138,7 @@ export class PawnMovement extends PieceMovement {
     const commonMoves: Partial<Move>[] = [...this.allMoves,...this.legalMoves,...this.capturableMoves];
     for (const move of commonMoves) {
       if ((this.piece as Pawn).promotionPosition.y === move.destination!.y) {
-        move.moveType! &= MoveType.Promotion;
+        move.moveType! |= MoveType.Promotion;
       }
     }
   }

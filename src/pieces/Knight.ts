@@ -10,10 +10,14 @@ export class Knight extends Piece {
     this._movement  = new KnightMovement(this, this.board);
   }
 
-  public rangedCapture(destination: BoardVector2d) {
-    this.position = destination;
-    this.moveCounter += 1;
-    // this.board.notifyRangedCapture(this.position, destination);
+
+  public override move(move: Move): void {
+    if ((move.moveType & MoveType.RangedCapture) === MoveType.RangedCapture) {
+      this.moveCounter++;
+    }
+    else {
+      super.move(move);
+    }
   }
 }
 
@@ -45,7 +49,7 @@ export class KnightMovement extends PieceMovement {
           this.legalMoves.push(move);
           if (board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) {
             move = ObjectUtilities.deepCopy(move);
-            move.moveType! &= MoveType.Capture
+            move.moveType! |= MoveType.Capture
             this.capturableMoves.push(move);
 
             move = {
@@ -58,4 +62,6 @@ export class KnightMovement extends PieceMovement {
       }
     }
   }
+
+
 }

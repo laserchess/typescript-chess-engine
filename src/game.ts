@@ -1,4 +1,4 @@
-import { Board } from "@lc/core";
+import { Board, MoveOrder } from "@lc/core";
 
 export class Game {
   private _currentPlayer: number;
@@ -11,6 +11,13 @@ export class Game {
   public set board(board: Board){
     this._board = board;
   }
+  
+  public get board(): Board{
+    if (this._board === undefined) {
+      throw new Error("Board is undefined.");
+    }
+    return this._board;
+  }
 
   public get currentPlayer(): number {
     return this._currentPlayer;
@@ -20,8 +27,8 @@ export class Game {
     return (playerId + 1) % 2;
   }
 
-  public move(/* move: MoveOrder */): void {
-    // this._board!.move(move, this._currentPlayer);
+  public move(move: MoveOrder): void {
+    this.board.move(move, this._currentPlayer);
     this._currentPlayer = Game.getEnemyId(this._currentPlayer);
   }
 
