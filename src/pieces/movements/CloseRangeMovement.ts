@@ -5,7 +5,9 @@ import { PieceMovement } from "@lc/piece-movements";
 
 export class CloseRangeMovement extends PieceMovement {
   // This method sets all around moves as capturableMoves.
-  protected override updateMoves(): void {
+  public override updateMoves(): void {
+    this.preUpdateMoves();
+
     const piece: Piece = this.piece as Piece;
     const board: Board = this.board;
     this.preUpdateMoves()

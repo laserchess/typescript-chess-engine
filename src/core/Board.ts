@@ -6,7 +6,7 @@ import {
   MoveOrder,
   MoveType
 } from "@lc/core";
-import { BoardVector2d, Direction, Rotation, Symmetry } from "@lc/geometry";
+import { BoardVector2d, Direction, DirectionUtils, Rotation, Symmetry } from "@lc/geometry";
 import { Pawn, Piece, PieceType } from "@lc/pieces";
 import { IllegalMoveError } from "@lc/utils";
 import { Lasgun } from "@lc/core";
@@ -131,6 +131,14 @@ export class Board {
     }
   }
 
+  public canRotate(rotation: Rotation, piece: Piece): boolean {
+    return true;
+  }
+
+  public canRangeCapture(destination: BoardVector2d, piece: Piece): boolean {
+    return true;
+  }
+
   public canMoveTo(destination: BoardVector2d, piece: Piece, capture: CaptureOptions): boolean {
     // const playerId: number = piece.playerId;
 
@@ -160,7 +168,6 @@ export class Board {
     }
     return false;
   }
-
 
   public getPiecesOfType(playerId: number, pieceType: PieceType): Piece[] {
     return this.piecesOfType.get(pieceType)![playerId];
@@ -247,7 +254,7 @@ export class Board {
     }
 
     if ((MoveType.EnPassant & ultimateMove.moveType) === MoveType.EnPassant) {
-      const directionVector: BoardVector2d = Direction.toBoardVector2d((piece as Pawn).direction!).opposite();
+      const directionVector: BoardVector2d = DirectionUtils.toBoardVector2d((piece as Pawn).direction!).opposite();
       const enemyPositon: BoardVector2d = ultimateMove.destination!.add(directionVector);
       const enemyPiece: Piece = this.getPiece(enemyPositon)!;
       ultimateMove.captured = enemyPiece;
@@ -286,5 +293,5 @@ export class Board {
   public isCheckAt(/* position: BoardVector2d, playerId: number */): boolean {
     return false;
   }
-  
+
 }

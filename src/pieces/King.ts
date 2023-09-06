@@ -74,7 +74,7 @@ export class KingMovement extends CloseRangeMovement {
     return false;
   }
 
-  protected updateMoves(): void {
+ public updateMoves(): void {
     super.updateMoves();
     let move: Partial<Move> = {
       destination: this.piece.position.add(new BoardVector2d(2, 0)) as BoardVector2d,

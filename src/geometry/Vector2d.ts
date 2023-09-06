@@ -1,4 +1,4 @@
-import { Direction } from "@lc/geometry";
+import { Direction, DirectionUtils } from "@lc/geometry";
 import { Integer } from "@lc/utils";
 import { Board } from "@lc/core";
 
@@ -496,6 +496,6 @@ export class BoardVector2d extends IntVector2d {
   }
 
   public getSqares(direction: Direction, board: Board): BoardVector2d[] {
-    return this.getDirectedMoveFromTuple(Direction.toTuple(direction), board);
+    return this.getDirectedMoveFromTuple(DirectionUtils.toTuple(direction), board);
   }
 }

@@ -22,8 +22,9 @@ export class Knight extends Piece {
 
 export class KnightMovement extends PieceMovement {
 
+  protected updateMoves(): void {
+    this.preUpdateMoves();
 
-  protected updateMovesWrapped(): void {
     const piece: Knight = this.piece as Knight;
     const board: Board = this.board;
     const baseVectors: BoardVector2d[] = [new BoardVector2d(1, 2), new BoardVector2d(2, 1)];
@@ -45,17 +46,22 @@ export class KnightMovement extends PieceMovement {
         if (board.canMoveTo(position, piece, CaptureOptions.NoCapture)) {
           this.legalMoves.push(move);
         }
-
-        if (board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) {
+        else if (board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) {
           move.moveType! |= MoveType.Capture;
           this.legalMoves.push(move)
+        }
+        if (board.canRangeCapture(position, piece)) {
           move = {
             destination: position,
             moveType: MoveType.RangedCapture
           }
+          this.legalMoves.push(move);
+        }
+        else {
           this.illegalMoves.push(move);
         }
       }
     }
   }
+
 }

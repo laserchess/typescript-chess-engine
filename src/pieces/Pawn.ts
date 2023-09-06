@@ -1,8 +1,7 @@
 import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
-import { BoardVector2d, Direction } from "@lc/geometry";
+import { BoardVector2d, Direction, DirectionUtils } from "@lc/geometry";
 import { DirectedPiece, PieceType, Piece } from "@lc/pieces";
 import { PieceMovement } from "@lc/piece-movements";
-import { ObjectUtilities } from "@lc/utils";
 
 export class Pawn extends DirectedPiece {
   private _enPassantPosition?: BoardVector2d;
@@ -48,7 +47,7 @@ export class PawnMovement extends PieceMovement {
   public isEnPassantLegal(destination: BoardVector2d): boolean {
     const piece: Pawn = this.piece as Pawn;
     const board: Board = this.board;
-    const otherPiece: Piece | null = board.getPiece(destination.sub(Direction.toBoardVector2d(piece.direction!)));
+    const otherPiece: Piece | null = board.getPiece(destination.sub(DirectionUtils.toBoardVector2d(piece.direction!)));
     return otherPiece !== null
       && !otherPiece.isSameColor(piece)
       && otherPiece.type === PieceType.PAWN
@@ -57,49 +56,50 @@ export class PawnMovement extends PieceMovement {
       && piece.isOnEnPassantPosition();
   }
 
-  protected updateMovesWrapped(): void {
+  protected updateMoves(): void {
+    this.preUpdateMoves();
+
     const piece: Pawn = this.piece as Pawn;
     const board: Board = this.board;
-    const direction: BoardVector2d = Direction.toBoardVector2d(piece.direction as Direction);
+    const direction: BoardVector2d = DirectionUtils.toBoardVector2d(piece.direction as Direction);
     const captureDeltas: BoardVector2d[] = [
-      Direction.toBoardVector2d(piece.direction!).reverseAxis().add(Direction.toBoardVector2d(piece.direction!)),
-      Direction.toBoardVector2d(piece.direction!).reverseAxis().opposite().add(Direction.toBoardVector2d(piece.direction!))
-    ]
-
-    this.clearMoves();
+      DirectionUtils.toBoardVector2d(piece.direction!).reverseAxis().add(DirectionUtils.toBoardVector2d(piece.direction!)),
+      DirectionUtils.toBoardVector2d(piece.direction!).reverseAxis().opposite().add(DirectionUtils.toBoardVector2d(piece.direction!))
+    ];
 
     // Advance 1 square
-
     if (!board.isOutOfBounds(piece.position.add(direction))) {
       const move: Partial<Move> = {
         destination: piece.position.add(direction) as BoardVector2d,
         moveType: MoveType.Move
       } 
-      this.allMoves.push(move);
       if (board.canMoveTo(piece.position.add(direction), piece, CaptureOptions.NoCapture)) {
-        this.legalMoves.push(ObjectUtilities.deepCopy(move));
+        this.legalMoves.push(move);
+      }
+      else {
+        this.illegalMoves.push(move);
       }
     }
 
     // Advance 2 squares
-
     if (!board.isOutOfBounds(piece.position.add(direction.mul(2)))) {
       const move: Partial<Move> = {
         destination: piece.position.add(direction.mul(2)) as BoardVector2d,
         moveType: MoveType.Move
       }
-      this.allMoves.push(move);
       if (
         !piece.wasMoved()
         && board.canMoveTo(piece.position.add(direction.mul(2)), piece, CaptureOptions.NoCapture)
         && this.legalMoves.length > 0
       ) {
-        this.legalMoves.push(ObjectUtilities.deepCopy(move));
+        this.legalMoves.push(move);
+      }
+      else {
+        this.illegalMoves.push(move);
       }
     }
 
     // Capture
-
     for (const increment of captureDeltas) {
       const position: BoardVector2d = piece.position.add(increment);
       const move: Partial<Move> = {
@@ -107,17 +107,16 @@ export class PawnMovement extends PieceMovement {
         moveType: MoveType.Move & MoveType.Capture
       }
       if (!board.isOutOfBounds(position)) {
-        this.allMoves.push(move);
         if (!board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) { // Additional data
-          this.legalMoves.push(ObjectUtilities.deepCopy(move));
-          this.capturableMoves.push(ObjectUtilities.deepCopy(move));
+          this.legalMoves.push(move);
+        }
+        else {
+          this.illegalMoves.push(move);
         }
       }
-
     }
 
     // En Passant
-
     if (piece.isOnEnPassantPosition()) {
       for (const position of captureDeltas) {
         const tmpPosition: BoardVector2d = piece.position.add(position);
@@ -126,20 +125,21 @@ export class PawnMovement extends PieceMovement {
           moveType: MoveType.Move & MoveType.Capture
         }
         if (this.isEnPassantLegal(tmpPosition)) {
-          this.allMoves.push(move);
-          this.legalMoves.push(ObjectUtilities.deepCopy(move));
-          this.capturableMoves.push(ObjectUtilities.deepCopy(move));
+          this.legalMoves.push(move);
+        }
+        else {
+          this.illegalMoves.push(move);
         }
       }
     }
 
     // Promotion flag
-
-    const commonMoves: Partial<Move>[] = [...this.allMoves,...this.legalMoves,...this.capturableMoves];
+    const commonMoves: Partial<Move>[] = [...this.legalMoves,...this.illegalMoves];
     for (const move of commonMoves) {
       if ((this.piece as Pawn).promotionPosition.y === move.destination!.y) {
         move.moveType! |= MoveType.Promotion;
       }
     }
   }
+
 }

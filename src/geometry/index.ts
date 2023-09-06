@@ -5,3 +5,4 @@ export {
   BoardVector2d
 } from "./Vector2d.js";
 export { Direction, Rotation } from "./Direction.js";
+export * as DirectionUtils from "./DirectionUtils.js";

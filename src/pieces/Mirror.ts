@@ -2,6 +2,7 @@ import { Move, MoveType } from "@lc/core";
 import { Direction, DirectionUtils, Rotation } from "@lc/geometry";
 import { DirectedPiece, PieceType } from "@lc/pieces";
 import { CloseRangeMovement } from "@lc/piece-movements";
+import { Syntax } from "@lc/utils";
 
 export class Mirror extends DirectedPiece {
   protected override initType(): void {
@@ -21,11 +22,11 @@ export class Mirror extends DirectedPiece {
   }
   
   private turnClockwise(): void {
-    this.direction = Direction.turnDoubleRight(this.direction!);
+    this.direction = DirectionUtils.rotateDoubleClockwise(this.direction!);
   }
 
   private turnAnticlockwise(): void {
-    this.direction = Direction.turnDoubleLeft(this.direction!);
+    this.direction = DirectionUtils.rotateDoubleAnticlockwise(this.direction!);
   }
 
   private turn(rotation: Rotation): void {
@@ -53,19 +54,31 @@ export class Mirror extends DirectedPiece {
 
 export class MirrorMovement extends CloseRangeMovement {
 
-  protected updateMoves(): void {
-    this.preUpdateMoves();
-
-    this.capturableMoves.length = 0;
-    const move: Partial<Move> = {
+  public updateMoves(): void {
+    super.updateMoves();
+    const capturable: Partial<Move>[] = this.legalMoves.filter((move) => Syntax.inAlternative(move.moveType!, MoveType.Capture));
+    this.illegalMoves = this.illegalMoves.concat(capturable);
+    this.legalMoves = this.legalMoves.filter((move) => !capturable.some((captureMove) => captureMove === move));
+    
+    let move: Partial<Move> = {
       rotation: Rotation.Anticlockwise
     }  
-    this.legalMoves.push(ObjectUtilities.deepCopy(move));
-    this.allMoves.push(ObjectUtilities.deepCopy(move));
-    
-    move.rotation = Rotation.Clockwise;
-    this.legalMoves.push(ObjectUtilities.deepCopy(move));
-    this.allMoves.push(move);
+    if(this.board.canRotate(Rotation.Anticlockwise, this.piece)) {
+      this.legalMoves.push(move);
+    }
+    else {
+      this.illegalMoves.push(move);
+    }
+
+    move = {
+      rotation: Rotation.Clockwise
+    }  
+    if(this.board.canRotate(Rotation.Anticlockwise, this.piece)) {
+      this.legalMoves.push(move);
+    }
+    else {
+      this.illegalMoves.push(move);
+    }
   }
 
 }

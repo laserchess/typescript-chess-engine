@@ -5,8 +5,8 @@ import { Piece } from "@lc/pieces";
 export abstract class PieceMovement {
   protected board: Board;
   protected piece: Piece;
-  public readonly illegalMoves: Partial<Move>[];
-  public readonly legalMoves: Partial<Move>[];
+  public illegalMoves: Partial<Move>[];
+  public legalMoves: Partial<Move>[];
 
   public constructor(piece: Piece, board: Board) {
     this.piece           = piece;
