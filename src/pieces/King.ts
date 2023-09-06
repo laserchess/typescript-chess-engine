@@ -2,7 +2,6 @@ import { MoveType, CaptureOptions, Move } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
 import { CloseRangeMovement } from "@lc/piece-movements";
-import { ObjectUtilities } from "@lc/utils";
 
 
 
@@ -75,21 +74,26 @@ export class KingMovement extends CloseRangeMovement {
     return false;
   }
 
-  protected updateMovesWrapped(): void {
+  protected updateMoves(): void {
     super.updateMoves();
+    let move: Partial<Move> = {
+      destination: this.piece.position.add(new BoardVector2d(2, 0)) as BoardVector2d,
+      moveType: MoveType.Move | MoveType.KingSideCastling
+    }
     if (this.isCastlingLegal(MoveType.KingSideCastling)) {
-      const move: Partial<Move> = {
-        destination: this.piece.position.add(new BoardVector2d(2, 0)) as BoardVector2d,
-        moveType: MoveType.Move & MoveType.KingSideCastling
-      }
       this.legalMoves.push(move)
-      this.allMoves.push(ObjectUtilities.deepCopy(move));
+    }
+    else {
+      this.illegalMoves.push(move);
+      return
+    }
+
+    move = {
+      destination: this.piece.position.add(new BoardVector2d(-2, 0)) as BoardVector2d,
+      moveType: MoveType.Move & MoveType.QueenSideCastling;
     }
     else if (this.isCastlingLegal(MoveType.QueenSideCastling)) {
-      const move: Partial<Move> = {
-        destination: this.piece.position.add(new BoardVector2d(-2, 0)) as BoardVector2d,
-        moveType: MoveType.Move & MoveType.KingSideCastling
-      }
+      const 
       this.legalMoves.push(move)
       this.allMoves.push(ObjectUtilities.deepCopy(move));
     }
