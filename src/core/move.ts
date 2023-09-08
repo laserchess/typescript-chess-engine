@@ -11,13 +11,12 @@ export const enum MoveType {
   Rotation          = 1 << 6,
   Promotion         = 1 << 7,
   
-  Check             = 1 << 8,
+  LaserFired        = 1 << 8,
   Checkmate         = 1 << 9,
   Stalemate         = 1 << 10,
-  Draw              = 1 << 11,
-  Lasermate         = 1 << 12,
-  LaserFired        = 1 << 13,
-  LaserCooldown     = 1 << 14
+  Lasermate         = 1 << 11,
+  Draw              = 1 << 12,
+  Check             = 1 << 13,
 }
 
 export interface Move {
@@ -29,6 +28,8 @@ export interface Move {
   promotedTo: PieceType | null
   piece: Piece,
   captured: Piece | null,
+  laserFields: [Set<BoardVector2d>, Set<BoardVector2d>],
+  laserCaptures: Set<BoardVector2d>
 }
 
 export interface MoveOrder {

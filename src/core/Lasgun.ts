@@ -1,6 +1,11 @@
-import { Board } from "@lc/core";
+import { Board, MoveType } from "@lc/core";
 import { BoardVector2d, Direction } from "@lc/geometry";
 
+export const enum LaserState {
+  LaserFired     = 1 << 0,
+  LaserSustained = 1 << 1,
+  LaserOff       = 1 << 2
+}
 
 export class Lasgun {
   private _maxToCharge?: number;
@@ -39,6 +44,9 @@ export class Lasgun {
     return this.currentCharge;
   }
   
+  public get laserState(): LaserState {
+    return LaserState.LaserFired;
+  }
 
   public propagateLaser() {
     // TODO

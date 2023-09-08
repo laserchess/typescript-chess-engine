@@ -10,8 +10,8 @@ export const enum MovesPredictionsType {
 export class Tile {
   
   private _coordinates: BoardVector2d;
-  private inMovesLegalOf: Set<Piece>[];
-  private inMovesIllegalOf: Set<Piece>[];
+  private inMovesLegalOf: [Set<Piece>, Set<Piece>];
+  private inMovesIllegalOf: [Set<Piece>, Set<Piece>];
   public pieceOnTile: Piece | null;
   
   public constructor(coordinates: BoardVector2d) {
@@ -34,28 +34,49 @@ export class Tile {
 
   public addPieceMovesToTile(piece: Piece, movePredictionsType: MovesPredictionsType): void {
     if (Syntax.inAlternative(movePredictionsType, MovesPredictionsType.Illegal)) {
-      
+      this.inMovesIllegalOf[piece.playerId].add(piece);
+    }
+    if (Syntax.inAlternative(movePredictionsType, MovesPredictionsType.Legal)) {
+      this.inMovesLegalOf[piece.playerId].add(piece);
     }
   }
 
   public removePieceMovesFromTile(piece: Piece, movePredictionsType: MovesPredictionsType): void {
-
+    if (Syntax.inAlternative(movePredictionsType, MovesPredictionsType.Illegal)) {
+      this.inMovesIllegalOf[piece.playerId].delete(piece);
+    }
+    if (Syntax.inAlternative(movePredictionsType, MovesPredictionsType.Legal)) {
+      this.inMovesLegalOf[piece.playerId].delete(piece);
+    }
   }
 
   public checkIfPieceMovesInTile(piece: Piece, movePredictionsType: MovesPredictionsType): boolean {
-
+    if (Syntax.inAlternative(movePredictionsType, MovesPredictionsType.Illegal)) {
+      return this.inMovesIllegalOf[piece.playerId].has(piece);
+    }
+    if (Syntax.inAlternative(movePredictionsType, MovesPredictionsType.Legal)) {
+      return this.inMovesLegalOf[piece.playerId].has(piece);
+    }
+    return false;
   }
 
-  public isPieceMovesEmpty(playerId: number, movePredictionsType: MovesPredictionsType): boolean{
+  public isPieceMovesEmpty(playerId: number, movePredictionsType: MovesPredictionsType): boolean {
+    if (Syntax.inAlternative(movePredictionsType, MovesPredictionsType.Illegal)) {
+      return this.inMovesIllegalOf[playerId].size === 0;
+    }
+    if (Syntax.inAlternative(movePredictionsType, MovesPredictionsType.Legal)) {
+      return this.inMovesLegalOf[playerId].size === 0;
+    }
+    return true;
   }
 
   public getPieceMovesOfTile(playerId: number, movePredictionsType: MovesPredictionsType) {
     let piecesSet: Set<Piece> = new Set<Piece>;
-    for (const item in MovesPredictionsType){
-      const movesEnumValue: MovesPredictionsType = MovesPredictionsType[item as keyof typeof MovesPredictionsType]
-      if ((movePredictionsType & movesEnumValue) === movesEnumValue) {
-        piecesSet = new Set([...piecesSet, ...this.setHashMap.get(movesEnumValue)![playerId]])
-      }
+    if (Syntax.inAlternative(movePredictionsType, MovesPredictionsType.Illegal)) {
+      piecesSet = new Set(this.inMovesIllegalOf[playerId]);
+    }
+    if (Syntax.inAlternative(movePredictionsType, MovesPredictionsType.Legal)) {
+      piecesSet = new Set([...this.inMovesIllegalOf[playerId],...this.inMovesLegalOf[playerId]]);
     }
     return piecesSet;
   }

@@ -8,8 +8,9 @@ import {
 } from "@lc/core";
 import { BoardVector2d, Direction, DirectionUtils, Rotation, Symmetry } from "@lc/geometry";
 import { Pawn, Piece, PieceType } from "@lc/pieces";
-import { IllegalMoveError } from "@lc/utils";
+import { IllegalMoveError, Syntax } from "@lc/utils";
 import { Lasgun } from "@lc/core";
+import { Mirror } from "pieces/Mirror.js";
 
 
 export const enum CaptureOptions {
@@ -22,8 +23,8 @@ export class Board {
   public readonly width: number;
   public readonly height: number;
   private readonly tiles: Map<BoardVector2d, Tile>;
-  private readonly piecesOfType: Map<PieceType, Piece[][]>;
-  private readonly kingsProtectors: [Piece[], Piece[]];
+  private readonly piecesOfType: Map<PieceType, [Set<Piece>,Set<Piece>]>;
+  private readonly kingsProtectors: [Set<Piece>, Set<Piece>];
   private readonly movesHistory: [Move[], Move[]];
   private readonly lasguns!: [Lasgun, Lasgun];
   private _lastMove: Move | null;
@@ -35,8 +36,8 @@ export class Board {
     this.width = width;
     this.height = height;
     this.tiles = new Map<BoardVector2d, Tile>();
-    this.piecesOfType = new Map<PieceType, Piece[][]>();
-    this.kingsProtectors = [[], []];
+    this.piecesOfType = new Map<PieceType, [Set<Piece>,Set<Piece>]>();
+    this.kingsProtectors = [new Set<Piece>, new Set<Piece>];
     this.movesHistory = [[], []];
     this._lastMove = null;
     for (let i = 0; i < width; i++) {
@@ -48,7 +49,7 @@ export class Board {
 
     for (const item in PieceType){
       const pieceType: PieceType = PieceType[item as keyof typeof PieceType];
-      this.piecesOfType.set(pieceType, []);
+      this.piecesOfType.set(pieceType, [new Set<Piece>,new Set<Piece>]);
     }
 
 
@@ -62,22 +63,23 @@ export class Board {
     }
   }
 
-  public getPiecesOfPlayer(playerId: number): Piece[] {
-    let playerPieces: Piece[] = [];
+  public getPiecesOfPlayer(playerId: number): Set<Piece> {
+    let playerPieces: Set<Piece> = new Set<Piece>;
     for (const type in PieceType) {
       const pieceType: PieceType = PieceType[type as keyof typeof PieceType];
-      playerPieces = playerPieces.concat(this.piecesOfType.get(pieceType)![playerId]);
+      playerPieces = new Set([...playerPieces,...this.piecesOfType.get(pieceType)![playerId]])
     }
     return playerPieces;
   }
   
-  public getKingProtectors(playerId: number): Piece[] {
+  public getKingProtectors(playerId: number): Set<Piece> {
     return this.kingsProtectors[playerId];
   }
   public isOutOfBounds(destination: BoardVector2d): boolean {
     return destination.x < 0 || destination.x >= this.width || destination.y < 0 || destination.y >= this.height;
   }
 
+  
   public getTile(position: BoardVector2d): Tile {
     const tile: Tile | undefined = this.tiles.get(position);
     if (tile === undefined) {
@@ -116,9 +118,9 @@ export class Board {
     const tile: Tile  = this.getTile(piece.position);
     tile.pieceOnTile = piece;
     
-    const pieceTypeArray: Piece[][] = this.piecesOfType.get(piece.type)!;
-    pieceTypeArray.length = Math.max(pieceTypeArray.length, piece.playerId + 1);
-    pieceTypeArray[piece.playerId].push(piece);
+    const pieceTypeSets: [Set<Piece>, Set<Piece>] = this.piecesOfType.get(piece.type)!;
+
+    pieceTypeSets[piece.playerId].add(piece);
   }
 
   public removePiece(piece: Piece): void {
@@ -136,11 +138,10 @@ export class Board {
   }
 
   public canRangeCapture(destination: BoardVector2d, piece: Piece): boolean {
-    return true;
+    return this.canMoveTo(destination, piece, CaptureOptions.RequiredCapture);
   }
 
   public canMoveTo(destination: BoardVector2d, piece: Piece, capture: CaptureOptions): boolean {
-    // const playerId: number = piece.playerId;
 
     // Check, if position after moving is in bounds of board.
 
@@ -154,22 +155,19 @@ export class Board {
 
     const destinationPiece: Piece | null = this.getTile(destination)!.pieceOnTile;
 
+
     if (destinationPiece === null){
-      if (capture === CaptureOptions.RequiredCapture) {
-        return false;
-      }
-      return true;
+      return capture !== CaptureOptions.RequiredCapture;
     }
+
     else if(!piece.isSameColor(destinationPiece)) {
-      if (capture === CaptureOptions.NoCapture) {
-        return false;
-      }
-      return true;
+      return capture !== CaptureOptions.NoCapture; 
     }
+
     return false;
   }
 
-  public getPiecesOfType(playerId: number, pieceType: PieceType): Piece[] {
+  public getPiecesOfType(playerId: number, pieceType: PieceType): Set<Piece> {
     return this.piecesOfType.get(pieceType)![playerId];
   }
 
@@ -242,30 +240,32 @@ export class Board {
     throw new IllegalMoveError("Unable to perform such move.");
   }
 
-  private buildMove(piece: Piece, pieceMove: Partial<Move>, moveOrder: MoveOrder): Move {
+  private buildMove(piece: Piece, pieceMove: Partial<Move>, moveOrder: MoveOrder, promotedTo?: PieceType): Move {
     const ultimateMove: Move = {
       destination: pieceMove.destination ?? null,
       moveType: pieceMove.moveType!,
       rotation: pieceMove.rotation ?? null,
       origin: piece.position,
       piece: piece,
-      promotedTo: null,
-      captured: null
+      promotedTo: promotedTo ?? null,
+      captured: null,
+      laserFields: [new Set<BoardVector2d>, new Set<BoardVector2d>],
+      laserCaptures: new Set<BoardVector2d>
     }
 
-    if ((MoveType.EnPassant & ultimateMove.moveType) === MoveType.EnPassant) {
+    if (Syntax.inAlternative(ultimateMove.moveType,MoveType.EnPassant)) {
       const directionVector: BoardVector2d = DirectionUtils.toBoardVector2d((piece as Pawn).direction!).opposite();
       const enemyPositon: BoardVector2d = ultimateMove.destination!.add(directionVector);
       const enemyPiece: Piece = this.getPiece(enemyPositon)!;
       ultimateMove.captured = enemyPiece;
     }
 
-    else if ((MoveType.Capture & ultimateMove.moveType) === MoveType.Capture) {
+    else if (Syntax.inAlternative(ultimateMove.moveType,MoveType.Capture)) {
       const enemyPiece: Piece = this.getPiece(ultimateMove.destination!)!;
       ultimateMove.captured = enemyPiece;
     }
     
-    else if ((MoveType.RangedCapture & ultimateMove.moveType) === MoveType.RangedCapture) {
+    else if (Syntax.inAlternative(ultimateMove.moveType,MoveType.RangedCapture)) {
       const enemyPiece: Piece = this.getPiece(ultimateMove.destination!)!;
       ultimateMove.captured = enemyPiece;
     }
@@ -273,16 +273,49 @@ export class Board {
     if (moveOrder.fireLaser === true) {
       ultimateMove.moveType |= MoveType.LaserFired
     }
+    //TODO Laser Fields, Laser Captures
+    //TODO CheckManager
     return ultimateMove;
   }
 
-  public move(move: MoveOrder, playerId: number): void {
+  public fulfillMove(move: Move) {
+    const typesOfMove: MoveType = move.moveType;
+
+
+    move.piece.move(move);
+    this._lastMove = move;
+    this.movesHistory[move.piece.playerId].push(move);
+
+    if (Syntax.inAlternative(typesOfMove, MoveType.RangedCapture) || Syntax.inAlternative(typesOfMove, MoveType.Capture)) {
+      const captured: Piece = move.captured!;
+      this.getPiecesOfType(captured.playerId, captured.type).delete(captured);
+      this.getTile(captured.position).pieceOnTile = null;
+    }
+
+    if (Syntax.inAlternative(typesOfMove, MoveType.Move)) {
+      const pieceToMove: Piece = move.piece;
+      this.getTile(pieceToMove.position).pieceOnTile = null;
+      this.getTile(move.destination!).pieceOnTile = pieceToMove;
+    }
+
+    if (Syntax.inAlternative(typesOfMove, MoveType.Rotation)) {
+      (this.getTile(move.origin).pieceOnTile! as Mirror).turn(move.rotation!);
+    }
+    //TODO Laser Fields and other Move Types
+  }
+
+  public move(move: MoveOrder, playerId: number, promotionTo?: PieceType): void {
     const moveFromPiece: Partial<Move> = this.getSpecificMove(move, playerId);
+
+    if (Syntax.inAlternative(moveFromPiece.moveType!, MoveType.Promotion) && promotionTo === undefined) {
+      // Return some data, that would tell gui, that selected move is legal,
+      // and it needs to send PieceType in promotionTo.
+    }
+
     const pieceToMove: Piece  = this.getTile(move.origin).pieceOnTile!;
     const moveToAnalyze: Move = this.buildMove(pieceToMove, moveFromPiece, move);
-    
-    pieceToMove.move(moveToAnalyze);
 
+    this.fulfillMove(moveToAnalyze);
   }
 
 

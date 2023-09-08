@@ -29,7 +29,7 @@ export class Mirror extends DirectedPiece {
     this.direction = DirectionUtils.rotateDoubleAnticlockwise(this.direction!);
   }
 
-  private turn(rotation: Rotation): void {
+  public turn(rotation: Rotation): void {
     switch(rotation) {
       case Rotation.Anticlockwise:
         this.turnAnticlockwise();

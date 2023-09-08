@@ -51,8 +51,9 @@ export class PawnMovement extends PieceMovement {
     return otherPiece !== null
       && !otherPiece.isSameColor(piece)
       && otherPiece.type === PieceType.PAWN
-      && board.canMoveTo(destination, piece, CaptureOptions.RequiredCapture)
+      && board.canMoveTo(destination, piece, CaptureOptions.NoCapture)
       && board.lastMove?.piece !== null
+      && board.lastMove?.piece !== otherPiece
       && piece.isOnEnPassantPosition();
   }
 
@@ -122,7 +123,7 @@ export class PawnMovement extends PieceMovement {
         const tmpPosition: BoardVector2d = piece.position.add(position);
         const move: Partial<Move> = {
           destination: position,
-          moveType: MoveType.Move & MoveType.Capture
+          moveType: MoveType.Move | MoveType.Capture
         }
         if (this.isEnPassantLegal(tmpPosition)) {
           this.legalMoves.push(move);
