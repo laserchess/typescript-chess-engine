@@ -50,7 +50,7 @@ export class Vector2d {
    * It has to be done in order to ensure that subclass
    * will return its instance and not superclass instance.
    * 
-   * @summary Method creates new `Vector2d` object. Shoudl be overriden by
+   * @summary Method creates new `Vector2d` object. Should be overriden by
    * subclass to return its instance.
    * @param {number} x - `number` that is ment to be first coordinate.
    * @param {number} y - `number` that is ment to be second coordinate.
@@ -333,7 +333,7 @@ export class IntVector2d extends Vector2d {
    */
   public createUnitVector<T extends Vector2d>(prioritizeAxisY?: boolean): T {
     if (Math.abs(this.x) === Math.abs(this.y)) {
-      if (typeof prioritizeAxisY === "undefined" || prioritizeAxisY === true) {
+      if (prioritizeAxisY !== undefined || prioritizeAxisY === true) {
         return this.createVector(0, Math.sign(this.y));
       }
       return this.createVector(Math.sign(this.x), 0);
@@ -455,6 +455,15 @@ export class BoardVector2d extends IntVector2d {
     return this.createVector(this.x, this.y)  as T;
   }
 
+  /**
+   * Method creates array of `BoardVector2d` objects. First element of this array is copy of calling
+   * object. Following objects are created by adding multiples of `increment` values to calling object.
+   * 
+   * @param {[number, number]} increment Tuple consisting of two integers that inform about direction
+   * in which new `BoardVector2d` should be propagated.
+   * @param board Instance of `Board` which sets up boundaries for moving.
+   * @returns Array of `BoardVector2d` created from calling object with direction given by `increment`.
+   */
   public getDirectedMoveFromTuple(increment: [number, number], board: Board): BoardVector2d[] {
     const x: number = increment[0];
     const y: number = increment[1];
@@ -465,12 +474,12 @@ export class BoardVector2d extends IntVector2d {
     const xCoordinates: number[] = [];
     const yCoordinates: number[] = [];
     if (x !== 0) {
-      for (let i = this.x; i < (x > 0 ? board.width : -1); i += x) {
+      for (let i = this.x; x > 0 ? i < board.width : i > -1; i += x) {
         xCoordinates.push(i);
       }
     }
     if (y !== 0) {
-      for (let i = this.y; i < (y > 0 ? board.width : -1); i += y) {
+      for (let i = this.y; y > 0 ? i < board.width : i > -1; i += y) {
         yCoordinates.push(i);
       }
     }
@@ -486,15 +495,21 @@ export class BoardVector2d extends IntVector2d {
     }
 
     const moves: BoardVector2d[] = [];
-    for (const x of xCoordinates) {
-      for (const y of yCoordinates) {
-        moves.push(new BoardVector2d(x, y));
-      }
+    const length: number = Math.min(xCoordinates.length, yCoordinates.length);
+    for (let i = 0; i<length;i++) {
+      moves.push(new BoardVector2d(xCoordinates[i], yCoordinates[i]));
     }
 
     return moves;
   }
-
+  /**
+   * Method works the same as {@link BoardVector2d.getDirectedMoveFromTuple}, but accepts `Direction`
+   * enum instead of tuple of `numbers`.
+   * @param {Direction} direction `Direction` enum that indicates direction in which new `BoardVector2d` 
+   * should be propagated.
+   * @param {Board} board Instance of `Board` which sets up boundaries for moving.
+   * @returns 
+   */
   public getSqares(direction: Direction, board: Board): BoardVector2d[] {
     return this.getDirectedMoveFromTuple(DirectionUtils.toTuple(direction), board);
   }

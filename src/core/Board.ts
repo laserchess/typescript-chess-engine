@@ -22,7 +22,7 @@ export const enum CaptureOptions {
 export class Board {
   public readonly width: number;
   public readonly height: number;
-  private readonly tiles: Map<BoardVector2d, Tile>;
+  private readonly tiles: Map<BoardVector2d, Piece>;
   private readonly piecesOfType: Map<PieceType, [Set<Piece>,Set<Piece>]>;
   private readonly kingsProtectors: [Set<Piece>, Set<Piece>];
   private readonly movesHistory: [Move[], Move[]];
@@ -35,17 +35,11 @@ export class Board {
   public constructor(width: number, height: number) {
     this.width = width;
     this.height = height;
-    this.tiles = new Map<BoardVector2d, Tile>();
+    this.tiles = new Map<BoardVector2d, Piece>();
     this.piecesOfType = new Map<PieceType, [Set<Piece>,Set<Piece>]>();
     this.kingsProtectors = [new Set<Piece>, new Set<Piece>];
     this.movesHistory = [[], []];
     this._lastMove = null;
-    for (let i = 0; i < width; i++) {
-      for (let j = 0; j < height; j++) {
-        const place: BoardVector2d = new BoardVector2d(i, j);
-        this.tiles.set(place, new Tile(place.copy()));
-      }
-    }
 
     for (const item in PieceType){
       const pieceType: PieceType = PieceType[item as keyof typeof PieceType];
@@ -55,12 +49,6 @@ export class Board {
 
     // this.promotionManager
     // this.checkManager
-  }
-
-  public updateAllTiles() {
-    for (let tile of this.tiles) {
-      tile[1].clearAllPredictions();
-    }
   }
 
   public getPiecesOfPlayer(playerId: number): Set<Piece> {
@@ -79,29 +67,17 @@ export class Board {
     return destination.x < 0 || destination.x >= this.width || destination.y < 0 || destination.y >= this.height;
   }
 
-  
-  public getTile(position: BoardVector2d): Tile {
-    const tile: Tile | undefined = this.tiles.get(position);
-    if (tile === undefined) {
-      throw new Error("There is no tile with coordinates of passed piece.");
-    }
-    return tile;
+  public changePosition(newPosition: BoardVector2d, piece: Piece) {
+    this.removePiece(piece);
+    this.tiles.set(newPosition, piece);
   }
 
   public getPiece(position: BoardVector2d): Piece | null {
-    return this.getTile(position).pieceOnTile;
+    return this.tiles.get(position) ?? null;
   }
 
-  public getTileOfPiece(piece: Piece): Tile {
-    return this.getTile(piece.position);
-  } 
-
   public isPieceAt(positon: BoardVector2d): boolean {
-    const tile: Tile | undefined = this.tiles.get(positon);
-    if (tile === undefined) {
-      return false;
-    }
-    return tile.pieceOnTile !== undefined;
+    return this.getPiece(positon) !== null;
   }
 
   public addPieces(pieces: Piece[]): void {
@@ -114,23 +90,29 @@ export class Board {
     if (this.isPieceAt(piece.position)) {
       throw new Error("There is already piece at this position.");
     }
-
-    const tile: Tile  = this.getTile(piece.position);
-    tile.pieceOnTile = piece;
-    
-    const pieceTypeSets: [Set<Piece>, Set<Piece>] = this.piecesOfType.get(piece.type)!;
-
-    pieceTypeSets[piece.playerId].add(piece);
+    this.tiles.set(piece.position, piece);
+    this.piecesOfType.get(piece.type)![piece.playerId].add(piece);
   }
 
   public removePiece(piece: Piece): void {
-    const tile: Tile | undefined = this.tiles.get(piece.position);
-    if (tile === undefined) {
-      return;
+    this.tiles.delete(piece.position);
+    this.piecesOfType.get(piece.type)![piece.playerId].delete(piece);
+    for (let protectors of this.kingsProtectors) {
+      protectors.delete(piece);
     }
-    if (tile.pieceOnTile === piece) {
-      tile.pieceOnTile = null;
+  }
+
+  public shiftPiece(origin: BoardVector2d, destination: BoardVector2d) {
+    const piece: Piece | null = this.getPiece(origin);
+    if (piece === null) {
+      throw new Error("Unable to shift piece. There is no piece on origin.");
     }
+    this.tiles.delete(origin);
+
+    if (this.getPiece(destination) === null) {
+      throw new Error("Unable to shift piece. There is already piece on destionation.");
+    }
+    this.tiles.set(destination, piece);
   }
 
   public canRotate(rotation: Rotation, piece: Piece): boolean {
@@ -153,7 +135,7 @@ export class Board {
 
     // TODO Checks
 
-    const destinationPiece: Piece | null = this.getTile(destination)!.pieceOnTile;
+    const destinationPiece: Piece | null = this.getPiece(destination);
 
 
     if (destinationPiece === null){
@@ -172,7 +154,7 @@ export class Board {
   }
 
   private getSpecificMove(move: MoveOrder, playerId: number): Partial<Move> {
-    let pieceToMove: Piece | null = this.getTile(move.origin).pieceOnTile;
+    let pieceToMove: Piece | null = this.getPiece(move.origin);
 
     if (pieceToMove === null) {
       throw new IllegalMoveError("There is no piece on origin postion.");
@@ -273,8 +255,7 @@ export class Board {
     if (moveOrder.fireLaser === true) {
       ultimateMove.moveType |= MoveType.LaserFired
     }
-    //TODO Laser Fields, Laser Captures
-    //TODO CheckManager
+    // Laser Fields, Laser Captures, and Check Manager flags should be set here
     return ultimateMove;
   }
 
@@ -289,17 +270,12 @@ export class Board {
     if (Syntax.inAlternative(typesOfMove, MoveType.RangedCapture) || Syntax.inAlternative(typesOfMove, MoveType.Capture)) {
       const captured: Piece = move.captured!;
       this.getPiecesOfType(captured.playerId, captured.type).delete(captured);
-      this.getTile(captured.position).pieceOnTile = null;
+      this.removePiece(captured);
     }
 
     if (Syntax.inAlternative(typesOfMove, MoveType.Move)) {
       const pieceToMove: Piece = move.piece;
-      this.getTile(pieceToMove.position).pieceOnTile = null;
-      this.getTile(move.destination!).pieceOnTile = pieceToMove;
-    }
-
-    if (Syntax.inAlternative(typesOfMove, MoveType.Rotation)) {
-      (this.getTile(move.origin).pieceOnTile! as Mirror).turn(move.rotation!);
+      this.shiftPiece(move.origin, move.destination!);
     }
     //TODO Laser Fields and other Move Types
   }
@@ -312,7 +288,7 @@ export class Board {
       // and it needs to send PieceType in promotionTo.
     }
 
-    const pieceToMove: Piece  = this.getTile(move.origin).pieceOnTile!;
+    const pieceToMove: Piece  = this.getPiece(move.origin)!;
     const moveToAnalyze: Move = this.buildMove(pieceToMove, moveFromPiece, move);
 
     this.fulfillMove(moveToAnalyze);
