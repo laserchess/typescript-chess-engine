@@ -1,10 +1,12 @@
 import { PieceType, Piece } from "pieces/Piece.js";
-import { AbstractPieceFactory, StandardPieceData } from "./AbstractPieceFactory.js";
 import { King } from "pieces/King.js";
 import { Queen } from "pieces/Queen.js";
 import { Knight } from "pieces/Knight.js";
 import { BoardVector2d } from "geometry/Vector2d.js";
 import { Board } from "core/Board.js";
+import { Direction } from "geometry/Direction.js";
+import { Mirror } from "pieces/Mirror.js";
+import { Pawn } from "pieces/Pawn.js";
 
 export interface StandardPieceData {
   position: BoardVector2d,
@@ -12,8 +14,17 @@ export interface StandardPieceData {
   board: Board
 }
 
-export class StandardPieceFactory extends AbstractPieceFactory {
-  public createPiece(pieceData: StandardPieceData, type: PieceType): Piece {
+export interface DirectedPieceData extends StandardPieceData {
+  direction: Direction,
+}
+
+export interface PawnPieceData extends DirectedPieceData {
+  enPassantPosition: BoardVector2d,
+  promotionPosition: BoardVector2d
+}
+
+export class PieceGenerator {
+  public createStandardPiece(pieceData: StandardPieceData, type: PieceType): Piece {
     switch(type) {
       case PieceType.KING:
         return new King(pieceData.position, pieceData.playerId, pieceData.board);
@@ -27,6 +38,20 @@ export class StandardPieceFactory extends AbstractPieceFactory {
         return new Knight(pieceData.position, pieceData.playerId, pieceData.board);
     }
     throw new Error("Unable to create this type of piece using StandardPieceFactory.")
+  }
+
+  public createMirror(pieceData: DirectedPieceData): Mirror {
+    const piece: Mirror = new Mirror(pieceData.position, pieceData.playerId, pieceData.board);
+    piece.direction = pieceData.direction;
+    return piece;
+  }
+
+  public createPawn(pieceData: PawnPieceData): Pawn {
+    const piece: Pawn = new Pawn(pieceData.position, pieceData.playerId, pieceData.board);
+    piece.direction = pieceData.direction;
+    piece.enPassantPosition = pieceData.enPassantPosition;
+    piece.promotionPosition = pieceData.promotionPosition;
+    return piece;
   }
   
 }
