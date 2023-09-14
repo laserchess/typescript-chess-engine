@@ -1,6 +1,6 @@
-import { Direction } from "geometry/Direction.js";
-import { Piece, PieceType } from "./Piece.js";
-import { LongRangeMovement } from "./movements/LongRangeMovement.js";
+import { Direction } from "@lc/geometry";
+import { Piece, PieceType } from "@lc/pieces";
+import { LongRangeMovement } from "@lc/piece-movements";
 
 export class Queen extends Piece {
   public static DIRECTIONS = [

@@ -1,16 +1,15 @@
 import {
   CheckManager,
   PromotionManager,
-  Tile,
+ 
   Move,
   MoveOrder,
   MoveType
 } from "@lc/core";
-import { BoardVector2d, Direction, DirectionUtils, Rotation, Symmetry } from "@lc/geometry";
+import { BoardVector2d, DirectionUtils, Rotation, Symmetry } from "@lc/geometry";
 import { Pawn, Piece, PieceType } from "@lc/pieces";
 import { IllegalMoveError, Syntax } from "@lc/utils";
 import { Lasgun } from "@lc/core";
-import { Mirror } from "pieces/Mirror.js";
 
 
 export const enum CaptureOptions {
@@ -107,11 +106,11 @@ export class Board {
     if (piece === null) {
       throw new Error("Unable to shift piece. There is no piece on origin.");
     }
-    this.tiles.delete(origin);
-
-    if (this.getPiece(destination) === null) {
-      throw new Error("Unable to shift piece. There is already piece on destionation.");
+    if (this.getPiece(destination) !== null) {
+      throw new Error("Unable to shift piece. There is already piece on destination.");
     }
+    piece.position = destination;
+    this.tiles.delete(origin);
     this.tiles.set(destination, piece);
   }
 
@@ -285,7 +284,7 @@ export class Board {
 
     if (Syntax.inAlternative(moveFromPiece.moveType!, MoveType.Promotion) && promotionTo === undefined) {
       // Return some data, that would tell gui, that selected move is legal,
-      // and it needs to send PieceType in promotionTo.
+      // but it needs to send PieceType in promotionTo.
     }
 
     const pieceToMove: Piece  = this.getPiece(move.origin)!;

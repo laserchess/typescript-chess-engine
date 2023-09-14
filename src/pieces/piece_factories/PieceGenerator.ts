@@ -1,12 +1,15 @@
-import { PieceType, Piece } from "pieces/Piece.js";
-import { King } from "pieces/King.js";
-import { Queen } from "pieces/Queen.js";
-import { Knight } from "pieces/Knight.js";
-import { BoardVector2d } from "geometry/Vector2d.js";
-import { Board } from "core/Board.js";
-import { Direction } from "geometry/Direction.js";
-import { Mirror } from "pieces/Mirror.js";
-import { Pawn } from "pieces/Pawn.js";
+import { 
+  PieceType,
+  Piece, 
+  King, 
+  Queen, 
+  Knight, 
+  Mirror, 
+  Pawn, 
+  Bishop, 
+  Rook } from "@lc/pieces";
+import { BoardVector2d, Direction } from "@lc/geometry";
+import { Board } from "@lc/core";
 
 export interface StandardPieceData {
   position: BoardVector2d,
