@@ -1,12 +1,13 @@
 import { BoardVector2d, Direction } from "@lc/geometry";
 
 export function rotate(direction: Direction, steps: number): Direction {
+  const enumSize = Object.keys(Direction).length / 2;
   if (steps >= 0) {
-    return (direction + steps) % Direction.Last as Direction;
+    return (direction + steps) % enumSize as Direction;
   }
   else {
-    const notNormalizedDirection = (direction + steps) % Direction.Last;
-    const normalizedDirection = Direction.Last - notNormalizedDirection;
+    const notNormalizedDirection = (direction + steps) % enumSize;
+    const normalizedDirection = enumSize + notNormalizedDirection;
     return normalizedDirection;
   }
 }
@@ -27,7 +28,7 @@ export function rotateDoubleAnticlockwise(direction: Direction): Direction {
   return rotate(direction, -2);
 }
 
-export function fromCoords(coordinates: BoardVector2d | [number, number]): Direction {
+export function fromCoordinates(coordinates: BoardVector2d | [number, number]): Direction {
   if (coordinates instanceof BoardVector2d) {
     coordinates = coordinates.toTuple();
   }

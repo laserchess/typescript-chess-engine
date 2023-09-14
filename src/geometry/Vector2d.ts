@@ -300,6 +300,17 @@ export class IntVector2d extends Vector2d {
   }
 
   /**
+ * Method creates new `IntVector2d` object from tuple.
+ * first element of tuple if first coordinate, second element
+ * is second coordinate.
+ * @param {[number, number]} coordinates Tuple of numbers to be used for coordinates.
+ * @returns New `IntVector2d` object created from `coordinates`.
+ */
+  public static fromTuple(coordinates: [number, number]): IntVector2d {
+    return new IntVector2d(coordinates[0], coordinates[1]);
+  }
+
+  /**
    * Method checks if two objects are equal.
    * 
    * @param {unknown} other - any object to be compared with calling object.
@@ -455,6 +466,17 @@ export class BoardVector2d extends IntVector2d {
     return this.createVector(this.x, this.y)  as T;
   }
 
+  /**
+   * Method creates new `BoardVector2d` object from tuple.
+   * first element of tuple if first coordinate, second element
+   * is second coordinate.
+   * @param {[number, number]} coordinates Tuple of numbers to be used for coordinates.
+   * @returns New `BoardVector2d` object created from `coordinates`.
+   */
+  public static fromTuple(coordinates: [number, number]): BoardVector2d {
+    return new BoardVector2d(coordinates[0], coordinates[1]);
+  }
+  
   /**
    * Method creates array of `BoardVector2d` objects. First element of this array is copy of calling
    * object. Following objects are created by adding multiples of `increment` values to calling object.
