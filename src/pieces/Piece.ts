@@ -28,8 +28,6 @@ export abstract class Piece {
   public readonly defendsKingsFrom: [Piece | null, Piece | null];
   public position: BoardVector2d;
   protected moveCounter: number;
-
-
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
     this.initialPosition  = position;
     this.position         = position;
@@ -37,7 +35,6 @@ export abstract class Piece {
     this.moveCounter      = 0;
     this.board            = board;
     this.defendsKingsFrom = [null, null];
-
     this.initType();
   }
 

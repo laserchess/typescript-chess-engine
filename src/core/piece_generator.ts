@@ -26,8 +26,7 @@ export interface PawnPieceData extends DirectedPieceData {
   promotionPosition: BoardVector2d
 }
 
-export class PieceGenerator {
-  public createStandardPiece(pieceData: StandardPieceData, type: PieceType): Piece {
+export function createStandardPiece(pieceData: StandardPieceData, type: PieceType): Piece {
     switch(type) {
       case PieceType.KING:
         return new King(pieceData.position, pieceData.playerId, pieceData.board);
@@ -40,16 +39,16 @@ export class PieceGenerator {
       case PieceType.KNIGHT:
         return new Knight(pieceData.position, pieceData.playerId, pieceData.board);
     }
-    throw new Error("Unable to create this type of piece using StandardPieceFactory.")
+    throw new Error("Unable to create this type of piece using PieceGenerator.createStandardPiece.")
   }
 
-  public createMirror(pieceData: DirectedPieceData): Mirror {
+  export function createMirror(pieceData: DirectedPieceData): Mirror {
     const piece: Mirror = new Mirror(pieceData.position, pieceData.playerId, pieceData.board);
     piece.direction = pieceData.direction;
     return piece;
   }
 
-  public createPawn(pieceData: PawnPieceData): Pawn {
+  export function createPawn(pieceData: PawnPieceData): Pawn {
     const piece: Pawn = new Pawn(pieceData.position, pieceData.playerId, pieceData.board);
     piece.direction = pieceData.direction;
     piece.enPassantPosition = pieceData.enPassantPosition;
@@ -57,4 +56,3 @@ export class PieceGenerator {
     return piece;
   }
   
-}
