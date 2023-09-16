@@ -121,13 +121,6 @@ describe("BoardVector2d", () => {
   });
 
   test("Getting moves", () => {
-    // vi.mock('@lc/core', () => {
-    //   const Board = vi.fn();
-    //   Board.prototype.width = 8;
-    //   Board.prototype.height = 8;
-    //   return {Board};
-    // })
-    // const board: Board = new Board();
     const board: Board = new Board(8,8)
     let vector: BoardVector2d = new BoardVector2d(7,7);
     expect(vector.getDirectedMoveFromTuple([1,1],board)).toStrictEqual([new BoardVector2d(7,7)]);
