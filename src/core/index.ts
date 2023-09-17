@@ -6,3 +6,4 @@ export { MoveType, Move, MoveOrder } from "./move.js";
 export { Tile, MovesPredictionsType } from "./Tile.js";
 export { Lasgun } from "./Lasgun.js";
 export * as Generator from "./piece_generator.js";
+export { Player } from "./Player.js";
