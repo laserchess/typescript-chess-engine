@@ -9,7 +9,6 @@ import { PieceType } from "@lc/pieces";
 describe("PieceGenerator", () => {
   const board: Board = new Board(8, 8);
   
-  
   test("createStandardPiece", () => {
     let data: Generator.StandardPieceData = {
       position: new BoardVector2d(1, 1),
@@ -25,10 +24,8 @@ describe("PieceGenerator", () => {
     for(let single of enumValues) {
       expect(() => Generator.createStandardPiece(data, single)).toThrowError(Error);
     }
-  })
+  }) 
 
-  
-    
   test("createMirror", () => {
     let data: Generator.DirectedPieceData = {
       position: new BoardVector2d(1, 1),

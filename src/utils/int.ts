@@ -1,7 +1,7 @@
 
 /**
  * Module containing functions connected that facilates
- * simulation numbers of integer type.
+ * simulation of numbers of integer type.
  */
 
 /**
