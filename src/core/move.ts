@@ -32,7 +32,7 @@ export interface Move {
   laserCaptures: Set<BoardVector2d>
 }
 
-export interface MoveOrder {
+export interface MoveCommand {
   origin: BoardVector2d,
   destination: BoardVector2d | null,
   fireLaser: boolean,

@@ -1,6 +1,5 @@
 import { Board, Move } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
-import { PieceMovement } from "@lc/piece-movements";
 
 
 export enum PieceType {
@@ -28,6 +27,7 @@ export abstract class Piece {
   public readonly defendsKingsFrom: [Piece | null, Piece | null];
   public position: BoardVector2d;
   protected moveCounter: number;
+  
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
     this.initialPosition  = position;
     this.position         = position;
@@ -42,14 +42,14 @@ export abstract class Piece {
 
   public get type(): PieceType {
     if (!this._type) {
-      throw new Error("Piece type is not initialised");
+      throw new Error("Piece type is not initialised.");
     }
     return this._type;
   }
 
   public get movement(): PieceMovement {
     if (!this._movement) {
-      throw new Error("Piece movement is not initialised");
+      throw new Error("Piece movement is not initialised.");
     }
     return this._movement;
   }
@@ -85,4 +85,29 @@ export abstract class Piece {
     this.position = move.destination!.copy();
     this.moveCounter++;
   }
+}
+
+export abstract class PieceMovement {
+  protected board: Board;
+  protected piece: Piece;
+  public illegalMoves: Partial<Move>[];
+  public legalMoves: Partial<Move>[];
+
+  public constructor(piece: Piece, board: Board) {
+    this.piece           = piece;
+    this.board           = board;
+    this.legalMoves      = [];
+    this.illegalMoves    = [];
+  }
+
+  protected clearMoves(): void {
+    this.legalMoves.length   = 0;
+    this.illegalMoves.length = 0;
+  }
+
+  protected preUpdateMoves(): void {
+    this.clearMoves();
+  }
+
+  protected abstract updateMoves(): void;
 }

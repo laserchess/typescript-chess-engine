@@ -1,7 +1,7 @@
 import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
 import { Piece } from "@lc/pieces";
-import { PieceMovement } from "@lc/piece-movements";
+import { PieceMovement } from "@lc/pieces";
 
 export class CloseRangeMovement extends PieceMovement {
   // This method sets all around moves as capturableMoves.

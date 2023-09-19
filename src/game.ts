@@ -1,4 +1,4 @@
-import { Board, MoveOrder } from "@lc/core";
+import { Board, MoveCommand } from "@lc/core";
 
 export class Game {
   private _currentPlayer: number;
@@ -27,7 +27,7 @@ export class Game {
     return (playerId + 1) % 2;
   }
 
-  public move(move: MoveOrder): void {
+  public move(move: MoveCommand): void {
     this.board.move(move, this._currentPlayer);
     this._currentPlayer = Game.getEnemyId(this._currentPlayer);
   }

@@ -1,7 +1,7 @@
 import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
 import { BoardVector2d, Direction, DirectionUtils } from "@lc/geometry";
 import { Piece } from "@lc/pieces";
-import { PieceMovement } from "@lc/piece-movements";
+import { PieceMovement } from "@lc/pieces";
 import { Syntax } from "@lc/utils";
 
 export class LongRangeMovement extends PieceMovement {

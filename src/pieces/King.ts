@@ -14,11 +14,11 @@ export class King extends Piece {
     this._movement  = new KingMovement(this, this.board);
   }
 
-  public set kingRook(rook: Piece) {
+  public set kingRook(rook: Piece | undefined) {
     this._kingRook = this.kingRook;
   }
 
-  public set queenRook(rook: Piece) {
+  public set queenRook(rook: Piece | undefined) {
     this._queenRook = this.kingRook;
   }
 
@@ -44,6 +44,10 @@ export class KingMovement extends CloseRangeMovement {
       potentialRook = piece.queenRook;
     }
     else {
+      return false;
+    }
+    
+    if (potentialRook === undefined) {
       return false;
     }
     

@@ -1,7 +1,7 @@
 import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
 import { BoardVector2d, Direction, DirectionUtils } from "@lc/geometry";
 import { DirectedPiece, PieceType, Piece } from "@lc/pieces";
-import { PieceMovement } from "@lc/piece-movements";
+import { PieceMovement } from "@lc/pieces";
 
 export class Pawn extends DirectedPiece {
   private _enPassantPosition?: BoardVector2d;
@@ -19,10 +19,6 @@ export class Pawn extends DirectedPiece {
     super._direction = direction;
   }
 
-  public get direction(): Direction | undefined {
-    return this._direction;
-  }
-
   public set enPassantPosition(position: BoardVector2d) {
     this._enPassantPosition = position;
   }
@@ -31,7 +27,19 @@ export class Pawn extends DirectedPiece {
     this._promotionPosition = position;
   }
 
-  
+  public get enPassantPosition(): BoardVector2d {
+    if (this.enPassantPosition === undefined){
+      throw new Error("enPassantPosition is not initialised.");
+    }
+    return this._enPassantPosition!;
+  }
+
+  public get promotionPosition(): BoardVector2d {
+    if (this.promotionPosition === undefined){
+      throw new Error("promotionPosition is not initialised.");
+    }
+    return this._promotionPosition!;
+  }
 
   public isOnEnPassantPosition(): boolean {
     return this._enPassantPosition === this.position;

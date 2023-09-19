@@ -4,10 +4,6 @@
  * simulation of numbers of integer type.
  */
 
-import { Board } from "core/Board.js";
-import { BoardVector2d } from "geometry/Vector2d.js";
-import { King } from "pieces/King.js";
-
 /**
  * Function that creates `number` from any number.
  * 

@@ -1,15 +1,15 @@
 import {
   CheckManager,
   PromotionManager,
- 
   Move,
-  MoveOrder,
-  MoveType
+  MoveType,
+  Player
 } from "@lc/core";
 import { BoardVector2d, DirectionUtils, Rotation, Symmetry } from "@lc/geometry";
 import { Pawn, Piece, PieceType } from "@lc/pieces";
 import { IllegalMoveError, Syntax } from "@lc/utils";
 import { Lasgun } from "@lc/core";
+import { MoveCommand } from "@lc/core";
 
 
 export const enum CaptureOptions {
@@ -152,51 +152,31 @@ export class Board {
     return this.piecesOfType.get(pieceType)![playerId];
   }
 
-  private getSpecificMove(move: MoveOrder, playerId: number): Partial<Move> {
+  private isMoveCommandLegal(move: MoveCommand, playerId: Player): boolean {
     let pieceToMove: Piece | null = this.getPiece(move.origin);
+    return !(
+    pieceToMove === null ||
+    (move.destination !== null && move.rotation !== null) ||
+    (move.rotation === null && move.destination === null) ||
+    (move.destination !== null && move.rotation !== null) ||
+    (move.rangedCapture === true && move.rotation !== null) ||
+    (move.fireLaser === true && !this.lasguns[playerId].isLoaded()) ||
+    !pieceToMove.isSameColor(playerId) ||
+    (pieceToMove.type !== PieceType.KNIGHT && move.rangedCapture === true) ||
+    (pieceToMove.type !== PieceType.MIRROR && move.rotation !== null)
+    )  
+  }
 
-    if (pieceToMove === null) {
-      throw new IllegalMoveError("There is no piece on origin postion.");
-    }
-    
-    if (move.destination !== null && move.rotation !== null) {
-      throw new IllegalMoveError("Unable to roatate and move piece at once.");
-    }
-
-    if (move.rotation === null && move.destination === null) {
-      throw new IllegalMoveError("Piece have to either rotate or move.");
-    }
-
-    if (move.destination !== null && move.rotation !== null) {
-      throw new IllegalMoveError("Unable to roatate and move piece at once.");
-    }
-
-    if (move.rangedCapture === true && move.rotation !== null) {
-      throw new IllegalMoveError("Piece cannot rotate and range capture a piece in one move.");
+  private getSpecificMove(move: MoveCommand, playerId: number): Partial<Move> {
+    if (!this.isMoveCommandLegal(move, playerId)) {
+      throw new IllegalMoveError(`This MoveCommand is illegal with playerId equal to ${playerId}`);
     }
 
-    if (move.fireLaser === true && !this.lasguns[playerId].isLoaded()) {
-      throw new IllegalMoveError("Lasgun is not loaded yet.");
-    }
+    let pieceToMove: Piece = this.getPiece(move.origin)!;
 
-    if (pieceToMove === null) {
-      throw new IllegalMoveError("There is no piece that has this position.");
-    }
-
-    if (!pieceToMove.isSameColor(playerId)) {
-      throw new IllegalMoveError("Piece standing on origin position is enemy's piece.");
-    }
-    if (pieceToMove.type !== PieceType.KNIGHT && move.rangedCapture === true) {
-      throw new IllegalMoveError("Only knight can capture without moving.");
-    }
-
-    if (pieceToMove.type !== PieceType.MIRROR && move.rotation !== null) {
-      throw new IllegalMoveError("Only mirror can rotate.");
-    }
-    
     if (move.rangedCapture === true) {
       for (let predictedMove of pieceToMove.movement.legalMoves) {
-        if ((predictedMove.moveType! & MoveType.RangedCapture) === MoveType.RangedCapture && move.destination === predictedMove.destination) {
+        if (Syntax.inAlternative(predictedMove.moveType!, MoveType.RangedCapture) && move.destination === predictedMove.destination) {
           return predictedMove;
         }
       }
@@ -221,7 +201,7 @@ export class Board {
     throw new IllegalMoveError("Unable to perform such move.");
   }
 
-  private buildMove(piece: Piece, pieceMove: Partial<Move>, moveOrder: MoveOrder, promotedTo?: PieceType): Move {
+  private buildMove(piece: Piece, pieceMove: Partial<Move>, moveOrder: MoveCommand, promotedTo?: PieceType): Move {
     const ultimateMove: Move = {
       destination: pieceMove.destination ?? null,
       moveType: pieceMove.moveType!,
@@ -279,7 +259,7 @@ export class Board {
     //TODO Laser Fields and other Move Types
   }
 
-  public move(move: MoveOrder, playerId: number, promotionTo?: PieceType): void {
+  public move(move: MoveCommand, playerId: number, promotionTo?: PieceType): void {
     const moveFromPiece: Partial<Move> = this.getSpecificMove(move, playerId);
 
     if (Syntax.inAlternative(moveFromPiece.moveType!, MoveType.Promotion) && promotionTo === undefined) {

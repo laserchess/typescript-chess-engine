@@ -1,4 +1,4 @@
-export { Piece, PieceType, PieceOptions } from "./Piece.js";
+export { Piece, PieceType, PieceOptions, PieceMovement } from "./Piece.js";
 export { DirectedPiece } from "./DirectedPiece.js";
 export { King } from "./King.js";
 export { Queen } from "./Queen.js";

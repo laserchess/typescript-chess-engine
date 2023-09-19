@@ -1,7 +1,7 @@
 import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
 import { BoardVector2d, Symmetry } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
-import { PieceMovement } from "@lc/piece-movements";
+import { PieceMovement } from "@lc/pieces";
 
 export class Knight extends Piece {
   protected override initType(): void {
