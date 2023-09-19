@@ -54,17 +54,21 @@ export abstract class Piece {
     return this._movement;
   }
 
-  public equals(other: unknown): boolean {
-    if (!(other instanceof Piece)) {
-      return false;
-    }
-    return this.initialPosition === other.initialPosition
-        && this.position === other.position
-        && this.playerId === other.playerId
-        && this.moveCounter === other.playerId
-        && this._movement === other.movement
-        && this.type === other.type
+  public get moveCount(): number {
+    return this.moveCounter;
   }
+
+  // public equals(other: unknown): boolean {
+  //   if (!(other instanceof Piece)) {
+  //     return false;
+  //   }
+  //   return this.initialPosition === other.initialPosition
+  //       && this.position === other.position
+  //       && this.playerId === other.playerId
+  //       && this.moveCounter === other.playerId
+  //       && this._movement === other.movement
+  //       && this.type === other.type
+  // }
 
   public toString(): string {
     return this.type.valueOf();
@@ -85,6 +89,7 @@ export abstract class Piece {
     this.position = move.destination!.copy();
     this.moveCounter++;
   }
+
 }
 
 export abstract class PieceMovement {

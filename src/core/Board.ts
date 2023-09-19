@@ -69,6 +69,7 @@ export class Board {
   public changePosition(newPosition: BoardVector2d, piece: Piece) {
     this.removePiece(piece);
     this.tiles.set(newPosition, piece);
+    piece.position = newPosition;
   }
 
   public getPiece(position: BoardVector2d): Piece | null {
