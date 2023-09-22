@@ -1,7 +1,7 @@
 # Dependency directories
 node_modules/
 jspm_packages/
-bower_components
+bower_components/
 
 # dotenv environment variable files
 .env
@@ -14,6 +14,13 @@ bower_components
 *.tsbuildinfo
 
 # Visual Studio Code
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.vsix
 
 build/
