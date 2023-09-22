@@ -3,11 +3,11 @@ import { BoardVector2d } from "@lc/geometry";
 
 
 export enum PieceType {
-  KING   = "K",
-  QUEEN  = "Q",
-  PAWN   = "",
+  KING = "K",
+  QUEEN = "Q",
+  PAWN = "",
   BISHOP = "B",
-  ROOK   = "R",
+  ROOK = "R",
   KNIGHT = "N",
   MIRROR = "M",
 }
@@ -27,13 +27,13 @@ export abstract class Piece {
   public readonly defendsKingsFrom: [Piece | null, Piece | null];
   public position: BoardVector2d;
   protected moveCounter: number;
-  
+
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
-    this.initialPosition  = position;
-    this.position         = position;
-    this.playerId         = playerId;
-    this.moveCounter      = 0;
-    this.board            = board;
+    this.initialPosition = position;
+    this.position = position;
+    this.playerId = playerId;
+    this.moveCounter = 0;
+    this.board = board;
     this.defendsKingsFrom = [null, null];
     this.initType();
   }
@@ -99,14 +99,14 @@ export abstract class PieceMovement {
   public legalMoves: Partial<Move>[];
 
   public constructor(piece: Piece, board: Board) {
-    this.piece           = piece;
-    this.board           = board;
-    this.legalMoves      = [];
-    this.illegalMoves    = [];
+    this.piece = piece;
+    this.board = board;
+    this.legalMoves = [];
+    this.illegalMoves = [];
   }
 
   protected preUpdateMoves(): void {
-    this.legalMoves.length   = 0;
+    this.legalMoves.length = 0;
     this.illegalMoves.length = 0;
   }
 

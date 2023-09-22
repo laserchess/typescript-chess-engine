@@ -7,7 +7,7 @@ import { Syntax } from "@lc/utils";
 export class Mirror extends DirectedPiece {
   protected override initType(): void {
     this._type = PieceType.MIRROR;
-    this._movement  = new MirrorMovement(this, this.board);
+    this._movement = new MirrorMovement(this, this.board);
   }
 
   public set direction(direction: Direction) {
@@ -17,10 +17,10 @@ export class Mirror extends DirectedPiece {
     this._direction = direction;
   }
 
-  public get direction(): Direction | undefined {
-    return this._direction;
+  public get direction(): Direction {
+    return super.direction;
   }
-  
+
   private turnClockwise(): void {
     this.direction = DirectionUtils.rotateDoubleClockwise(this.direction!);
   }
@@ -30,13 +30,13 @@ export class Mirror extends DirectedPiece {
   }
 
   private turn(rotation: Rotation): void {
-    switch(rotation) {
+    switch (rotation) {
       case Rotation.Anticlockwise:
         this.turnAnticlockwise();
-      break;
+        break;
       case Rotation.Clockwise:
         this.turnClockwise();
-      break;
+        break;
     }
   }
 
@@ -62,8 +62,8 @@ export class MirrorMovement extends CloseRangeMovement {
 
     let move: Partial<Move> = {
       rotation: Rotation.Anticlockwise
-    }  
-    if(this.board.canRotate(Rotation.Anticlockwise, this.piece)) {
+    }
+    if (this.board.canRotate(Rotation.Anticlockwise, this.piece)) {
       this.legalMoves.push(move);
     }
     else {
@@ -72,8 +72,8 @@ export class MirrorMovement extends CloseRangeMovement {
 
     move = {
       rotation: Rotation.Clockwise
-    }  
-    if(this.board.canRotate(Rotation.Anticlockwise, this.piece)) {
+    }
+    if (this.board.canRotate(Rotation.Anticlockwise, this.piece)) {
       this.legalMoves.push(move);
     }
     else {

@@ -15,7 +15,7 @@ export class Queen extends Piece {
   ];
 
   protected override initType(): void {
-    this._type     = PieceType.QUEEN;
+    this._type = PieceType.QUEEN;
     this._movement = new LongRangeMovement(this, this.board, Queen.DIRECTIONS);
   }
 }

@@ -1,21 +1,21 @@
 import { BoardVector2d, Direction, DirectionUtils } from "@lc/geometry";
 
 describe("DirectionUtils", () => {
-  test("rotate",() => {
-    expect(DirectionUtils.rotate(Direction.LeftRank,3)).toBe(Direction.UpperRightDiagonal);
-    expect(DirectionUtils.rotate(Direction.UpperFile,-3)).toBe(Direction.BottomLeftDiagonal);
+  test("rotate", () => {
+    expect(DirectionUtils.rotate(Direction.LeftRank, 3)).toBe(Direction.UpperRightDiagonal);
+    expect(DirectionUtils.rotate(Direction.UpperFile, -3)).toBe(Direction.BottomLeftDiagonal);
     expect(DirectionUtils.rotate(Direction.UpperFile, 20)).toBe(Direction.BottomFile);
   })
-  test("rotateClockwise",() => {
+  test("rotateClockwise", () => {
     expect(DirectionUtils.rotateClockwise(Direction.LeftRank)).toBe(Direction.UpperLeftDiagonal);
   })
-  test("rotateAnticlockwise",() => {
+  test("rotateAnticlockwise", () => {
     expect(DirectionUtils.rotateAnticlockwise(Direction.LeftRank)).toBe(Direction.BottomLeftDiagonal);
   })
-  test("rotateDoubleClockwise",() => {
+  test("rotateDoubleClockwise", () => {
     expect(DirectionUtils.rotateDoubleClockwise(Direction.LeftRank)).toBe(Direction.UpperFile);
   })
-  test("rotateDoubleAnticlockwise",() => {
+  test("rotateDoubleAnticlockwise", () => {
     expect(DirectionUtils.rotateDoubleAnticlockwise(Direction.LeftRank)).toBe(Direction.BottomFile);
   })
   test("formCoordinates", () => {
@@ -27,9 +27,9 @@ describe("DirectionUtils", () => {
       [[-1, 1], Direction.UpperLeftDiagonal],
       [[1, 1], Direction.UpperRightDiagonal],
       [[1, -1], Direction.BottomRightDiagonal],
-      [[-1, -1],Direction.BottomLeftDiagonal]
+      [[-1, -1], Direction.BottomLeftDiagonal]
     ]
-    for (let corresponding of coordinates) {
+    for (const corresponding of coordinates) {
       expect(DirectionUtils.fromCoordinates(corresponding[0])).toBe(corresponding[1]);
     }
   })
@@ -42,9 +42,9 @@ describe("DirectionUtils", () => {
       [[-1, 1], Direction.UpperLeftDiagonal],
       [[1, 1], Direction.UpperRightDiagonal],
       [[1, -1], Direction.BottomRightDiagonal],
-      [[-1, -1],Direction.BottomLeftDiagonal]
+      [[-1, -1], Direction.BottomLeftDiagonal]
     ]
-    for (let corresponding of coordinates) {
+    for (const corresponding of coordinates) {
       expect(DirectionUtils.toTuple(corresponding[1])).toStrictEqual(corresponding[0]);
     }
   })
@@ -60,7 +60,7 @@ describe("DirectionUtils", () => {
       Direction.BottomLeftDiagonal
     ]
 
-    for (let corresponding of coordinates) {
+    for (const corresponding of coordinates) {
       expect(DirectionUtils.toBoardVector2d(corresponding)).toStrictEqual(BoardVector2d.fromTuple(DirectionUtils.toTuple(corresponding)));
     }
   })

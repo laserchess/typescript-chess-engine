@@ -5,12 +5,12 @@ import {
   MoveType,
   Player
 } from "@lc/core";
-import { BoardVector2d, DirectionUtils, Rotation, Symmetry } from "@lc/geometry";
+import { BoardVector2d, DirectionUtils, Rotation } from "@lc/geometry";
 import { Pawn, Piece, PieceType } from "@lc/pieces";
 import { IllegalMoveError, Syntax } from "@lc/utils";
 import { Lasgun } from "@lc/core";
 import { MoveCommand } from "@lc/core";
-import { Map as ValueMap, Set as ValueSet } from "immutable";
+
 
 
 export const enum CaptureOptions {
@@ -22,8 +22,8 @@ export const enum CaptureOptions {
 export class Board {
   public readonly width: number;
   public readonly height: number;
-  private readonly tiles: Map<String, Piece>;
-  private readonly piecesOfType: Map<PieceType, [Set<Piece>,Set<Piece>]>;
+  private readonly tiles: Map<string, Piece>;
+  private readonly piecesOfType: Map<PieceType, [Set<Piece>, Set<Piece>]>;
   private readonly kingsProtectors: [Set<Piece>, Set<Piece>];
   private readonly movesHistory: [Move[], Move[]];
   private readonly lasguns!: [Lasgun, Lasgun];
@@ -35,15 +35,15 @@ export class Board {
   public constructor(width: number, height: number) {
     this.width = width;
     this.height = height;
-    this.tiles = new Map<String, Piece>();
-    this.piecesOfType = new Map<PieceType, [Set<Piece>,Set<Piece>]>();
+    this.tiles = new Map<string, Piece>();
+    this.piecesOfType = new Map<PieceType, [Set<Piece>, Set<Piece>]>();
     this.kingsProtectors = [new Set<Piece>, new Set<Piece>];
     this.movesHistory = [[], []];
     this._lastMove = null;
 
-    for (const item in PieceType){
+    for (const item in PieceType) {
       const pieceType: PieceType = PieceType[item as keyof typeof PieceType];
-      this.piecesOfType.set(pieceType, [new Set<Piece>,new Set<Piece>]);
+      this.piecesOfType.set(pieceType, [new Set<Piece>, new Set<Piece>]);
     }
 
 
@@ -55,11 +55,11 @@ export class Board {
     let playerPieces: Set<Piece> = new Set<Piece>;
     for (const type in PieceType) {
       const pieceType: PieceType = PieceType[type as keyof typeof PieceType];
-      playerPieces = new Set([...playerPieces,...this.piecesOfType.get(pieceType)![playerId]])
+      playerPieces = new Set([...playerPieces, ...this.piecesOfType.get(pieceType)![playerId]])
     }
     return playerPieces;
   }
-  
+
   public getKingProtectors(playerId: number): Set<Piece> {
     return this.kingsProtectors[playerId];
   }
@@ -117,6 +117,8 @@ export class Board {
   }
 
   public canRotate(rotation: Rotation, piece: Piece): boolean {
+    rotation;
+    piece;
     return true;
   }
 
@@ -139,12 +141,12 @@ export class Board {
     const destinationPiece: Piece | null = this.getPiece(destination);
 
 
-    if (destinationPiece === null){
+    if (destinationPiece === null) {
       return capture !== CaptureOptions.RequiredCapture;
     }
 
-    else if(!piece.isSameColor(destinationPiece)) {
-      return capture !== CaptureOptions.NoCapture; 
+    else if (!piece.isSameColor(destinationPiece)) {
+      return capture !== CaptureOptions.NoCapture;
     }
 
     return false;
@@ -157,16 +159,16 @@ export class Board {
   private isMoveCommandLegal(move: MoveCommand, playerId: Player): boolean {
     const pieceToMove: Piece | null = this.getPiece(move.origin);
     return !(
-    pieceToMove === null ||
-    (move.destination !== null && move.rotation !== null) ||
-    (move.rotation === null && move.destination === null) ||
-    (move.destination !== null && move.rotation !== null) ||
-    (move.rangedCapture === true && move.rotation !== null) ||
-    (move.fireLaser === true && !this.lasguns[playerId].isLoaded()) ||
-    !pieceToMove.isSameColor(playerId) ||
-    (pieceToMove.type !== PieceType.KNIGHT && move.rangedCapture === true) ||
-    (pieceToMove.type !== PieceType.MIRROR && move.rotation !== null)
-    )  
+      pieceToMove === null ||
+      (move.destination !== null && move.rotation !== null) ||
+      (move.rotation === null && move.destination === null) ||
+      (move.destination !== null && move.rotation !== null) ||
+      (move.rangedCapture === true && move.rotation !== null) ||
+      (move.fireLaser === true && !this.lasguns[playerId].isLoaded()) ||
+      !pieceToMove.isSameColor(playerId) ||
+      (pieceToMove.type !== PieceType.KNIGHT && move.rangedCapture === true) ||
+      (pieceToMove.type !== PieceType.MIRROR && move.rotation !== null)
+    )
   }
 
   private getSpecificMove(move: MoveCommand, playerId: number): Partial<Move> {
@@ -212,23 +214,23 @@ export class Board {
       piece: piece,
       promotedTo: promotedTo ?? null,
       captured: null,
-      laserFields: [new Set<String>, new Set<String>],
-      laserCaptures: new Set<String>
+      laserFields: [new Set<string>, new Set<string>],
+      laserCaptures: new Set<string>
     }
 
-    if (Syntax.inAlternative(ultimateMove.moveType,MoveType.EnPassant)) {
+    if (Syntax.inAlternative(ultimateMove.moveType, MoveType.EnPassant)) {
       const directionVector: BoardVector2d = DirectionUtils.toBoardVector2d((piece as Pawn).direction!).opposite();
       const enemyPositon: BoardVector2d = ultimateMove.destination!.add(directionVector);
       const enemyPiece: Piece = this.getPiece(enemyPositon)!;
       ultimateMove.captured = enemyPiece;
     }
 
-    else if (Syntax.inAlternative(ultimateMove.moveType,MoveType.Capture)) {
+    else if (Syntax.inAlternative(ultimateMove.moveType, MoveType.Capture)) {
       const enemyPiece: Piece = this.getPiece(ultimateMove.destination!)!;
       ultimateMove.captured = enemyPiece;
     }
-    
-    else if (Syntax.inAlternative(ultimateMove.moveType,MoveType.RangedCapture)) {
+
+    else if (Syntax.inAlternative(ultimateMove.moveType, MoveType.RangedCapture)) {
       const enemyPiece: Piece = this.getPiece(ultimateMove.destination!)!;
       ultimateMove.captured = enemyPiece;
     }
@@ -255,7 +257,6 @@ export class Board {
     }
 
     if (Syntax.inAlternative(typesOfMove, MoveType.Move)) {
-      const pieceToMove: Piece = move.piece;
       this.shiftPiece(move.origin, move.destination!);
     }
     //TODO Laser Fields and other Move Types
@@ -269,7 +270,7 @@ export class Board {
       // but it needs to send PieceType in promotionTo.
     }
 
-    const pieceToMove: Piece  = this.getPiece(move.origin)!;
+    const pieceToMove: Piece = this.getPiece(move.origin)!;
     const moveToAnalyze: Move = this.buildMove(pieceToMove, moveFromPiece, move);
 
     this.fulfillMove(moveToAnalyze);

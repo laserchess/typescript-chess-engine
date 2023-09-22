@@ -37,25 +37,25 @@ export class LongRangeMovement extends PieceMovement {
   private getAllLongRangeMoves(): Partial<Record<Direction, Partial<Move>[]>> {
     const moves: Partial<Record<Direction, Partial<Move>[]>> = {};
     for (const direction of this.directions) {
-      moves[direction] =  this.getAllCoordinatesByDirection(direction);
+      moves[direction] = this.getAllCoordinatesByDirection(direction);
     }
     return moves;
   }
 
   private getAllCoordinatesByDirection(direction: Direction): Partial<Move>[] {
-    const x = this.piece.position.x, 
-          y = this.piece.position.y,
-          tuple = DirectionUtils.toTuple(direction),
-          step = { x: tuple[0], y: tuple[1] };
+    const x = this.piece.position.x,
+      y = this.piece.position.y,
+      tuple = DirectionUtils.toTuple(direction),
+      step = { x: tuple[0], y: tuple[1] };
     const maxMoveLength = {
-      x: step.x > 0 ? this.board.width  - x : x,
+      x: step.x > 0 ? this.board.width - x : x,
       y: step.y > 0 ? this.board.height - y : y
     };
     const moveLength = Math.min(maxMoveLength.x, maxMoveLength.y);
 
     const moveArray: Partial<Move>[] = [];
     let i = 0;
-    for (;i < moveLength; i++) {
+    for (; i < moveLength; i++) {
       let vector: BoardVector2d = new BoardVector2d(x + i * step.x, y + i * step.y);
       if (this.board.canMoveTo(vector, this.piece, CaptureOptions.NoCapture)) {
         moveArray.push({
@@ -70,6 +70,6 @@ export class LongRangeMovement extends PieceMovement {
         })
       }
     }
-    return  moveArray
+    return moveArray
   }
 }

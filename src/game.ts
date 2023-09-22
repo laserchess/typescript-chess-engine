@@ -4,15 +4,15 @@ export class Game {
   private _currentPlayer: number;
   private _board?: Board;
 
-  public constructor(){
+  public constructor() {
     this._currentPlayer = 0;
   }
 
-  public set board(board: Board){
+  public set board(board: Board) {
     this._board = board;
   }
-  
-  public get board(): Board{
+
+  public get board(): Board {
     if (this._board === undefined) {
       throw new Error("Board is undefined.");
     }

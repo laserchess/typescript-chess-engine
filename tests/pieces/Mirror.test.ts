@@ -17,7 +17,7 @@ describe("Mirror", () => {
       }
     )
     expect(mirror.direction).toBe(Direction.BottomLeftDiagonal);
-    expect(() => {mirror.direction = Direction.BottomFile}).toThrow();
+    expect(() => { mirror.direction = Direction.BottomFile }).toThrow();
   })
 
   test("move", () => {
@@ -62,16 +62,16 @@ describe("Mirror", () => {
         mirror.movement.updateMoves();
         const moves: Set<Partial<Move>> = new Set(
           [
-            {destination: new BoardVector2d(2, 3), moveType: MoveType.Move},
-            {destination: new BoardVector2d(3, 3), moveType: MoveType.Move},
-            {destination: new BoardVector2d(4, 3), moveType: MoveType.Move},
-            {destination: new BoardVector2d(4, 4), moveType: MoveType.Move},
-            {destination: new BoardVector2d(4, 5), moveType: MoveType.Move},
-            {destination: new BoardVector2d(3, 5), moveType: MoveType.Move},
-            {destination: new BoardVector2d(2, 5), moveType: MoveType.Move},
-            {destination: new BoardVector2d(2, 4), moveType: MoveType.Move},
-            {rotation: Rotation.Clockwise},
-            {rotation: Rotation.Anticlockwise}
+            { destination: new BoardVector2d(2, 3), moveType: MoveType.Move },
+            { destination: new BoardVector2d(3, 3), moveType: MoveType.Move },
+            { destination: new BoardVector2d(4, 3), moveType: MoveType.Move },
+            { destination: new BoardVector2d(4, 4), moveType: MoveType.Move },
+            { destination: new BoardVector2d(4, 5), moveType: MoveType.Move },
+            { destination: new BoardVector2d(3, 5), moveType: MoveType.Move },
+            { destination: new BoardVector2d(2, 5), moveType: MoveType.Move },
+            { destination: new BoardVector2d(2, 4), moveType: MoveType.Move },
+            { rotation: Rotation.Clockwise },
+            { rotation: Rotation.Anticlockwise }
           ]
         )
         for (const move of moves) {
@@ -105,8 +105,8 @@ describe("Mirror", () => {
         )
         board.addPieces([friend, enemy]);
         mirror.movement.updateMoves();
-        let m1 = {destination: new BoardVector2d(2, 3), moveType: MoveType.Move}
-        let m2 = {destination: new BoardVector2d(3, 3), moveType: MoveType.Move | MoveType.Capture}
+        const m1 = { destination: new BoardVector2d(2, 3), moveType: MoveType.Move }
+        const m2 = { destination: new BoardVector2d(3, 3), moveType: MoveType.Move | MoveType.Capture }
         expect(mirror.movement.illegalMoves).toContainEqual(m1);
         expect(mirror.movement.illegalMoves).toContainEqual(m2);
       })

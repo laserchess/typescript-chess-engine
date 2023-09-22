@@ -11,7 +11,7 @@ export class Rook extends Piece {
   ];
 
   protected override initType(): void {
-    this._type     = PieceType.ROOK;
+    this._type = PieceType.ROOK;
     this._movement = new LongRangeMovement(this, this.board, Rook.DIRECTIONS);
   }
 }

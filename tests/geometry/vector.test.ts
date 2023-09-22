@@ -121,11 +121,11 @@ describe("BoardVector2d", () => {
   });
 
   test("Getting moves", () => {
-    const board: Board = new Board(8,8)
-    let vector: BoardVector2d = new BoardVector2d(7,7);
-    expect(vector.getDirectedMoveFromTuple([1,1],board)).toStrictEqual([new BoardVector2d(7,7)]);
-    vector = new BoardVector2d(2,4);
-    expect(vector.getDirectedMoveFromTuple([-1,1],board)).toStrictEqual([new BoardVector2d(2,4), new BoardVector2d(1,5),new BoardVector2d(0,6)]);
+    const board: Board = new Board(8, 8)
+    let vector: BoardVector2d = new BoardVector2d(7, 7);
+    expect(vector.getDirectedMoveFromTuple([1, 1], board)).toStrictEqual([new BoardVector2d(7, 7)]);
+    vector = new BoardVector2d(2, 4);
+    expect(vector.getDirectedMoveFromTuple([-1, 1], board)).toStrictEqual([new BoardVector2d(2, 4), new BoardVector2d(1, 5), new BoardVector2d(0, 6)]);
   })
 
 });
@@ -133,8 +133,8 @@ describe("BoardVector2d", () => {
 
 describe("Different types vectors", () => {
   test("Creating BoardVector2d from other type vectors", () => {
-    expect(new BoardVector2d(2,2).add(new Vector2d(2,2)).toString()).toStrictEqual(new BoardVector2d(4, 4).toString());
-    expect(new Vector2d(2,2).add(new BoardVector2d(2,2)).toString()).toStrictEqual(new Vector2d(4, 4).toString());
+    expect(new BoardVector2d(2, 2).add(new Vector2d(2, 2)).toString()).toStrictEqual(new BoardVector2d(4, 4).toString());
+    expect(new Vector2d(2, 2).add(new BoardVector2d(2, 2)).toString()).toStrictEqual(new Vector2d(4, 4).toString());
   });
-  
+
 });

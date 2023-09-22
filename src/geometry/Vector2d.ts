@@ -1,7 +1,6 @@
 import { Direction, DirectionUtils } from "@lc/geometry";
 import { Integer } from "@lc/utils";
 import { Board } from "@lc/core";
-import { Type } from "typescript";
 
 /**
  * Enum that represents possible symmetry transformation
@@ -11,9 +10,9 @@ import { Type } from "typescript";
  */
 export const enum Symmetry {
   Origin = 0,
-  XAxis  = 1,
-  YAxis  = 2,
-  None   = 3
+  XAxis = 1,
+  YAxis = 2,
+  None = 3
 }
 
 /**
@@ -185,7 +184,7 @@ export class Vector2d {
    * 
    * @returns  New `Vector2d` object created by negating calling object coordinates.
    */
-  public opposite<T extends Vector2d>(): typeof this {
+  public opposite(): typeof this {
     return this.createVector(-this.x, -this.y) as typeof this;
   }
 
@@ -194,7 +193,7 @@ export class Vector2d {
    * 
    * @returns  New `Vector2d` object that is copy of calling object.
    */
-  public copy<T extends Vector2d>(): typeof this {
+  public copy(): typeof this {
     return this.createVector(this.x, this.y) as typeof this;
   }
 
@@ -238,7 +237,7 @@ export class Vector2d {
    * @returns `Number` that represents length of vector.
    */
   public getLength(): number {
-    return Math.sqrt(this.x*this.x+this.y*this.y);
+    return Math.sqrt(this.x * this.x + this.y * this.y);
   }
 
   /**
@@ -253,7 +252,7 @@ export class Vector2d {
   }
 
 
-  
+
 }
 
 
@@ -326,24 +325,24 @@ export class IntVector2d extends Vector2d {
     return this.x == other.x && this.y == other.y;
   }
 
-    /**
-   * Method creates new `IntVector2d` object that is 
-   * {@link https://en.wikipedia.org/wiki/Unit_vector unit vector} 
-   * of calling object. This method differs from {@link Vector2d.createUnitVector},
-   * as it creates new `IntVector2d` with one coordinate equal to 0, and one equal
-   * to -1 or 1. In most cases, new object have certain coordinate equal to 1 or -1, if this
-   * coordinate had greater absolute value than other coordinate of calling object.
-   * If absolute values of both coordinates of calling object are equal, then
-   * `prioritizeAxisY` decides which coordinate is more important(, by default
-   * more important is x axis).
-   * 
-   * @summary Method creates new `IntVector2d` object that is 
-   * {@link https://en.wikipedia.org/wiki/Unit_vector unit vector} 
-   * of calling object.
-   * @param {boolean} prioritizeAxisY - bool value that decides which axis should be considered
-   * as more important, when absolute value of coordinates is equal.
-   * @returns `IntVector2d` object that is {@link https://en.wikipedia.org/wiki/Unit_vector unit vector}.
-   */
+  /**
+ * Method creates new `IntVector2d` object that is 
+ * {@link https://en.wikipedia.org/wiki/Unit_vector unit vector} 
+ * of calling object. This method differs from {@link Vector2d.createUnitVector},
+ * as it creates new `IntVector2d` with one coordinate equal to 0, and one equal
+ * to -1 or 1. In most cases, new object have certain coordinate equal to 1 or -1, if this
+ * coordinate had greater absolute value than other coordinate of calling object.
+ * If absolute values of both coordinates of calling object are equal, then
+ * `prioritizeAxisY` decides which coordinate is more important(, by default
+ * more important is x axis).
+ * 
+ * @summary Method creates new `IntVector2d` object that is 
+ * {@link https://en.wikipedia.org/wiki/Unit_vector unit vector} 
+ * of calling object.
+ * @param {boolean} prioritizeAxisY - bool value that decides which axis should be considered
+ * as more important, when absolute value of coordinates is equal.
+ * @returns `IntVector2d` object that is {@link https://en.wikipedia.org/wiki/Unit_vector unit vector}.
+ */
   public createUnitVector(prioritizeAxisY?: boolean): typeof this {
     if (Math.abs(this.x) === Math.abs(this.y)) {
       if (prioritizeAxisY !== undefined || prioritizeAxisY === true) {
@@ -478,7 +477,7 @@ export class BoardVector2d extends IntVector2d {
   public static fromTuple(coordinates: [number, number]): BoardVector2d {
     return new BoardVector2d(coordinates[0], coordinates[1]);
   }
-  
+
   /**
    * Method creates array of `BoardVector2d` objects. First element of this array is copy of calling
    * object. Following objects are created by adding multiples of `increment` values to calling object.
@@ -520,7 +519,7 @@ export class BoardVector2d extends IntVector2d {
 
     const moves: BoardVector2d[] = [];
     const length: number = Math.min(xCoordinates.length, yCoordinates.length);
-    for (let i = 0; i<length;i++) {
+    for (let i = 0; i < length; i++) {
       moves.push(new BoardVector2d(xCoordinates[i], yCoordinates[i]));
     }
 

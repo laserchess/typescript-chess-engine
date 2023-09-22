@@ -3,17 +3,17 @@ import { Piece } from "@lc/pieces";
 import { Syntax } from "@lc/utils";
 
 export const enum MovesPredictionsType {
-  Legal      = 1 << 1,
-  Illegal    = 1 << 2
+  Legal = 1 << 1,
+  Illegal = 1 << 2
 }
 
 export class Tile {
-  
+
   private _coordinates: BoardVector2d;
   private inMovesLegalOf: [Set<Piece>, Set<Piece>];
   private inMovesIllegalOf: [Set<Piece>, Set<Piece>];
   public pieceOnTile: Piece | null;
-  
+
   public constructor(coordinates: BoardVector2d) {
     this._coordinates = coordinates;
     this.inMovesLegalOf = [new Set<Piece>(), new Set<Piece>()];
@@ -24,9 +24,9 @@ export class Tile {
   public get coordinates(): BoardVector2d {
     return this._coordinates;
   }
-  
+
   public clearAllPredictions(): void {
-    for (const i=0;i<1;i++) {
+    for (let i = 0; i < 1; i++) {
       this.inMovesIllegalOf[i].clear();
       this.inMovesLegalOf[i].clear();
     }
@@ -76,7 +76,7 @@ export class Tile {
       piecesSet = new Set(this.inMovesIllegalOf[playerId]);
     }
     if (Syntax.inAlternative(movePredictionsType, MovesPredictionsType.Legal)) {
-      piecesSet = new Set([...this.inMovesIllegalOf[playerId],...this.inMovesLegalOf[playerId]]);
+      piecesSet = new Set([...this.inMovesIllegalOf[playerId], ...this.inMovesLegalOf[playerId]]);
     }
     return piecesSet;
   }

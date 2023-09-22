@@ -11,7 +11,7 @@ export class King extends Piece {
 
   protected override initType(): void {
     this._type = PieceType.KING;
-    this._movement  = new KingMovement(this, this.board);
+    this._movement = new KingMovement(this, this.board);
   }
 
   public set kingRook(rook: Piece | undefined) {
@@ -29,7 +29,7 @@ export class King extends Piece {
   public get queenRook(): Piece {
     return this._queenRook!;
   }
-  
+
 }
 
 export class KingMovement extends CloseRangeMovement {
@@ -46,11 +46,11 @@ export class KingMovement extends CloseRangeMovement {
     else {
       return false;
     }
-    
+
     if (potentialRook === undefined) {
       return false;
     }
-    
+
     if (
       potentialRook.type === PieceType.ROOK
       && !potentialRook.wasMoved()
@@ -59,7 +59,7 @@ export class KingMovement extends CloseRangeMovement {
       const fromKingUnitVector: BoardVector2d = this.piece.position.sub(potentialRook.position).createUnitVector();
       let currentPosition: BoardVector2d = this.piece.position;
 
-      for (const i = 0; i < 2; i++) {
+      for (let i = 0; i < 2; i++) {
         // if (this.board.isCheckAt(currentPosition, this.piece.playerId)) {
         //   return false;
         // }
@@ -78,7 +78,7 @@ export class KingMovement extends CloseRangeMovement {
     return false;
   }
 
- public updateMoves(): void {
+  public updateMoves(): void {
     super.updateMoves();
     let move: Partial<Move> = {
       destination: this.piece.position.add(new BoardVector2d(2, 0)) as BoardVector2d,

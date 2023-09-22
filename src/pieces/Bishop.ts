@@ -11,7 +11,7 @@ export class Bishop extends Piece {
   ];
 
   protected override initType(): void {
-    this._type     = PieceType.BISHOP;
+    this._type = PieceType.BISHOP;
     this._movement = new LongRangeMovement(this, this.board, Bishop.DIRECTIONS);
   }
 }

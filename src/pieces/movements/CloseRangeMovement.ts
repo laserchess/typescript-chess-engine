@@ -18,7 +18,7 @@ export abstract class CloseRangeMovement extends PieceMovement {
           continue;
         }
         const newVector: BoardVector2d = new BoardVector2d(scalar1, scalar2).add(piece.position);
-        let move: Partial<Move> = {
+        const move: Partial<Move> = {
           destination: newVector,
           moveType: MoveType.Move
         }

@@ -9,14 +9,18 @@ export class Pawn extends DirectedPiece {
 
   protected override initType(): void {
     this._type = PieceType.PAWN;
-    this._movement  = new PawnMovement(this, this.board);
+    this._movement = new PawnMovement(this, this.board);
+  }
+
+  public get direction(): Direction {
+    return super.direction;
   }
 
   public set direction(direction: Direction) {
     if (direction % 2 === 1) {
       throw new Error("Direction for PawnPiece mustn't be diagonal.");
     }
-    super._direction = direction;
+    this._direction = direction;
   }
 
   public set enPassantPosition(position: BoardVector2d) {
@@ -28,24 +32,30 @@ export class Pawn extends DirectedPiece {
   }
 
   public get enPassantPosition(): BoardVector2d {
-    if (this.enPassantPosition === undefined){
+    if (this._enPassantPosition === undefined) {
       throw new Error("enPassantPosition is not initialised.");
     }
     return this._enPassantPosition!;
   }
 
   public get promotionPosition(): BoardVector2d {
-    if (this.promotionPosition === undefined){
+    if (this._promotionPosition === undefined) {
       throw new Error("promotionPosition is not initialised.");
     }
     return this._promotionPosition!;
   }
 
   public isOnEnPassantPosition(): boolean {
-    return this._enPassantPosition === this.position;
+    if (this._enPassantPosition === undefined) {
+      throw new Error("enPassantPosition is not initialised.");
+    }
+    return this._enPassantPosition!.equals(this.position);
   }
 
   public isOnPromotionPosition(): boolean {
+    if (this._promotionPosition === undefined) {
+      throw new Error("promotionPosition is not initialised.");
+    }
     return this._promotionPosition!.y === this.position.y;
   }
 }
@@ -81,7 +91,7 @@ export class PawnMovement extends PieceMovement {
       const move: Partial<Move> = {
         destination: piece.position.add(direction) as BoardVector2d,
         moveType: MoveType.Move
-      } 
+      }
       if (board.canMoveTo(piece.position.add(direction), piece, CaptureOptions.NoCapture)) {
         this.legalMoves.push(move);
       }
@@ -143,7 +153,7 @@ export class PawnMovement extends PieceMovement {
     }
 
     // Promotion flag
-    const commonMoves: Partial<Move>[] = [...this.legalMoves,...this.illegalMoves];
+    const commonMoves: Partial<Move>[] = [...this.legalMoves, ...this.illegalMoves];
     for (const move of commonMoves) {
       if ((this.piece as Pawn).promotionPosition.y === move.destination!.y) {
         move.moveType! |= MoveType.Promotion;

@@ -6,7 +6,7 @@ import { PieceMovement } from "@lc/pieces";
 export class Knight extends Piece {
   protected override initType(): void {
     this._type = PieceType.KNIGHT;
-    this._movement  = new KnightMovement(this, this.board);
+    this._movement = new KnightMovement(this, this.board);
   }
 
 
@@ -54,7 +54,7 @@ export class KnightMovement extends PieceMovement {
         else {
           this.illegalMoves.push(move);
         }
-        
+
         move = {
           destination: position,
           moveType: MoveType.RangedCapture

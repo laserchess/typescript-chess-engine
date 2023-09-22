@@ -5,7 +5,7 @@ import { Piece, PieceType, King } from "@lc/pieces";
 
 export class CheckManager {
   public board: Board;
-  
+
   public constructor(board: Board) {
     this.board = board;
   }
