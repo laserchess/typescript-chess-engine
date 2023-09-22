@@ -1,6 +1,5 @@
-import { Board } from "@lc/core";
+import { Board, Move } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
-import { PieceMovement } from "@lc/piece-movements";
 
 
 export enum PieceType {
@@ -11,7 +10,6 @@ export enum PieceType {
   ROOK   = "R",
   KNIGHT = "N",
   MIRROR = "M",
-  LASGUN = "L"
 }
 
 export interface PieceOptions {
@@ -29,8 +27,7 @@ export abstract class Piece {
   public readonly defendsKingsFrom: [Piece | null, Piece | null];
   public position: BoardVector2d;
   protected moveCounter: number;
-
-
+  
   public constructor(position: BoardVector2d, playerId: number, board: Board) {
     this.initialPosition  = position;
     this.position         = position;
@@ -38,7 +35,6 @@ export abstract class Piece {
     this.moveCounter      = 0;
     this.board            = board;
     this.defendsKingsFrom = [null, null];
-
     this.initType();
   }
 
@@ -46,29 +42,33 @@ export abstract class Piece {
 
   public get type(): PieceType {
     if (!this._type) {
-      throw new Error("Piece type is not initialised");
+      throw new Error("Piece type is not initialised.");
     }
     return this._type;
   }
 
   public get movement(): PieceMovement {
     if (!this._movement) {
-      throw new Error("Piece movement is not initialised");
+      throw new Error("Piece movement is not initialised.");
     }
     return this._movement;
   }
 
-  public equals(other: unknown): boolean {
-    if (!(other instanceof Piece)) {
-      return false;
-    }
-    return this.initialPosition === other.initialPosition
-        && this.position === other.position
-        && this.playerId === other.playerId
-        && this.moveCounter === other.playerId
-        && this._movement === other.movement
-        && this.type === other.type
+  public get moveCount(): number {
+    return this.moveCounter;
   }
+
+  // public equals(other: unknown): boolean {
+  //   if (!(other instanceof Piece)) {
+  //     return false;
+  //   }
+  //   return this.initialPosition === other.initialPosition
+  //       && this.position === other.position
+  //       && this.playerId === other.playerId
+  //       && this.moveCounter === other.playerId
+  //       && this._movement === other.movement
+  //       && this.type === other.type
+  // }
 
   public toString(): string {
     return this.type.valueOf();
@@ -85,10 +85,30 @@ export abstract class Piece {
     return this.playerId === other;
   }
 
-  public move(destination: BoardVector2d) {
-    // const origin: BoardVector2d = this.position.copy();
-    this.position = destination;
-    this.moveCounter += 1;
-    // this.board.notifyPositionChange(origin, destination);
+  public move(move: Move): void {
+    this.position = move.destination!.copy();
+    this.moveCounter++;
   }
+
+}
+
+export abstract class PieceMovement {
+  protected board: Board;
+  protected piece: Piece;
+  public illegalMoves: Partial<Move>[];
+  public legalMoves: Partial<Move>[];
+
+  public constructor(piece: Piece, board: Board) {
+    this.piece           = piece;
+    this.board           = board;
+    this.legalMoves      = [];
+    this.illegalMoves    = [];
+  }
+
+  protected preUpdateMoves(): void {
+    this.legalMoves.length   = 0;
+    this.illegalMoves.length = 0;
+  }
+
+  public abstract updateMoves(): void;
 }

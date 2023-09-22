@@ -1,9 +1,8 @@
-import { Move } from "@lc/core";
-import { Direction, Rotation } from "@lc/geometry";
+import { Move, MoveType } from "@lc/core";
+import { Direction, DirectionUtils, Rotation } from "@lc/geometry";
 import { DirectedPiece, PieceType } from "@lc/pieces";
 import { CloseRangeMovement } from "@lc/piece-movements";
-import { ObjectUtilities } from "@lc/utils";
-
+import { Syntax } from "@lc/utils";
 
 export class Mirror extends DirectedPiece {
   protected override initType(): void {
@@ -21,31 +20,65 @@ export class Mirror extends DirectedPiece {
   public get direction(): Direction | undefined {
     return this._direction;
   }
+  
+  private turnClockwise(): void {
+    this.direction = DirectionUtils.rotateDoubleClockwise(this.direction!);
+  }
+
+  private turnAnticlockwise(): void {
+    this.direction = DirectionUtils.rotateDoubleAnticlockwise(this.direction!);
+  }
+
+  private turn(rotation: Rotation): void {
+    switch(rotation) {
+      case Rotation.Anticlockwise:
+        this.turnAnticlockwise();
+      break;
+      case Rotation.Clockwise:
+        this.turnClockwise();
+      break;
+    }
+  }
+
+  public override move(move: Move): void {
+    if ((move.moveType & MoveType.Rotation) === MoveType.Rotation) {
+      this.moveCounter++;
+      this.turn(move.rotation!);
+    }
+    else {
+      super.move(move);
+    }
+  }
+
 }
 
 export class MirrorMovement extends CloseRangeMovement {
 
-  public turnClockwise(): void {
-    const piece: Mirror = this.piece as Mirror;
-    piece.direction = Direction.turnDoubleRight(piece.direction!);
-  }
-
-  public turnAnticlockwise(): void {
-    const piece: Mirror = this.piece as Mirror;
-    piece.direction = Direction.turnDoubleLeft(piece.direction!);
-  }
-
-  protected updateMovesWrapped(): void {
+  public override updateMoves(): void {
     super.updateMoves();
-    this.capturableMoves.length = 0;
-    const move: Partial<Move> = {
+    const capturable: Partial<Move>[] = this.legalMoves.filter((move) => Syntax.inAlternative(move.moveType!, MoveType.Capture));
+    this.illegalMoves = this.illegalMoves.concat(capturable);
+    this.legalMoves = this.legalMoves.filter((move) => !capturable.includes(move));
+
+    let move: Partial<Move> = {
       rotation: Rotation.Anticlockwise
     }  
-    this.legalMoves.push(ObjectUtilities.deepCopy(move));
-    this.allMoves.push(ObjectUtilities.deepCopy(move));
-    
-    move.rotation = Rotation.Clockwise;
-    this.legalMoves.push(ObjectUtilities.deepCopy(move));
-    this.allMoves.push(move);
+    if(this.board.canRotate(Rotation.Anticlockwise, this.piece)) {
+      this.legalMoves.push(move);
+    }
+    else {
+      this.illegalMoves.push(move);
+    }
+
+    move = {
+      rotation: Rotation.Clockwise
+    }  
+    if(this.board.canRotate(Rotation.Anticlockwise, this.piece)) {
+      this.legalMoves.push(move);
+    }
+    else {
+      this.illegalMoves.push(move);
+    }
   }
+
 }

@@ -2,7 +2,6 @@ import { MoveType, CaptureOptions, Move } from "@lc/core";
 import { BoardVector2d } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
 import { CloseRangeMovement } from "@lc/piece-movements";
-import { ObjectUtilities } from "@lc/utils";
 
 
 
@@ -15,11 +14,11 @@ export class King extends Piece {
     this._movement  = new KingMovement(this, this.board);
   }
 
-  public set kingRook(rook: Piece) {
+  public set kingRook(rook: Piece | undefined) {
     this._kingRook = this.kingRook;
   }
 
-  public set queenRook(rook: Piece) {
+  public set queenRook(rook: Piece | undefined) {
     this._queenRook = this.kingRook;
   }
 
@@ -48,6 +47,10 @@ export class KingMovement extends CloseRangeMovement {
       return false;
     }
     
+    if (potentialRook === undefined) {
+      return false;
+    }
+    
     if (
       potentialRook.type === PieceType.ROOK
       && !potentialRook.wasMoved()
@@ -56,7 +59,7 @@ export class KingMovement extends CloseRangeMovement {
       const fromKingUnitVector: BoardVector2d = this.piece.position.sub(potentialRook.position).createUnitVector();
       let currentPosition: BoardVector2d = this.piece.position;
 
-      for (let i = 0; i < 2; i++) {
+      for (const i = 0; i < 2; i++) {
         // if (this.board.isCheckAt(currentPosition, this.piece.playerId)) {
         //   return false;
         // }
@@ -75,23 +78,29 @@ export class KingMovement extends CloseRangeMovement {
     return false;
   }
 
-  protected updateMovesWrapped(): void {
+ public updateMoves(): void {
     super.updateMoves();
-    if (this.isCastlingLegal(MoveType.KingSideCastling)) {
-      const move: Partial<Move> = {
-        destination: this.piece.position.add(new BoardVector2d(2, 0)) as BoardVector2d,
-        moveType: MoveType.Move & MoveType.KingSideCastling
-      }
-      this.legalMoves.push(move)
-      this.allMoves.push(ObjectUtilities.deepCopy(move));
+    let move: Partial<Move> = {
+      destination: this.piece.position.add(new BoardVector2d(2, 0)) as BoardVector2d,
+      moveType: MoveType.Move | MoveType.KingSideCastling
     }
-    else if (this.isCastlingLegal(MoveType.QueenSideCastling)) {
-      const move: Partial<Move> = {
-        destination: this.piece.position.add(new BoardVector2d(-2, 0)) as BoardVector2d,
-        moveType: MoveType.Move & MoveType.KingSideCastling
-      }
-      this.legalMoves.push(move)
-      this.allMoves.push(ObjectUtilities.deepCopy(move));
+    if (this.isCastlingLegal(MoveType.KingSideCastling)) {
+      this.legalMoves.push(move);
+    }
+    else {
+      this.illegalMoves.push(move);
+    }
+
+    move = {
+      destination: this.piece.position.add(new BoardVector2d(-2, 0)) as BoardVector2d,
+      moveType: MoveType.Move & MoveType.QueenSideCastling
+    }
+
+    if (this.isCastlingLegal(MoveType.QueenSideCastling)) {
+      this.legalMoves.push(move);
+    }
+    else {
+      this.illegalMoves.push(move);
     }
   }
 }

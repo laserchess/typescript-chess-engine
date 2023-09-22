@@ -1,4 +1,5 @@
 import { IntVector2d, Vector2d, BoardVector2d, Symmetry } from "@lc/geometry";
+import { Board } from "@lc/core";
 
 describe("Vector2d", () => {
 
@@ -46,6 +47,16 @@ describe("Vector2d", () => {
     expect(new Vector2d(1.5, 2).copy()).not.toStrictEqual(new Vector2d(1, 2));
   });
 
+  test("Length", () => {
+    expect(new Vector2d(3, 4).getLength()).toStrictEqual(5);
+  });
+
+  test("Unit Vector", () => {
+    expect(new Vector2d(3, 4).createUnitVector()).toStrictEqual(new Vector2d(0.6, 0.8));
+  });
+
+
+
 });
 
 describe("IntVector2d", () => {
@@ -75,6 +86,13 @@ describe("IntVector2d", () => {
     expect(new IntVector2d(1, 1).copy()).toStrictEqual(new IntVector2d(1, 1));
     expect(new IntVector2d(1.5, 2).copy()).toStrictEqual(new IntVector2d(1, 2));
   });
+
+  test("Unit Vector", () => {
+    expect(new IntVector2d(3, 4).createUnitVector()).toStrictEqual(new IntVector2d(0, 1));
+    expect(new IntVector2d(-6, 4).createUnitVector()).toStrictEqual(new IntVector2d(-1, 0));
+    expect(new IntVector2d(3, 3).createUnitVector()).toStrictEqual(new IntVector2d(1, 0));
+    expect(new IntVector2d(3, 3).createUnitVector(true)).toStrictEqual(new IntVector2d(0, 1));
+  });
 });
 
 describe("BoardVector2d", () => {
@@ -102,6 +120,13 @@ describe("BoardVector2d", () => {
     expect(new BoardVector2d(1, 2).copy()).toStrictEqual(new BoardVector2d(1, 2));
   });
 
+  test("Getting moves", () => {
+    const board: Board = new Board(8,8)
+    let vector: BoardVector2d = new BoardVector2d(7,7);
+    expect(vector.getDirectedMoveFromTuple([1,1],board)).toStrictEqual([new BoardVector2d(7,7)]);
+    vector = new BoardVector2d(2,4);
+    expect(vector.getDirectedMoveFromTuple([-1,1],board)).toStrictEqual([new BoardVector2d(2,4), new BoardVector2d(1,5),new BoardVector2d(0,6)]);
+  })
 
 });
 

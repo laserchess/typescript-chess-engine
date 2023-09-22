@@ -1,21 +1,75 @@
-import { NotImplementedError } from "@lc/utils";
-import { BoardVector2d } from "@lc/geometry";
+import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
+import { BoardVector2d, Direction, DirectionUtils } from "@lc/geometry";
 import { Piece } from "@lc/pieces";
+import { PieceMovement } from "@lc/pieces";
+import { Syntax } from "@lc/utils";
 
-export class LongRangeMovement /** extends PieceMovement */ {
-  constructor(ranged: Piece) {
+export class LongRangeMovement extends PieceMovement {
+  public allLongRangeMoves: Partial<Record<Direction, Partial<Move>[]>> = {};
+  public readonly directions: Direction[];
 
+  constructor(piece: Piece, board: Board, directions: Direction[]) {
+    super(piece, board);
+    this.directions = directions;
   }
 
-  public iterateSquares(origin: BoardVector2d) {
-    throw new NotImplementedError("iterateSquares() method is not implemented yet");
+  public override updateMoves(): void {
+    this.preUpdateMoves();
+    this.allLongRangeMoves = this.getAllLongRangeMoves();
+
+    for (const direction of this.directions) {
+      const legal: boolean = true;
+      for (const move of this.allLongRangeMoves[direction]!) {
+        if (Syntax.inAlternative(move.moveType!, MoveType.Capture)) {
+          legal = false;
+        }
+
+        if (legal) {
+          this.legalMoves.push(move);
+        }
+        else {
+          this.illegalMoves.push(move);
+        }
+      }
+    }
   }
 
-  public getAllMoves(): BoardVector2d[][] {
-    throw new NotImplementedError("getAllMoves() method is not implemented yet");
+  private getAllLongRangeMoves(): Partial<Record<Direction, Partial<Move>[]>> {
+    const moves: Partial<Record<Direction, Partial<Move>[]>> = {};
+    for (const direction of this.directions) {
+      moves[direction] =  this.getAllCoordinatesByDirection(direction);
+    }
+    return moves;
   }
 
-  public getLegalMoves(): BoardVector2d[][] {
-    throw new NotImplementedError("getLegalMoves() method is not implemented yet");
+  private getAllCoordinatesByDirection(direction: Direction): Partial<Move>[] {
+    const x = this.piece.position.x, 
+          y = this.piece.position.y,
+          tuple = DirectionUtils.toTuple(direction),
+          step = { x: tuple[0], y: tuple[1] };
+    const maxMoveLength = {
+      x: step.x > 0 ? this.board.width  - x : x,
+      y: step.y > 0 ? this.board.height - y : y
+    };
+    const moveLength = Math.min(maxMoveLength.x, maxMoveLength.y);
+
+    const moveArray: Partial<Move>[] = [];
+    let i = 0;
+    for (;i < moveLength; i++) {
+      let vector: BoardVector2d = new BoardVector2d(x + i * step.x, y + i * step.y);
+      if (this.board.canMoveTo(vector, this.piece, CaptureOptions.NoCapture)) {
+        moveArray.push({
+          destination: vector,
+          moveType: MoveType.Move
+        })
+      }
+      else if (this.board.canMoveTo(vector, this.piece, CaptureOptions.RequiredCapture)) {
+        moveArray.push({
+          destination: vector,
+          moveType: MoveType.Move | MoveType.Capture
+        })
+      }
+    }
+    return  moveArray
   }
 }

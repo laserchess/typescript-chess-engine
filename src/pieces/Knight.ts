@@ -1,8 +1,7 @@
 import { Board, CaptureOptions, Move, MoveType } from "@lc/core";
 import { BoardVector2d, Symmetry } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
-import { PieceMovement } from "@lc/piece-movements";
-import { ObjectUtilities } from "@lc/utils";
+import { PieceMovement } from "@lc/pieces";
 
 export class Knight extends Piece {
   protected override initType(): void {
@@ -10,17 +9,22 @@ export class Knight extends Piece {
     this._movement  = new KnightMovement(this, this.board);
   }
 
-  public rangedCapture(destination: BoardVector2d) {
-    this.position = destination;
-    this.moveCounter += 1;
-    // this.board.notifyRangedCapture(this.position, destination);
+
+  public override move(move: Move): void {
+    if ((move.moveType & MoveType.RangedCapture) === MoveType.RangedCapture) {
+      this.moveCounter++;
+    }
+    else {
+      super.move(move);
+    }
   }
 }
 
 export class KnightMovement extends PieceMovement {
 
+  public override updateMoves(): void {
+    this.preUpdateMoves();
 
-  protected updateMovesWrapped(): void {
     const piece: Knight = this.piece as Knight;
     const board: Board = this.board;
     const baseVectors: BoardVector2d[] = [new BoardVector2d(1, 2), new BoardVector2d(2, 1)];
@@ -34,28 +38,36 @@ export class KnightMovement extends PieceMovement {
     }
 
     for (const position of positions) {
-      let move: Partial<Move> = {
-        destination: position,
-        moveType: MoveType.Move
-      }
+      let move: Partial<Move>;
       if (!board.isOutOfBounds(position)) {
-        this.allMoves.push(move);
-        if (board.canMoveTo(position, piece, CaptureOptions.OptionalCapture)) {
-          move = ObjectUtilities.deepCopy(move);
+        move = {
+          destination: position,
+          moveType: MoveType.Move
+        }
+        if (board.canMoveTo(position, piece, CaptureOptions.NoCapture)) {
           this.legalMoves.push(move);
-          if (board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) {
-            move = ObjectUtilities.deepCopy(move);
-            move.moveType! &= MoveType.Capture
-            this.capturableMoves.push(move);
+        }
+        else if (board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) {
+          move.moveType! |= MoveType.Capture;
+          this.legalMoves.push(move)
+        }
+        else {
+          this.illegalMoves.push(move);
+        }
+        
+        move = {
+          destination: position,
+          moveType: MoveType.RangedCapture
+        }
+        if (board.canRangeCapture(position, piece)) {
 
-            move = {
-              destination: position,
-              moveType: MoveType.RangedCapture
-            }
-            this.capturableMoves.push(move);
-          }
+          this.legalMoves.push(move);
+        }
+        else {
+          this.illegalMoves.push(move);
         }
       }
     }
   }
+
 }
