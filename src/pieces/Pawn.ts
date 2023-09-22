@@ -65,7 +65,7 @@ export class PawnMovement extends PieceMovement {
       && piece.isOnEnPassantPosition();
   }
 
-  protected updateMoves(): void {
+  public override updateMoves(): void {
     this.preUpdateMoves();
 
     const piece: Pawn = this.piece as Pawn;

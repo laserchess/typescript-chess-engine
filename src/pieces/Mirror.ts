@@ -29,12 +29,12 @@ export class Mirror extends DirectedPiece {
     this.direction = DirectionUtils.rotateDoubleAnticlockwise(this.direction!);
   }
 
-  public turn(rotation: Rotation): void {
+  private turn(rotation: Rotation): void {
     switch(rotation) {
       case Rotation.Anticlockwise:
         this.turnAnticlockwise();
       break;
-      case Rotation.Anticlockwise:
+      case Rotation.Clockwise:
         this.turnClockwise();
       break;
     }
@@ -54,12 +54,12 @@ export class Mirror extends DirectedPiece {
 
 export class MirrorMovement extends CloseRangeMovement {
 
-  public updateMoves(): void {
+  public override updateMoves(): void {
     super.updateMoves();
     const capturable: Partial<Move>[] = this.legalMoves.filter((move) => Syntax.inAlternative(move.moveType!, MoveType.Capture));
     this.illegalMoves = this.illegalMoves.concat(capturable);
-    this.legalMoves = this.legalMoves.filter((move) => !capturable.some((captureMove) => captureMove === move));
-    
+    this.legalMoves = this.legalMoves.filter((move) => !capturable.includes(move));
+
     let move: Partial<Move> = {
       rotation: Rotation.Anticlockwise
     }  

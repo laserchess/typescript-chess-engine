@@ -10,6 +10,7 @@ import { Pawn, Piece, PieceType } from "@lc/pieces";
 import { IllegalMoveError, Syntax } from "@lc/utils";
 import { Lasgun } from "@lc/core";
 import { MoveCommand } from "@lc/core";
+import { Map as ValueMap, Set as ValueSet } from "immutable";
 
 
 export const enum CaptureOptions {
@@ -21,7 +22,7 @@ export const enum CaptureOptions {
 export class Board {
   public readonly width: number;
   public readonly height: number;
-  private readonly tiles: Map<BoardVector2d, Piece>;
+  private readonly tiles: Map<String, Piece>;
   private readonly piecesOfType: Map<PieceType, [Set<Piece>,Set<Piece>]>;
   private readonly kingsProtectors: [Set<Piece>, Set<Piece>];
   private readonly movesHistory: [Move[], Move[]];
@@ -34,7 +35,7 @@ export class Board {
   public constructor(width: number, height: number) {
     this.width = width;
     this.height = height;
-    this.tiles = new Map<BoardVector2d, Piece>();
+    this.tiles = new Map<String, Piece>();
     this.piecesOfType = new Map<PieceType, [Set<Piece>,Set<Piece>]>();
     this.kingsProtectors = [new Set<Piece>, new Set<Piece>];
     this.movesHistory = [[], []];
@@ -68,12 +69,12 @@ export class Board {
 
   public changePosition(newPosition: BoardVector2d, piece: Piece) {
     this.removePiece(piece);
-    this.tiles.set(newPosition, piece);
+    this.tiles.set(newPosition.toString(), piece);
     piece.position = newPosition;
   }
 
   public getPiece(position: BoardVector2d): Piece | null {
-    return this.tiles.get(position) ?? null;
+    return this.tiles.get(position.toString()) ?? null;
   }
 
   public isPieceAt(positon: BoardVector2d): boolean {
@@ -90,14 +91,14 @@ export class Board {
     if (this.isPieceAt(piece.position)) {
       throw new Error("There is already piece at this position.");
     }
-    this.tiles.set(piece.position, piece);
+    this.tiles.set(piece.position.toString(), piece);
     this.piecesOfType.get(piece.type)![piece.playerId].add(piece);
   }
 
   public removePiece(piece: Piece): void {
-    this.tiles.delete(piece.position);
+    this.tiles.delete(piece.position.toString());
     this.piecesOfType.get(piece.type)![piece.playerId].delete(piece);
-    for (let protectors of this.kingsProtectors) {
+    for (const protectors of this.kingsProtectors) {
       protectors.delete(piece);
     }
   }
@@ -111,8 +112,8 @@ export class Board {
       throw new Error("Unable to shift piece. There is already piece on destination.");
     }
     piece.position = destination;
-    this.tiles.delete(origin);
-    this.tiles.set(destination, piece);
+    this.tiles.delete(origin.toString());
+    this.tiles.set(destination.toString(), piece);
   }
 
   public canRotate(rotation: Rotation, piece: Piece): boolean {
@@ -154,7 +155,7 @@ export class Board {
   }
 
   private isMoveCommandLegal(move: MoveCommand, playerId: Player): boolean {
-    let pieceToMove: Piece | null = this.getPiece(move.origin);
+    const pieceToMove: Piece | null = this.getPiece(move.origin);
     return !(
     pieceToMove === null ||
     (move.destination !== null && move.rotation !== null) ||
@@ -173,10 +174,10 @@ export class Board {
       throw new IllegalMoveError(`This MoveCommand is illegal with playerId equal to ${playerId}`);
     }
 
-    let pieceToMove: Piece = this.getPiece(move.origin)!;
+    const pieceToMove: Piece = this.getPiece(move.origin)!;
 
     if (move.rangedCapture === true) {
-      for (let predictedMove of pieceToMove.movement.legalMoves) {
+      for (const predictedMove of pieceToMove.movement.legalMoves) {
         if (Syntax.inAlternative(predictedMove.moveType!, MoveType.RangedCapture) && move.destination === predictedMove.destination) {
           return predictedMove;
         }
@@ -184,7 +185,7 @@ export class Board {
     }
 
     if (move.rotation !== null) {
-      for (let predictedMove of pieceToMove.movement.legalMoves) {
+      for (const predictedMove of pieceToMove.movement.legalMoves) {
         if (move.rotation === predictedMove.rotation) {
           return predictedMove;
         }
@@ -192,7 +193,7 @@ export class Board {
     }
 
     if (move.destination !== null) {
-      for (let predictedMove of pieceToMove.movement.legalMoves) {
+      for (const predictedMove of pieceToMove.movement.legalMoves) {
         if (move.destination === predictedMove.destination) {
           return predictedMove;
         }
@@ -211,8 +212,8 @@ export class Board {
       piece: piece,
       promotedTo: promotedTo ?? null,
       captured: null,
-      laserFields: [new Set<BoardVector2d>, new Set<BoardVector2d>],
-      laserCaptures: new Set<BoardVector2d>
+      laserFields: [new Set<String>, new Set<String>],
+      laserCaptures: new Set<String>
     }
 
     if (Syntax.inAlternative(ultimateMove.moveType,MoveType.EnPassant)) {

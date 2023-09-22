@@ -59,7 +59,7 @@ export class KingMovement extends CloseRangeMovement {
       const fromKingUnitVector: BoardVector2d = this.piece.position.sub(potentialRook.position).createUnitVector();
       let currentPosition: BoardVector2d = this.piece.position;
 
-      for (let i = 0; i < 2; i++) {
+      for (const i = 0; i < 2; i++) {
         // if (this.board.isCheckAt(currentPosition, this.piece.playerId)) {
         //   return false;
         // }

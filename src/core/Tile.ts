@@ -26,7 +26,7 @@ export class Tile {
   }
   
   public clearAllPredictions(): void {
-    for (let i=0;i<1;i++) {
+    for (const i=0;i<1;i++) {
       this.inMovesIllegalOf[i].clear();
       this.inMovesLegalOf[i].clear();
     }

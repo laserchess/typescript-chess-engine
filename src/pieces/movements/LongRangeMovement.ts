@@ -13,13 +13,13 @@ export class LongRangeMovement extends PieceMovement {
     this.directions = directions;
   }
 
-  protected override updateMoves(): void {
+  public override updateMoves(): void {
     this.preUpdateMoves();
     this.allLongRangeMoves = this.getAllLongRangeMoves();
 
-    for (let direction of this.directions) {
-      let legal: boolean = true;
-      for (let move of this.allLongRangeMoves[direction]!) {
+    for (const direction of this.directions) {
+      const legal: boolean = true;
+      for (const move of this.allLongRangeMoves[direction]!) {
         if (Syntax.inAlternative(move.moveType!, MoveType.Capture)) {
           legal = false;
         }

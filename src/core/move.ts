@@ -1,5 +1,6 @@
 import { BoardVector2d, Rotation } from "@lc/geometry";
 import { Piece, PieceType } from "@lc/pieces";
+import { Set as ValueSet } from "immutable";
 
 export const enum MoveType {
   Move              = 1 << 0,
@@ -28,8 +29,8 @@ export interface Move {
   promotedTo: PieceType | null
   piece: Piece,
   captured: Piece | null,
-  laserFields: [Set<BoardVector2d>, Set<BoardVector2d>],
-  laserCaptures: Set<BoardVector2d>
+  laserFields: [Set<String>, Set<String>],
+  laserCaptures: Set<String>
 }
 
 export interface MoveCommand {

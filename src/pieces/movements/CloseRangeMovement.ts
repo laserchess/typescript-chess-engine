@@ -3,7 +3,7 @@ import { BoardVector2d } from "@lc/geometry";
 import { Piece } from "@lc/pieces";
 import { PieceMovement } from "@lc/pieces";
 
-export class CloseRangeMovement extends PieceMovement {
+export abstract class CloseRangeMovement extends PieceMovement {
   // This method sets all around moves as capturableMoves.
   public override updateMoves(): void {
     this.preUpdateMoves();

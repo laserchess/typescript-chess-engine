@@ -6,8 +6,12 @@ export function rotate(direction: Direction, steps: number): Direction {
     return (direction + steps) % enumSize as Direction;
   }
   else {
-    const notNormalizedDirection = (direction + steps) % enumSize;
-    const normalizedDirection = enumSize + notNormalizedDirection;
+    const notNormalizedDirection = direction + steps;
+    if (notNormalizedDirection > 0){
+      return notNormalizedDirection; 
+    }
+    const rest = Math.abs(notNormalizedDirection) % enumSize;
+    const normalizedDirection = enumSize - rest;
     return normalizedDirection;
   }
 }

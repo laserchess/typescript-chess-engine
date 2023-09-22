@@ -22,7 +22,7 @@ export class Knight extends Piece {
 
 export class KnightMovement extends PieceMovement {
 
-  protected updateMoves(): void {
+  public override updateMoves(): void {
     this.preUpdateMoves();
 
     const piece: Knight = this.piece as Knight;
@@ -38,11 +38,12 @@ export class KnightMovement extends PieceMovement {
     }
 
     for (const position of positions) {
-      let move: Partial<Move> = {
-        destination: position,
-        moveType: MoveType.Move
-      }
+      let move: Partial<Move>;
       if (!board.isOutOfBounds(position)) {
+        move = {
+          destination: position,
+          moveType: MoveType.Move
+        }
         if (board.canMoveTo(position, piece, CaptureOptions.NoCapture)) {
           this.legalMoves.push(move);
         }
@@ -50,11 +51,16 @@ export class KnightMovement extends PieceMovement {
           move.moveType! |= MoveType.Capture;
           this.legalMoves.push(move)
         }
+        else {
+          this.illegalMoves.push(move);
+        }
+        
+        move = {
+          destination: position,
+          moveType: MoveType.RangedCapture
+        }
         if (board.canRangeCapture(position, piece)) {
-          move = {
-            destination: position,
-            moveType: MoveType.RangedCapture
-          }
+
           this.legalMoves.push(move);
         }
         else {

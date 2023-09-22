@@ -105,14 +105,10 @@ export abstract class PieceMovement {
     this.illegalMoves    = [];
   }
 
-  protected clearMoves(): void {
+  protected preUpdateMoves(): void {
     this.legalMoves.length   = 0;
     this.illegalMoves.length = 0;
   }
 
-  protected preUpdateMoves(): void {
-    this.clearMoves();
-  }
-
-  protected abstract updateMoves(): void;
+  public abstract updateMoves(): void;
 }
