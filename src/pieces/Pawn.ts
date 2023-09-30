@@ -49,7 +49,7 @@ export class Pawn extends DirectedPiece {
     if (this._enPassantPosition === undefined) {
       throw new Error("enPassantPosition is not initialised.");
     }
-    return this._enPassantPosition!.equals(this.position);
+    return this._enPassantPosition!.y === this.position.y;
   }
 
   public isOnPromotionPosition(): boolean {
@@ -92,12 +92,7 @@ export class PawnMovement extends PieceMovement {
         destination: piece.position.add(direction) as BoardVector2d,
         moveType: MoveType.Move
       }
-      if (board.canMoveTo(piece.position.add(direction), piece, CaptureOptions.NoCapture)) {
-        this.legalMoves.push(move);
-      }
-      else {
-        this.illegalMoves.push(move);
-      }
+      this.appendToMovePredictionType(board.canMoveTo(piece.position.add(direction), piece, CaptureOptions.NoCapture), move)
     }
 
     // Advance 2 squares
@@ -106,16 +101,11 @@ export class PawnMovement extends PieceMovement {
         destination: piece.position.add(direction.mul(2)) as BoardVector2d,
         moveType: MoveType.Move
       }
-      if (
+      this.appendToMovePredictionType(        
         !piece.wasMoved()
         && board.canMoveTo(piece.position.add(direction.mul(2)), piece, CaptureOptions.NoCapture)
         && this.legalMoves.length > 0
-      ) {
-        this.legalMoves.push(move);
-      }
-      else {
-        this.illegalMoves.push(move);
-      }
+        ,move)
     }
 
     // Capture
@@ -123,34 +113,27 @@ export class PawnMovement extends PieceMovement {
       const position: BoardVector2d = piece.position.add(increment);
       const move: Partial<Move> = {
         destination: position,
-        moveType: MoveType.Move & MoveType.Capture
+        moveType: MoveType.Move | MoveType.Capture
       }
       if (!board.isOutOfBounds(position)) {
-        if (!board.canMoveTo(position, piece, CaptureOptions.RequiredCapture)) { // Additional data
-          this.legalMoves.push(move);
-        }
-        else {
-          this.illegalMoves.push(move);
-        }
+        this.appendToMovePredictionType(board.canMoveTo(position, piece, CaptureOptions.RequiredCapture), move);
       }
+      
     }
 
     // En Passant
-    if (piece.isOnEnPassantPosition()) {
-      for (const position of captureDeltas) {
-        const tmpPosition: BoardVector2d = piece.position.add(position);
-        const move: Partial<Move> = {
-          destination: position,
-          moveType: MoveType.Move | MoveType.Capture
-        }
-        if (this.isEnPassantLegal(tmpPosition)) {
-          this.legalMoves.push(move);
-        }
-        else {
-          this.illegalMoves.push(move);
-        }
+    
+    for (const increment of captureDeltas) {
+      const position: BoardVector2d = piece.position.add(increment);
+      const move: Partial<Move> = {
+        destination: position,
+        moveType: MoveType.Move | MoveType.Capture | MoveType.EnPassant
+      }
+      if (!board.isOutOfBounds(position)) {
+        this.appendToMovePredictionType(this.isEnPassantLegal(position), move);
       }
     }
+    
 
     // Promotion flag
     const commonMoves: Partial<Move>[] = [...this.legalMoves, ...this.illegalMoves];

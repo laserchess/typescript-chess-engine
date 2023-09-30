@@ -41,14 +41,14 @@ export abstract class Piece {
   protected abstract initType(): void;
 
   public get type(): PieceType {
-    if (!this._type) {
+    if (this._type === undefined) {
       throw new Error("Piece type is not initialised.");
     }
     return this._type;
   }
 
   public get movement(): PieceMovement {
-    if (!this._movement) {
+    if (this._movement === undefined) {
       throw new Error("Piece movement is not initialised.");
     }
     return this._movement;
@@ -108,6 +108,14 @@ export abstract class PieceMovement {
   protected preUpdateMoves(): void {
     this.legalMoves.length = 0;
     this.illegalMoves.length = 0;
+  }
+  protected appendToMovePredictionType(isLegal: boolean, move: Partial<Move>): void {
+    if (isLegal) {
+      this.legalMoves.push(move);
+    }
+    else {
+      this.illegalMoves.push(move);
+    }
   }
 
   public abstract updateMoves(): void;

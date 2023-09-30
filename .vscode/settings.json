@@ -1,3 +1,4 @@
 {
-  "vitest.commandLine": "npx vitest"
+  "vitest.commandLine": "npx vitest",
+  "editor.tabSize": 2,
 }
