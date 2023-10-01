@@ -50,7 +50,7 @@ export class LongRangeMovement extends PieceMovement {
       y = this.piece.position.y,
       tuple = DirectionUtils.toTuple(direction),
       step = { x: tuple[0], y: tuple[1] };
-    const maxMoveLength: {x: number, y: number} = {} as {x: number, y: number};
+    const maxMoveLength = {} as  {x: number, y: number};
     if (step.x > 0) {
       maxMoveLength.x = this.board.width - x;
     }
