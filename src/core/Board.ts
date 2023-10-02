@@ -24,7 +24,6 @@ export class Board {
   public readonly height: number;
   private readonly tiles: Map<string, Piece>;
   private readonly piecesOfType: Map<PieceType, [Set<Piece>, Set<Piece>]>;
-  private readonly kingsProtectors: [Set<Piece>, Set<Piece>];
   private readonly movesHistory: [Move[], Move[]];
   private readonly lasguns!: [Lasgun, Lasgun];
   private _lastMove: Move | null;
@@ -37,7 +36,6 @@ export class Board {
     this.height = height;
     this.tiles = new Map<string, Piece>();
     this.piecesOfType = new Map<PieceType, [Set<Piece>, Set<Piece>]>();
-    this.kingsProtectors = [new Set<Piece>, new Set<Piece>];
     this.movesHistory = [[], []];
     this._lastMove = null;
 
@@ -51,6 +49,10 @@ export class Board {
     // this.checkManager
   }
 
+  public get lastMove(): Move | null {
+    return this._lastMove;
+  }
+
   public getPiecesOfPlayer(playerId: number): Set<Piece> {
     let playerPieces: Set<Piece> = new Set<Piece>;
     for (const type in PieceType) {
@@ -60,31 +62,24 @@ export class Board {
     return playerPieces;
   }
 
-  public getKingProtectors(playerId: number): Set<Piece> {
-    return this.kingsProtectors[playerId];
-  }
-  public isOutOfBounds(destination: BoardVector2d): boolean {
-    return destination.x < 0 || destination.x >= this.width || destination.y < 0 || destination.y >= this.height;
-  }
-
-  public changePosition(newPosition: BoardVector2d, piece: Piece) {
-    this.removePiece(piece);
-    this.tiles.set(newPosition.toString(), piece);
-    piece.position = newPosition;
-  }
-
   public getPiece(position: BoardVector2d): Piece | null {
     return this.tiles.get(position.toString()) ?? null;
+  }
+
+  public getPiecesOfType(playerId: number, pieceType: PieceType): Set<Piece> {
+    return this.piecesOfType.get(pieceType)![playerId];
+  }
+
+  public isOutOfBounds(destination: BoardVector2d): boolean {
+    return destination.x < 0 || destination.x >= this.width || destination.y < 0 || destination.y >= this.height;
   }
 
   public isPieceAt(positon: BoardVector2d): boolean {
     return this.getPiece(positon) !== null;
   }
 
-  public addPieces(pieces: Piece[]): void {
-    for (const piece of pieces) {
-      this.addPiece(piece);
-    }
+  public isCheckAt(/* position: BoardVector2d, playerId: number */): boolean {
+    return false;
   }
 
   public addPiece(piece: Piece): void {
@@ -95,12 +90,15 @@ export class Board {
     this.piecesOfType.get(piece.type)![piece.playerId].add(piece);
   }
 
+  public addPieces(pieces: Piece[]): void {
+    for (const piece of pieces) {
+      this.addPiece(piece);
+    }
+  }
+
   public removePiece(piece: Piece): void {
     this.tiles.delete(piece.position.toString());
     this.piecesOfType.get(piece.type)![piece.playerId].delete(piece);
-    for (const protectors of this.kingsProtectors) {
-      protectors.delete(piece);
-    }
   }
 
   public shiftPiece(origin: BoardVector2d, destination: BoardVector2d) {
@@ -152,9 +150,7 @@ export class Board {
     return false;
   }
 
-  public getPiecesOfType(playerId: number, pieceType: PieceType): Set<Piece> {
-    return this.piecesOfType.get(pieceType)![playerId];
-  }
+
 
   private isMoveCommandLegal(move: MoveCommand, playerId: Player): boolean {
     const pieceToMove: Piece | null = this.getPiece(move.origin);
@@ -277,12 +273,6 @@ export class Board {
   }
 
 
-  public get lastMove(): Move | null {
-    return this._lastMove;
-  }
 
-  public isCheckAt(/* position: BoardVector2d, playerId: number */): boolean {
-    return false;
-  }
 
 }

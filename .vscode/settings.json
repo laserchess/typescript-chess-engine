@@ -1,4 +1,5 @@
 {
   "vitest.commandLine": "npx vitest",
   "editor.tabSize": 2,
+  "javascript.preferences.importModuleSpecifier": "non-relative",
 }

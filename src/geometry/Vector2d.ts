@@ -32,7 +32,6 @@ export class Vector2d {
    * its subclasses.
    */
   public readonly y: number;
-  public l = Vector2d
 
   /**
    * Basic constructor that allows to create new `Vector2d` object.
